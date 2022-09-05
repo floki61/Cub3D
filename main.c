@@ -30,8 +30,6 @@ void	read_map(t_data *img, t_node *var)
 
 void	init_data(t_data	*img, t_node	*var, char	*fd)
 {
-	// img = malloc(sizeof(t_data));
-	// var = malloc(sizeof(t_node));
 	img->fd = open(fd, O_RDONLY);
 	if (!(img->fd) || !img || !var)
 	{
