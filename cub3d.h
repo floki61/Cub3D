@@ -1,6 +1,9 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
+// #define PI 3.14159265
+#define PI 3.14159265358979323846
+
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -8,26 +11,15 @@
 # include <limits.h>
 # include <fcntl.h>
 # include <mlx.h>
+#include <math.h>
 
 typedef struct s_node
 {
-	int		c;
 	int		e;
 	int		p;
 	int		x;
 	int		y;
 	int		lenght;
-	int		width;
-	void	*player1;
-	void	*player2;
-	void	*player3;
-	void	*player4;
-	void	*exit;
-	void	*exit2;
-	void	*ground;
-	void	*block;
-	void	*envr;
-	void	*lava;
 }				t_node;
 
 typedef struct s_player
@@ -40,17 +32,17 @@ typedef struct s_data
 {
 	void	*mlx;
 	void	*mlx_win;
-	void	*img;
-	char	*relative_path;
 	char	**map;
-	int		img_width;
-	int		img_height;
 	int		px;
 	int		py;
+	//line:
+	int	turndirection; // -1 if left +1 if right
+	int	walkdirection; // -1 if back +1 if front
+	double	rotationangle; // p / 2
+	double	rotationspeed; // 2 * (p / 180 )
 	int		c;
 	int		indx;
 	int		fd;
-	int		p_p;
 	t_node	var;
 	t_player	player;
 }				t_data;
@@ -81,5 +73,6 @@ void	put_player(t_data *img);
 int		check_name(int	argc, char *str);
 void	put_string(t_data *img);
 void	find_player(t_player *player, t_data *img);
+void	put_myplayer2(t_data *img);
 
 #endif

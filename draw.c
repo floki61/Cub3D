@@ -70,6 +70,30 @@ void	put_ground(t_data	*img)
 	}
 }
 
+void	put_line(t_data *img)
+{
+	float i;
+	float x;
+	float y;
+
+	i = 0;
+	
+	while(i < 40)
+	{
+		// printf(" shouf %lf\n", img->rotationangle);
+		// printf("---sin---: %lf\n",  sin(img->rotationangle));
+		// printf("---cos---: %lf\n", cos(img->rotationangle));
+		x = img->px + 5 + cos(img->rotationangle) * i;
+		y = img->py + sin(img->rotationangle) * i;
+		// printf("---X---: %lf\n",  x);
+		// printf("---Y---: %lf\n", y);
+		// img->rotationangle += img->turndirection * img->rotationspeed;
+		// printf("rotation : %lf\n",img->rotationangle);
+		// printf("---sin---: %lf\n",  asin(img->rotationangle));
+		mlx_pixel_put(img->mlx, img->mlx_win, x, y, 0xFF0000);
+		i += 1;
+	}
+}
 
 void	put_myplayer2(t_data *img)
 {
@@ -90,17 +114,11 @@ void	put_myplayer2(t_data *img)
 		}
 		h++;
 	}
+	put_line(img);
 }
 
 void	draw(t_data *img)
 {
-	int i = 0;
-	while(img->map[i])
-	{
-		printf(": %s\n",img->map[i]);
-		i++;
-	}
-
 	img->var.y = 0;
 	while (img->map[img->var.y])
 	{
@@ -127,6 +145,14 @@ int	destroy(t_data *data)
 	return (0);
 }
 
+void	player_data(t_data *img)
+{
+	img->walkdirection = 0;
+	img->turndirection = 0;
+	img->rotationangle = PI / 2;
+	img->rotationspeed = 2 * (PI / 180);
+}
+
 int	open_window(t_data *img, t_node *var)
 {
 	int		x;
@@ -137,6 +163,7 @@ int	open_window(t_data *img, t_node *var)
 	img->indx = -1;
 	img->mlx = mlx_init();
 	img->mlx_win = mlx_new_window(img->mlx, x * 80, y * 80, "game");
+	player_data(img);
 	draw(img);
 	mlx_key_hook(img->mlx_win, key_hook, img);
 	mlx_hook(img->mlx_win, 17, 0, destroy, img);
