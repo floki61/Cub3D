@@ -16,10 +16,7 @@ void	moves2(int keycode, t_data *img)
     if(keycode == 2)
 		img->turndirection = -1;
     else if(keycode == 1)
-	{
 		img->walkdirection = -1;
-        // img->py +=10;
-	}
 }
 
 void	moves1(int keycode, t_data *img)
@@ -34,10 +31,7 @@ void	moves1(int keycode, t_data *img)
     if(keycode == 0)
 		img->turndirection = 1;
     else if(keycode == 13)
-	{
 		img->walkdirection = 1;
-        // img->py -= 10;
-	}
 }
 
 void	update(t_data	*img)
@@ -50,6 +44,7 @@ void	update(t_data	*img)
 
 int	key_hook(int keycode, t_data *img)
 {
+	// printf("keycode : %d\n",keycode);
 	if(keycode == 53 || keycode == 0 || keycode == 13 || keycode == 1 || keycode == 2)
 	{
 		if (keycode == 53 || keycode == 0 || keycode == 13)

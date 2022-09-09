@@ -158,7 +158,7 @@ int	open_window(t_data *img, t_node *var)
 	img->mlx_win = mlx_new_window(img->mlx, x * 80, y * 80, "game");
 	player_data(img);
 	draw(img);
-	mlx_key_hook(img->mlx_win, key_hook, img);
+	mlx_hook(img->mlx_win, 2, 1L, key_hook, img);
 	mlx_hook(img->mlx_win, 17, 0, destroy, img);
 	mlx_loop(img->mlx);
 	return (0);
