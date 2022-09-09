@@ -40,6 +40,8 @@ typedef struct s_data
 	int	walkdirection; // -1 if back +1 if front
 	double	rotationangle; // p / 2
 	double	rotationspeed; // 2 * (p / 180 )
+	int		movespeed;	// 2
+	int		movestep; 	// walkdirection * movespeed
 	int		c;
 	int		indx;
 	int		fd;

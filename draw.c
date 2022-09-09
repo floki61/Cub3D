@@ -80,16 +80,8 @@ void	put_line(t_data *img)
 	
 	while(i < 40)
 	{
-		// printf(" shouf %lf\n", img->rotationangle);
-		// printf("---sin---: %lf\n",  sin(img->rotationangle));
-		// printf("---cos---: %lf\n", cos(img->rotationangle));
 		x = img->px + 5 + cos(img->rotationangle) * i;
 		y = img->py + sin(img->rotationangle) * i;
-		// printf("---X---: %lf\n",  x);
-		// printf("---Y---: %lf\n", y);
-		// img->rotationangle += img->turndirection * img->rotationspeed;
-		// printf("rotation : %lf\n",img->rotationangle);
-		// printf("---sin---: %lf\n",  asin(img->rotationangle));
 		mlx_pixel_put(img->mlx, img->mlx_win, x, y, 0xFF0000);
 		i += 1;
 	}
@@ -151,6 +143,7 @@ void	player_data(t_data *img)
 	img->turndirection = 0;
 	img->rotationangle = PI / 2;
 	img->rotationspeed = 2 * (PI / 180);
+	img->movespeed = 2;
 }
 
 int	open_window(t_data *img, t_node *var)
