@@ -48,7 +48,7 @@ void	put_wall(t_data	*img)
 		w = 0;
 		while (w < 80)
 		{
-			my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0x000000);
+			my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0x27329F);
 			i++;
 			w++;
 		}
@@ -169,13 +169,12 @@ void	player_data(t_data *img)
 	img->turndirection = 0;
 	img->rotationangle = PI / 2;
 	img->rotationspeed = 2 * (PI / 180);
-	img->movespeed = 3;
+	img->movespeed = 5;
 }
 
 int	open_window(t_data *img)
 {
 	img->mapx = ft_strlen(img->map[0]);
-	// printf("draw/x: %d/y: %d\n", x, y);
 	img->indx = -1;
 	img->mlx = mlx_init();
 	img->mlx_win = mlx_new_window(img->mlx, img->mapx * 80, img->mapy * 80, "game");
