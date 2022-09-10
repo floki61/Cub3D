@@ -80,18 +80,34 @@ void	put_ground(t_data	*img)
 	}
 }
 
+int		check_point(t_data	*img, int x, int y)
+{
+	int	px;
+	int py;
+
+	px = x / 80;
+	py = y / 80;
+	// printf("px: %d / py: %d\n", px, py);
+	// printf("mappos: %d\n", img->map[py][px]);
+	if(img->map[py][px] == '1')
+		return (0);
+	return (1);
+}
+
 void	put_line(t_data *img)
 {
 	float i;
-	float x;
-	float y;
+	int x;
+	int y;
 
 	i = 0;
 	
-	while(i < 80)
+	while(i < 900)
 	{
 		x = img->px + 5 + cos(img->rotationangle) * i;
 		y = img->py + sin(img->rotationangle) * i;
+		if(!check_point(img, x, y))
+			return ;
 		my_mlx_pixel_put(img, x, y, 0xFF0000);
 		i += 1;
 	}
@@ -116,7 +132,6 @@ void	put_myplayer2(t_data *img)
 		}
 		h++;
 	}
-	// put_line(img);
 }
 
 void	draw(t_data *img)
@@ -134,7 +149,6 @@ void	draw(t_data *img)
 			img->var.x++;
 		}
 		img->var.y++;
-		// printf("her %d, x: %d\n" ,img->var.y, img->var.x);
 	}
 	put_myplayer2(img);
 	put_line(img);

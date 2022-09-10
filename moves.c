@@ -53,7 +53,7 @@ int	key_hook(int keycode, t_data *img)
 			moves2 (keycode, img);
 		update(img);
 		mlx_clear_window (img->mlx, img->mlx_win);
-		printf("moves/x: %d/y: %d\n", ft_strlen(img->map[0]), img->var.lenght);
+		printf("moves/x: %d/y: %d\n", img->px, img->py);
 		img->img = mlx_new_image(img->mlx,  img->mapx* 80, img->mapy * 80);
 		img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 		draw(img);
