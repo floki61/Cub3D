@@ -169,7 +169,7 @@ void	player_data(t_data *img)
 	img->turndirection = 0;
 	img->rotationangle = PI / 2;
 	img->rotationspeed = 2 * (PI / 180);
-	img->movespeed = 9;
+	img->movespeed = 3;
 }
 
 int	open_window(t_data *img)

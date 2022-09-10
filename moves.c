@@ -16,7 +16,10 @@ void	moves2(int keycode, t_data *img)
     if(keycode == 2)
 		img->turndirection = -1;
     else if(keycode == 1)
+	{
+		// printf("moves:x: %d/y: %d\n", img->px, img->py);
 		img->walkdirection = -1;
+	}
 }
 
 void	moves1(int keycode, t_data *img)
@@ -36,15 +39,22 @@ void	moves1(int keycode, t_data *img)
 
 void	update(t_data	*img)
 {
+	int	px;
+	int py;
+
 	img->rotationangle += img->turndirection * img->rotationspeed;
 	img->movestep = img->walkdirection * img->movespeed;
+	px = (img->px + cos(img->rotationangle) * img->movestep) / 80;
+	py = (img->py + sin(img->rotationangle) * img->movestep) / 80;
+	if(img->map[py][px] == '1')
+		return ;
 	img->px = img->px + cos(img->rotationangle) * img->movestep;
 	img->py = img->py + sin(img->rotationangle) * img->movestep;
 }
 
 int	key_hook(int keycode, t_data *img)
 {
-	// printf("keycode : %d\n",keycode);
+	printf("keycode : %d\n",keycode);
 	if(keycode == 53 || keycode == 0 || keycode == 13 || keycode == 1 || keycode == 2)
 	{
 		if (keycode == 53 || keycode == 0 || keycode == 13)
