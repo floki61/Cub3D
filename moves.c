@@ -44,9 +44,9 @@ void	update(t_data	*img)
 
 	img->rotationangle += img->turndirection * img->rotationspeed;
 	img->movestep = img->walkdirection * img->movespeed;
-	px = (img->px + cos(img->rotationangle) * img->movestep) / 80;
-	py = (img->py + sin(img->rotationangle) * img->movestep) / 80;
-	if(img->map[py][px] == '1')
+	px = (img->px + cos(img->rotationangle) * img->movestep);
+	py = (img->py + sin(img->rotationangle) * img->movestep);
+	if(img->map[py / 80][px / 80] == '1' || img->map[py / 80][(px + 10) / 80] == '1' || img->map[(py + 10) / 80][px / 80] == '1' || img->map[(py + 10) / 80][(px + 10) / 80] == '1')
 		return ;
 	img->px = img->px + cos(img->rotationangle) * img->movestep;
 	img->py = img->py + sin(img->rotationangle) * img->movestep;

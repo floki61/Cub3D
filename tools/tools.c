@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 00:32:45 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/03 19:35:30 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/10 05:48:37 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,26 +140,3 @@ void	search_map(t_data *img, char n)
 	}
 }
 
-// void	find_player(t_player *player, t_data *img)
-// {
-// 	int	i;
-// 	int	j;
-
-// 	i = 0;
-// 	while (img->map[i])
-// 	{
-// 		j = 0;
-// 		while (img->map[i][j])
-// 		{
-// 			if (img->map[i][j] == 'P')
-// 			{
-// 				player->x = j;
-// 				player->y = i;
-// 				img->map[i][j] = '0';
-// 				return ;
-// 			}
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// }
