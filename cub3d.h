@@ -15,8 +15,8 @@
 
 typedef struct s_node
 {
-	int		e;
-	int		p;
+	// int		e;
+	// int		p;
 	int		x;
 	int		y;
 	int		lenght;
@@ -35,6 +35,9 @@ typedef struct s_data
 	char	**map;
 	int		px;
 	int		py;
+	
+	int mapx;
+	int mapy;
 	//line:
 	int	turndirection; // -1 if left +1 if right
 	int	walkdirection; // -1 if back +1 if front
@@ -42,7 +45,14 @@ typedef struct s_data
 	double	rotationspeed; // 2 * (p / 180 )
 	int		movespeed;	// 2
 	int		movestep; 	// walkdirection * movespeed
-	int		c;
+	//
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	char 	*addr;
+	void	*img;
+	
+	// int		c;
 	int		indx;
 	int		fd;
 	t_node	var;
@@ -57,11 +67,11 @@ int		ft_strlen(char *str);
 void	ft_putstr(char *s);
 char	*ft_itoa(int n);
 char	**ft_split(char const *s, char c);
-int		check_map(char **map, t_node *var, t_data *img);
+int		check_map(char **map, t_data *img);
 int		check_lenght(char **map, int i, t_node *var);
 int		check_width(char **map, int i);
 int		check_middle(char **map, t_node *var, t_data *img);
-int		open_window(t_data *img, t_node *var);
+int		open_window(t_data *img);
 void	so_long(t_data *img, t_node *var);
 void	drawing(char map, t_data	*img);
 void	search_map(t_data *img, char n);

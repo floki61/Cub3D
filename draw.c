@@ -1,5 +1,15 @@
 #include "cub3d.h"
 
+void	my_mlx_pixel_put(t_data *img, int x, int y, int color)
+{
+	char	*dst;
+
+	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+	*(unsigned int*)dst = color;
+}
+
+
+
 void	find_player(t_player *player, t_data *img)
 {
 	int	i;
@@ -38,7 +48,7 @@ void	put_wall(t_data	*img)
 		w = 0;
 		while (w < 80)
 		{
-			mlx_pixel_put(img->mlx, img->mlx_win, (img->var.x * 80) + w, (img->var.y * 80) + h, 0x000000);
+			my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0x000000);
 			i++;
 			w++;
 		}
@@ -60,9 +70,9 @@ void	put_ground(t_data	*img)
 		while (w < 79)
 		{
 			if(w == 0 || h == 79)
-				mlx_pixel_put(img->mlx, img->mlx_win, (img->var.x * 80) + w, (img->var.y * 80) + h, 0x000000);
+				my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0x000000);
 			else
-				mlx_pixel_put(img->mlx, img->mlx_win, (img->var.x * 80) + w, (img->var.y * 80) + h, 0xFFFFFF);
+				my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0xFFFFFF);
 			i++;
 			w++;
 		}
@@ -78,11 +88,11 @@ void	put_line(t_data *img)
 
 	i = 0;
 	
-	while(i < 40)
+	while(i < 80)
 	{
 		x = img->px + 5 + cos(img->rotationangle) * i;
 		y = img->py + sin(img->rotationangle) * i;
-		mlx_pixel_put(img->mlx, img->mlx_win, x, y, 0xFF0000);
+		my_mlx_pixel_put(img, x, y, 0xFF0000);
 		i += 1;
 	}
 }
@@ -100,13 +110,13 @@ void	put_myplayer2(t_data *img)
 		w = 0;
 		while (w < 10)
 		{
-			mlx_pixel_put(img->mlx, img->mlx_win, img->px + w, img->py + h, 0xFF0000);
+			my_mlx_pixel_put(img, img->px + w, img->py + h, 0xFF0000);
 			i++;
 			w++;
 		}
 		h++;
 	}
-	put_line(img);
+	// put_line(img);
 }
 
 void	draw(t_data *img)
@@ -124,8 +134,10 @@ void	draw(t_data *img)
 			img->var.x++;
 		}
 		img->var.y++;
+		// printf("her %d, x: %d\n" ,img->var.y, img->var.x);
 	}
 	put_myplayer2(img);
+	put_line(img);
 	img->indx++;
 	ft_putstr (ft_itoa(img->indx));
 }
@@ -143,21 +155,21 @@ void	player_data(t_data *img)
 	img->turndirection = 0;
 	img->rotationangle = PI / 2;
 	img->rotationspeed = 2 * (PI / 180);
-	img->movespeed = 2;
+	img->movespeed = 9;
 }
 
-int	open_window(t_data *img, t_node *var)
+int	open_window(t_data *img)
 {
-	int		x;
-	int		y;
-
-	x = ft_strlen(img->map[0]);
-	y = var->lenght;
+	img->mapx = ft_strlen(img->map[0]);
+	// printf("draw/x: %d/y: %d\n", x, y);
 	img->indx = -1;
 	img->mlx = mlx_init();
-	img->mlx_win = mlx_new_window(img->mlx, x * 80, y * 80, "game");
+	img->mlx_win = mlx_new_window(img->mlx, img->mapx * 80, img->mapy * 80, "game");
+	img->img = mlx_new_image(img->mlx, img->mapx * 80, img->mapy * 80);
+	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 	player_data(img);
 	draw(img);
+	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	mlx_hook(img->mlx_win, 2, 1L, key_hook, img);
 	mlx_hook(img->mlx_win, 17, 0, destroy, img);
 	mlx_loop(img->mlx);

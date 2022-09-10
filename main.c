@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-void	read_map(t_data *img, t_node *var)
+void	read_map(t_data *img)
 {
 	char	*instruction;
 	char	*tab;
@@ -19,7 +19,7 @@ void	read_map(t_data *img, t_node *var)
 		instruction = get_next_line(img->fd);
 	}
 	img->map = ft_split(tab, '\n');
-	if (!check_map(img->map, var, img))
+	if (!check_map(img->map, img))
 	{
 		ft_putstr("Error Invalide Map\n");
 		exit (0);
@@ -48,6 +48,6 @@ int	main(int argc, char **argv)
 	var = malloc(sizeof(t_node));
 	check_name(argc ,argv[1]);
 	init_data(img, var, argv[1]);
-	read_map(img, var);
-	open_window(img, var);
+	read_map(img);
+	open_window(img);
 }

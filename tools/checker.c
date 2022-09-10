@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 22:38:37 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/06 00:56:51 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/10 01:32:02 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int skip_spaces(char    *line)
 	return (i);
 }
 
-int	height(char **map, t_node *var)
+int	height(char **map, t_data *img)
 {
 	int	i;
 
@@ -43,7 +43,7 @@ int	height(char **map, t_node *var)
 			return (-1);
 		i++;
 	}
-	var->lenght = i;
+	img->mapy = i;
 	return (i);
 }
 
@@ -61,32 +61,22 @@ int	width(char **map, int i) //-> firt line must be 11111111111111
 	return (n);
 }
 
-int	middle(char **map, t_node *var, t_data *img)
+int	middle(char **map, t_data *img)
 {
 	int	i;
 	int	n;
 
 	i = 1;
-	img->c = 0;
-	var->e = 0;
-	var->p = 0;
 	while (map[++i])
 	{
 		n = skip_spaces(map[i]);
 		while (map[i][n])
 		{
-			// if (map[i][n] == 'C')
-			// 	img->c += 1;
-			// else if (map[i][n] == 'E')
-			// 	var->e += 1;
 			if (map[i][n] == 'P')
 			{
 				map[i][n] = '0';
 				img->px = (80 * n) + 35;
 				img->py = (80 * i) + 35;
-				printf("px: %d\n",img->px);
-				printf("py: %d\n",img->py);
-				var->p += 1;
 			}
 			else if(map[i][n] == '0')
 			{
@@ -100,14 +90,12 @@ int	middle(char **map, t_node *var, t_data *img)
 			n++;
 		}
 	}
-	// if (img->c < 1 || var->e < 1 || var->p != 1)
-	// 	return (-1);
 	return (0);
 }
 
-int	check_map(char	**map, t_node	*var, t_data	*img)
+int	check_map(char	**map, t_data	*img)
 {
-	if ((height(map, var)) == -1)
+	if ((height(map, img)) == -1)
 	{
 		printf("height error\n");
 		return (0);
@@ -117,12 +105,12 @@ int	check_map(char	**map, t_node	*var, t_data	*img)
 		printf("width0 error\n");
 		return (0);
 	}
-	if ((width(map, var->lenght - 1)) == -1)
+	if ((width(map, img->mapy - 1)) == -1)
 	{
 		printf("width1 error\n");
 		return (0);
 	}
-	if ((middle(map, var, img)) == -1)
+	if ((middle(map, img)) == -1)
 	{
 		printf("middle error\n");
 		return (0);
