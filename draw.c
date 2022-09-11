@@ -101,7 +101,6 @@ void	put_line(t_data *img)
 	int y;
 
 	i = 0;
-	
 	while(i < 900)
 	{
 		x = img->px + 5 + cos(img->rotationangle) * i;
@@ -134,6 +133,39 @@ void	put_myplayer2(t_data *img)
 	}
 }
 
+void	castallrays(t_data	*img)
+{
+	int i = 0;
+	int j = 0;
+	int x = 0;
+	int y = 0;
+
+	int		columnId = 0;
+	int		wall_strip_width = 1;
+	int		num_rays = img->mapx / wall_strip_width; 
+	double  fov_angle = 60 * (PI / 180);
+	double	rayangle = img->rotationangle - (fov_angle / 2);
+	printf("num_rays == %d\n", num_rays);
+	while(i < num_rays)
+	{
+		j = 0;
+		printf("-----------------------------\n");
+		while(j < 900)
+		{
+			x = img->px + 5 + cos(rayangle) * j;
+			y = img->py + sin(rayangle) * j;
+			if(!check_point(img, x, y))
+				break; ;
+			my_mlx_pixel_put(img, x, y,	0x800080);
+			j++;
+		}
+		rayangle += fov_angle / num_rays;
+		columnId++;
+		i++;
+	}
+
+}
+
 void	draw(t_data *img)
 {
 	img->var.y = 0;
@@ -150,6 +182,7 @@ void	draw(t_data *img)
 		}
 		img->var.y++;
 	}
+	castallrays(img);
 	put_myplayer2(img);
 	put_line(img);
 	img->indx++;
