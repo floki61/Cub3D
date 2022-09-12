@@ -21,6 +21,11 @@ typedef struct s_node
 	int		y;
 	int		lenght;
 }				t_node;
+typedef struct s_ray
+{
+	int		redline;
+	int		lenght;
+}				t_ray;
 
 typedef struct s_player
 {
@@ -50,10 +55,10 @@ typedef struct s_data
 	int		line_length;
 	int		endian;
 	char 	*addr;
+	t_ray	*ray;
 	void	*img;
 	
 	// int		c;
-	int		indx;
 	int		fd;
 	t_node	var;
 	t_player	player;
@@ -78,13 +83,14 @@ void	search_map(t_data *img, char n);
 void	draw(t_data *img);
 void	moves1(int keycode, t_data *img);
 void	moves2(int keycode, t_data *img);
-void	moves3(t_data *img, int py, int px);
 int		key_hook(int keycode, t_data *img);
+int		key_hook2(int keycode, t_data *img);
 int		destroy(t_data *data);
 void	put_player(t_data *img);
 int		check_name(int	argc, char *str);
 void	put_string(t_data *img);
 void	find_player(t_player *player, t_data *img);
 void	put_myplayer2(t_data *img);
+int		loop_game(t_data	*img);
 
 #endif

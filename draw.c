@@ -104,11 +104,12 @@ void	put_line(t_data *img)
 	while(i < 900)
 	{
 		x = img->px + 5 + cos(img->rotationangle) * i;
-		y = img->py + sin(img->rotationangle) * i;
+		y = img->py + 5 + sin(img->rotationangle) * i;
 		if(!check_point(img, x, y))
 			return ;
 		my_mlx_pixel_put(img, x, y, 0xFF0000);
 		i += 1;
+		img->ray->redline++;
 	}
 }
 
@@ -140,27 +141,25 @@ void	castallrays(t_data	*img)
 	int x = 0;
 	int y = 0;
 
-	int		columnId = 0;
-	int		wall_strip_width = 1;
+	// int		columnId = 0;
+	double		wall_strip_width = 1.1;
 	int		num_rays = img->mapx / wall_strip_width; 
 	double  fov_angle = 60 * (PI / 180);
 	double	rayangle = img->rotationangle - (fov_angle / 2);
-	printf("num_rays == %d\n", num_rays);
 	while(i < num_rays)
 	{
 		j = 0;
-		printf("-----------------------------\n");
 		while(j < 900)
 		{
 			x = img->px + 5 + cos(rayangle) * j;
-			y = img->py + sin(rayangle) * j;
+			y = img->py + 5 + sin(rayangle) * j;
 			if(!check_point(img, x, y))
-				break; ;
+				break ;
 			my_mlx_pixel_put(img, x, y,	0x800080);
 			j++;
 		}
 		rayangle += fov_angle / num_rays;
-		columnId++;
+		// columnId++;
 		i++;
 	}
 
@@ -182,11 +181,10 @@ void	draw(t_data *img)
 		}
 		img->var.y++;
 	}
-	castallrays(img);
 	put_myplayer2(img);
+	castallrays(img);
 	put_line(img);
-	img->indx++;
-	ft_putstr (ft_itoa(img->indx));
+	printf("redline : %d\n", img->ray->redline);
 }
 
 int	destroy(t_data *data)
@@ -198,9 +196,10 @@ int	destroy(t_data *data)
 
 void	player_data(t_data *img)
 {
+	img->ray->redline = 0;
 	img->walkdirection = 0;
 	img->turndirection = 0;
-	img->rotationangle = PI / 2;
+	img->rotationangle = -PI / 2;
 	img->rotationspeed = 2 * (PI / 180);
 	img->movespeed = 5;
 }
@@ -208,7 +207,6 @@ void	player_data(t_data *img)
 int	open_window(t_data *img)
 {
 	img->mapx = ft_strlen(img->map[0]);
-	img->indx = -1;
 	img->mlx = mlx_init();
 	img->mlx_win = mlx_new_window(img->mlx, img->mapx * 80, img->mapy * 80, "game");
 	img->img = mlx_new_image(img->mlx, img->mapx * 80, img->mapy * 80);
@@ -217,6 +215,8 @@ int	open_window(t_data *img)
 	draw(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	mlx_hook(img->mlx_win, 2, 1L, key_hook, img);
+	mlx_hook(img->mlx_win, 3, 2L, key_hook2, img);
+	mlx_loop_hook(img->mlx, loop_game, img);
 	mlx_hook(img->mlx_win, 17, 0, destroy, img);
 	mlx_loop(img->mlx);
 	return (0);
