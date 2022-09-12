@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 22:38:37 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/10 01:32:02 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/12 15:26:51 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int	check_name(int argc, char *str)
 		exit(0);
 	i = ft_strlen(str) - 4;
 	j = 0;
-	s = ".ber";
+	s = ".cub";
 	if (i < 0)
 		return (1);
 	while ((str[i] != '\0' || s[j] != '\0') && (str[j] == s[j]))

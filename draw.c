@@ -101,7 +101,7 @@ void	put_line(t_data *img)
 	int y;
 
 	i = 0;
-	while(i < 900)
+	while(1)
 	{
 		x = img->px + 5 + cos(img->rotationangle) * i;
 		y = img->py + 5 + sin(img->rotationangle) * i;
@@ -142,14 +142,14 @@ void	castallrays(t_data	*img)
 	int y = 0;
 
 	// int		columnId = 0;
-	double		wall_strip_width = 1.1;
-	int		num_rays = img->mapx / wall_strip_width; 
+	int		wall_strip_width = 1;
+	int		num_rays = (img->mapx / wall_strip_width)  * 100; 
 	double  fov_angle = 60 * (PI / 180);
 	double	rayangle = img->rotationangle - (fov_angle / 2);
 	while(i < num_rays)
 	{
 		j = 0;
-		while(j < 900)
+		while(1)
 		{
 			x = img->px + 5 + cos(rayangle) * j;
 			y = img->py + 5 + sin(rayangle) * j;
