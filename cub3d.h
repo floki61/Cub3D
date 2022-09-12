@@ -24,7 +24,7 @@ typedef struct s_node
 typedef struct s_ray
 {
 	int		redline;
-	int		lenght;
+	int		*lenght;
 }				t_ray;
 
 typedef struct s_player
