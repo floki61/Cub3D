@@ -137,9 +137,16 @@ void	castallrays(t_data	*img)
 	double  fov_angle = 60 * (PI / 180);
 	double	rayangle = img->rotationangle - (fov_angle / 2);
 
+	if(h==1)
+	{
+		while(img->ray->lenght[i])
+			printf("raylenght : %d\n", img->ray->lenght[i++]);
+		i = 0;
+		h = 2;
+	}
 	if(h==0)
 	{
-		// printf("-raaaaaày\n");
+		printf("-raaaaaày\n");
 		img->ray->lenght = malloc(sizeof(int) * num_rays);
 		h = 1;
 	}
@@ -161,8 +168,8 @@ void	castallrays(t_data	*img)
 	}
 	img->ray->lenght[i] = '\0';
 	i = 0;
-	while(img->ray->lenght[i])
-		printf("raylenght : %d\n", img->ray->lenght[i++]);
+	// while(img->ray->lenght[i])
+	// 	printf("raylenght : %d\n", img->ray->lenght[i++]);
 	// exit (0);
 }
 
@@ -202,7 +209,7 @@ void	player_data(t_data *img)
 	img->turndirection = 0;
 	img->rotationangle = -PI / 2;
 	img->rotationspeed = 2 * (PI / 180);
-	img->movespeed = 5;
+	img->movespeed = 10;
 }
 
 int	open_window(t_data *img)

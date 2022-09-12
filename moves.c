@@ -27,7 +27,7 @@ void	moves2(int keycode, t_data *img)
 
 	px = img->px;
 	py = img->py;
-	printf("p : %d\n", img->map[(py / 80)][(px + 5) / 80]);
+	printf("p : %d\n", img->map[(py / 80)][(px + 5) / 80])
     if(keycode == 2)
 	{
 		if(img->map[(py / 80)][(px + 5) / 80] == '0')
