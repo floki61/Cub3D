@@ -1,11 +1,5 @@
 #include "cub3d.h"
 
-void	init_line(t_data *img)
-{
-	img->walkdirection = 0;
-	img->turndirection = 0;
-	img->ray->redline = 0;
-}
 
 void	moves3(int keycode, t_data *img)
 {
@@ -27,7 +21,6 @@ void	moves2(int keycode, t_data *img)
 
 	px = img->px;
 	py = img->py;
-	printf("p : %d\n", img->map[(py / 80)][(px + 5) / 80])
     if(keycode == 2)
 	{
 		if(img->map[(py / 80)][(px + 5) / 80] == '0')
@@ -85,19 +78,23 @@ int	key_hook(int keycode, t_data *img)
 
 int	key_hook2(int keycode, t_data *img)
 {
-	keycode = 0;
-	init_line(img);
+	if(keycode == 1 || keycode == 13)
+		img->walkdirection = 0;
+	else if(keycode == 123 || keycode == 124)
+		img->turndirection = 0;
 	return (0);
 }
 
 int	loop_game(t_data	*img)
 {
+	mlx_hook(img->mlx_win, 2, 1L, key_hook, img);
+	mlx_hook(img->mlx_win, 3, 2L, key_hook2, img);
 	update(img);
 	mlx_clear_window (img->mlx, img->mlx_win);
 	img->img = mlx_new_image(img->mlx,  img->mapx* 80, img->mapy * 80);
 	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 	draw(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
-	init_line(img);
+	img->ray->redline = 0;
 	return (0);
 }

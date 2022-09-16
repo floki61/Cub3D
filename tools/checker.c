@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 22:38:37 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/12 15:26:51 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/16 00:42:42 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	middle(char **map, t_data *img)
 		n = skip_spaces(map[i]);
 		while (map[i][n])
 		{
-			if (map[i][n] == 'P')
+			if (map[i][n] == 'N' || map[i][n] == 'S' || map[i][n] == 'E' || map[i][n] == 'W')
 			{
 				map[i][n] = '0';
 				img->px = (80 * n) + 35;
@@ -84,6 +84,8 @@ int	middle(char **map, t_data *img)
 					return(-1);	
 				else if(map[i - 1][n] == '\0' || map[i + 1][n] == '\0' || map[i][n + 1] == '\0' || map[i][n - 1] == '\0')
 					return(-1);	
+				// else if(map[i - 1][n] == '\t' || map[i + 1][n] == '\t' || map[i][n + 1] == '\t' || map[i][n - 1] == '\t')
+				// 	return(-1);	
 			}
 			else if (map [i][n] != '1' && map[i][n] != ' ' && map[i][n] != '\t')
 				return (-1);
@@ -117,8 +119,6 @@ int	check_map(char	**map, t_data	*img)
 	}
 	return (1);
 }
-
-
 
 int	check_name(int argc, char *str)
 {

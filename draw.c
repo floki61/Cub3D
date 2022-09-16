@@ -137,16 +137,8 @@ void	castallrays(t_data	*img)
 	double  fov_angle = 60 * (PI / 180);
 	double	rayangle = img->rotationangle - (fov_angle / 2);
 
-	if(h==1)
-	{
-		while(img->ray->lenght[i])
-			printf("raylenght : %d\n", img->ray->lenght[i++]);
-		i = 0;
-		h = 2;
-	}
 	if(h==0)
 	{
-		printf("-raaaaaày\n");
 		img->ray->lenght = malloc(sizeof(int) * num_rays);
 		h = 1;
 	}
@@ -167,10 +159,6 @@ void	castallrays(t_data	*img)
 		i++;
 	}
 	img->ray->lenght[i] = '\0';
-	i = 0;
-	// while(img->ray->lenght[i])
-	// 	printf("raylenght : %d\n", img->ray->lenght[i++]);
-	// exit (0);
 }
 
 void	draw(t_data *img)
@@ -222,10 +210,8 @@ int	open_window(t_data *img)
 	player_data(img);
 	draw(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
-	mlx_hook(img->mlx_win, 2, 1L, key_hook, img);
-	mlx_hook(img->mlx_win, 3, 2L, key_hook2, img);
 	mlx_loop_hook(img->mlx, loop_game, img);
 	mlx_hook(img->mlx_win, 17, 0, destroy, img);
 	mlx_loop(img->mlx);
 	return (0);
-}
+}	
