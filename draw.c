@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/17 00:59:29 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/17 05:40:19 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,83 @@ void	put_myplayer(t_data *img)
 	}
 }
 
+int		haswallat(t_data	*img,int	x, int y)
+{
+	if(img->map[y / 80][x / 80] == '1')
+		return(1);
+	return (0);
+}
+
+void	normalizeangle(t_data	*img)
+{
+	img->rays->rayangle =	(int)img->rays->rayangle % (2 * (int)PI);
+	if (img->rays->rayangle < 0)
+		img->rays->rayangle = (2 * PI) + img->rays->rayangle;
+}
+void	cast(t_data	*img)
+{
+	int		xintercept;
+	int		yintercept;
+	int		xstep;
+	int		ystep;
+	int		israyfacingdown = 0;
+	int		israyfacingup = 1;
+	int		israyfacingright = 1;
+	int		israyfacingleft = 1;
+	
+	if(img->rays->rayangle > 0 && img->rays->rayangle < PI)
+		israyfacingdown = 80;
+	if(!israyfacingdown)
+		israyfacingup = -1;
+	if(img->rays->rayangle < (0.5 * PI) || img->rays->rayangle > (1.5 * PI))
+		israyfacingright = -1;
+	else
+		israyfacingleft = -1;
+		
+	yintercept = (img->py / 80) * 80;
+	yintercept += israyfacingdown; 
+	
+	xintercept = img->px + (yintercept - img->py) / tan(img->rays->rayangle);
+
+	ystep = 80;
+	ystep *= israyfacingup;
+
+	xstep = 80	/ tan(img->rays->rayangle);
+	if(xstep > 0)
+		xstep *= israyfacingleft;
+	if(xstep < 0)
+		xstep *= israyfacingright;
+
+	int		nexthorztouchx = xintercept;
+	int		nexthorztouchy = yintercept;
+	
+	if(israyfacingup)
+		nexthorztouchy--;
+	while(1)
+	{
+		if(haswallat(img, nexthorztouchx, nexthorztouchy))
+		{
+			// int	foundhorzwallhit = 1;
+			img->rays->wallhitx = nexthorztouchx;
+			img->rays->wallhity = nexthorztouchy;
+			break;
+		}
+		else
+		{
+			nexthorztouchx += xstep;
+			nexthorztouchy += ystep;
+		}
+	}
+	
+}
+
+void	init_rays(t_data	*img)
+{
+	img->rays->wall_strip_width = 1;
+	img->rays->num_rays = (img->mapx / img->rays->wall_strip_width)  * 100; 
+	img->rays->fov_angle = 60 * (PI / 180);
+	img->rays->rayangle = img->rotationangle - (img->rays->fov_angle / 2);	
+}
 void	castallrays(t_data	*img)
 {
 	int i = 0;
@@ -118,30 +195,29 @@ void	castallrays(t_data	*img)
 	int y = 0;
 	static int h;
 
-	int		wall_strip_width = 1;
-	int		num_rays = (img->mapx / wall_strip_width)  * 100; 
-	double  fov_angle = 60 * (PI / 180);
-	double	rayangle = img->rotationangle - (fov_angle / 2);
 
+	init_rays(img);
 	if(h==0)
 	{
-		img->ray->lenght = malloc(sizeof(int) * num_rays);
+		img->ray->lenght = malloc(sizeof(int) * img->rays->num_rays);
 		h = 1;
 	}
-	while(i < num_rays)
+	while(i < img->rays->num_rays)
 	{
 		j = 0;
-		while(1)
+		normalizeangle(img);
+		cast(img);
+		while(x != img->rays->wallhitx && y != img->rays->wallhity)
 		{
-			x = img->px + 5 + cos(rayangle) * j;
-			y = img->py + 5 + sin(rayangle) * j;
-			if(!check_point(img, x, y))
-				break ;
+			x = img->px + 5 + cos(img->rays->rayangle) * j;
+			y = img->py + 5 + sin(img->rays->rayangle) * j;
+			// if(!check_point(img, x, y))
+			// 	break ;
 			my_mlx_pixel_put(img, x, y,	0x800080);
 			j++;
 		}
 		img->ray->lenght[i] = j;
-		rayangle += fov_angle / num_rays;
+		img->rays->rayangle += img->rays->fov_angle / img->rays->num_rays;
 		i++;
 	}
 	img->ray->lenght[i] = '\0';

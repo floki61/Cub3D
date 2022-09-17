@@ -33,6 +33,18 @@ typedef struct s_player
 	int y;
 }	t_player;
 
+typedef	struct s_cast
+{
+	int		wall_strip_width;
+	int		num_rays;
+	double	rayangle;
+	double	fov_angle;
+	int		wallhitx;
+	int		wallhity;
+
+}	t_cast;
+
+
 typedef struct s_data
 {
 	void	*mlx;
@@ -56,6 +68,7 @@ typedef struct s_data
 	int		endian;
 	char 	*addr;
 	t_ray	*ray;
+	t_cast	*rays;
 	void	*img;
 	
 	// int		c;
