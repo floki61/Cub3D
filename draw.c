@@ -1,4 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
+/*   Updated: 2022/09/17 00:59:29 by oel-berh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
+
+int		check_point(t_data	*img, int x, int y)
+{
+	if(img->map[y / 80][x / 80] == '1')
+		return (0);
+	return (1);
+}
 
 void	my_mlx_pixel_put(t_data *img, int x, int y, int color)
 {
@@ -7,33 +26,6 @@ void	my_mlx_pixel_put(t_data *img, int x, int y, int color)
 	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
 	*(unsigned int*)dst = color;
 }
-
-
-
-void	find_player(t_player *player, t_data *img)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (img->map[i])
-	{
-		j = 0;
-		while (img->map[i][j])
-		{
-			if (img->map[i][j] == 'P')
-			{
-				player->x = j;
-				player->y = i;
-				img->map[i][j] = '0';
-				return ;
-			}
-			j++;
-		}
-		i++;
-	}
-}
-
 
 void	put_wall(t_data	*img)
 {
@@ -80,14 +72,8 @@ void	put_ground(t_data	*img)
 	}
 }
 
-int		check_point(t_data	*img, int x, int y)
-{
-	if(img->map[y / 80][x / 80] == '1')
-		return (0);
-	return (1);
-}
 
-void	put_line(t_data *img)
+void	redray(t_data *img)
 {
 	int x;
 	int y;
@@ -103,7 +89,7 @@ void	put_line(t_data *img)
 	}
 }
 
-void	put_myplayer2(t_data *img)
+void	put_myplayer(t_data *img)
 {
 	int i;
 	int	h;
@@ -177,10 +163,9 @@ void	draw(t_data *img)
 		}
 		img->var.y++;
 	}
-	put_myplayer2(img);
+	put_myplayer(img);
 	castallrays(img);
-	put_line(img);
-	// printf("redline : %d\n", img->ray->redline);
+	redray(img);
 }
 
 int	destroy(t_data *data)
@@ -190,16 +175,6 @@ int	destroy(t_data *data)
 	return (0);
 }
 
-void	player_data(t_data *img)
-{
-	img->ray->redline = 0;
-	img->walkdirection = 0;
-	img->turndirection = 0;
-	img->rotationangle = -PI / 2;
-	img->rotationspeed = 2 * (PI / 180);
-	img->movespeed = 10;
-}
-
 int	open_window(t_data *img)
 {
 	img->mapx = ft_strlen(img->map[0]);
@@ -207,7 +182,6 @@ int	open_window(t_data *img)
 	img->mlx_win = mlx_new_window(img->mlx, img->mapx * 80, img->mapy * 80, "game");
 	img->img = mlx_new_image(img->mlx, img->mapx * 80, img->mapy * 80);
 	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
-	player_data(img);
 	draw(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	mlx_loop_hook(img->mlx, loop_game, img);
