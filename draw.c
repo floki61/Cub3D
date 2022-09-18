@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/17 05:40:19 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/18 03:58:46 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,11 @@ int		haswallat(t_data	*img,int	x, int y)
 
 void	normalizeangle(t_data	*img)
 {
-	img->rays->rayangle =	(int)img->rays->rayangle % (2 * (int)PI);
+	printf("rayanglenorm: %f\n",img->rays->rayangle);
+	img->rays->rayangle =	fmod(img->rays->rayangle, (2 * PI));
 	if (img->rays->rayangle < 0)
 		img->rays->rayangle = (2 * PI) + img->rays->rayangle;
+	printf("rayanglenorm2: %f\n",img->rays->rayangle);
 }
 void	cast(t_data	*img)
 {
@@ -136,8 +138,11 @@ void	cast(t_data	*img)
 	
 	if(img->rays->rayangle > 0 && img->rays->rayangle < PI)
 		israyfacingdown = 80;
+	printf("rayangle: %f\n", img->rays->rayangle);
+	printf("hisfacingdown: %d\n", israyfacingdown);
 	if(!israyfacingdown)
 		israyfacingup = -1;
+	printf("hisfacingup: %d\n", israyfacingup);
 	if(img->rays->rayangle < (0.5 * PI) || img->rays->rayangle > (1.5 * PI))
 		israyfacingright = -1;
 	else
@@ -152,20 +157,21 @@ void	cast(t_data	*img)
 	ystep *= israyfacingup;
 
 	xstep = 80	/ tan(img->rays->rayangle);
-	if(xstep > 0)
+	if(israyfacingleft == -1 && ystep > 0)
 		xstep *= israyfacingleft;
-	if(xstep < 0)
+	if(israyfacingright == -1 && ystep < 0)
 		xstep *= israyfacingright;
 
 	int		nexthorztouchx = xintercept;
 	int		nexthorztouchy = yintercept;
 	
-	if(israyfacingup)
+	if(israyfacingup == -1)
 		nexthorztouchy--;
 	while(1)
 	{
 		if(haswallat(img, nexthorztouchx, nexthorztouchy))
 		{
+			printf("hey\n");
 			// int	foundhorzwallhit = 1;
 			img->rays->wallhitx = nexthorztouchx;
 			img->rays->wallhity = nexthorztouchy;
@@ -195,8 +201,10 @@ void	castallrays(t_data	*img)
 	int y = 0;
 	static int h;
 
-
+	
 	init_rays(img);
+	printf("rotationangle§: %f\n", img->rotationangle);
+	printf("rayangle befor cast§: %f\n", img->rays->rayangle);
 	if(h==0)
 	{
 		img->ray->lenght = malloc(sizeof(int) * img->rays->num_rays);
@@ -206,13 +214,19 @@ void	castallrays(t_data	*img)
 	{
 		j = 0;
 		normalizeangle(img);
+		printf("hey---------\n");
 		cast(img);
-		while(x != img->rays->wallhitx && y != img->rays->wallhity)
+		// while(x != img->rays->wallhitx && y != img->rays->wallhity)
+		while(1)
 		{
 			x = img->px + 5 + cos(img->rays->rayangle) * j;
 			y = img->py + 5 + sin(img->rays->rayangle) * j;
-			// if(!check_point(img, x, y))
-			// 	break ;
+			
+			printf("walhitx: %d\nwalhity: %d\n", img->rays->wallhitx, img->rays->wallhity);
+			printf("x: %d\ny: %d\n", x, y);
+			exit(0);
+			if(!check_point(img, x, y))
+				break ;
 			my_mlx_pixel_put(img, x, y,	0x800080);
 			j++;
 		}
