@@ -76,6 +76,7 @@ typedef struct s_data
 	//line:
 	int	turndirection; // -1 if left +1 if right
 	int	walkdirection; // -1 if back +1 if front
+	int	walkdirection2;
 	double	rotationangle; // p / 2
 	double	rotationspeed; // 2 * (p / 180 )
 	int		movespeed;	// 2
