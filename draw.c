@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/22 01:39:24 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/22 02:07:54 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,115 +129,119 @@ float distanceBetweenPoints(float x1, float y1, float x2, float y2)
 {
     return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
-// int		distanceBetweenPoints(float x, float y, float xd, float yd)
-// {
-// 	return (sqrt(pow((xd - x), 2) + pow(yd - y, 2)));
-// }
-void	cast(t_data	*img)
+
+void	raysfacing(t_data	*img)
+{
+	img->rayfacing->down = img->rays->rayangle > 0 && img->rays->rayangle < PI;
+	img->rayfacing->up = !img->rayfacing->down;
+	img->rayfacing->right = img->rays->rayangle < (0.5 * PI) || img->rays->rayangle > (1.5 * PI);
+	img->rayfacing->left = !img->rayfacing->right;
+}
+
+void	horizontal_raygrid(t_data	*img)
 {
 	float	xintercept;
 	float	yintercept;
 	float	xstep;
 	float	ystep;
-	int		israyfacingdown;
-	int		israyfacingup;
-	int		israyfacingright;
-	int		israyfacingleft;
 
-	float h = 0;
-	float v = 0;
-	israyfacingdown = img->rays->rayangle > 0 && img->rays->rayangle < PI;
-	israyfacingup = !israyfacingdown;
-	israyfacingright = img->rays->rayangle < (0.5 * PI) || img->rays->rayangle > (1.5 * PI);
-	israyfacingleft = !israyfacingright;
-	
+	img->rays->horzhitdistance = 0;
 	yintercept = floor((img->py + 5) / 80) * 80;
-	if(israyfacingdown)
+	if(img->rayfacing->down)
 		yintercept += 80;
 	xintercept = img->px + 5 + (yintercept - img->py - 5) / tan(img->rays->rayangle);
 	
 	ystep = 80;
-	if(israyfacingup)
+	if(img->rayfacing->up)
 		ystep *=  -1;
 	xstep = 80	/ tan(img->rays->rayangle);
-	if(israyfacingleft && xstep > 0)
+	if(img->rayfacing->left && xstep > 0)
 		xstep *=  -1;
-	else if(israyfacingright && xstep < 0)
+	else if(img->rayfacing->right && xstep < 0)
 		xstep *= -1;
 	
 	while(xintercept >= 0 && xintercept <= 80 * img->mapx && yintercept >= 0 && yintercept <= 80 * img->mapy)
 	{
-		if(israyfacingup)
+		if(img->rayfacing->up)
 			yintercept -= 1;
 		if(haswallat(img,xintercept, yintercept))
 		{
-			if(israyfacingup)
+			if(img->rayfacing->up)
 				++yintercept;
 			img->rays->wallhitx = xintercept;
 			img->rays->wallhity = yintercept;
-			// img->rays->raylenght = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
-			h = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
+			img->rays->horzhitdistance = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
 			break;
 		}
 		else
 		{
-			if(israyfacingup)
+			if(img->rayfacing->up)
 				yintercept += 1;
 			xintercept += xstep;
 			yintercept += ystep;
 		}
 	}
-	float		xinterceptv;
-	float		yinterceptv;
+}
 
-	xinterceptv = floor((img->px + 5) / 80) * 80;
-	if(israyfacingright)
-		xinterceptv += 80;
-	yinterceptv = img->py + 5 + (xinterceptv - img->px - 5) * tan(img->rays->rayangle);
+void	vertical_raygrid(t_data	*img)
+{
+	float		xintercept;
+	float		yintercept;
+	float		xstep;
+	float		ystep;
+
+	img->rays->verthitdistance = 0;
+	xintercept = floor((img->px + 5) / 80) * 80;
+	if(img->rayfacing->right)
+		xintercept += 80;
+	yintercept = img->py + 5 + (xintercept - img->px - 5) * tan(img->rays->rayangle);
 	xstep = 80;
-	if(israyfacingleft)
+	if(img->rayfacing->left)
 		xstep *= -1;
 	ystep = 80 * tan(img->rays->rayangle);
-	if(israyfacingup && ystep > 0)
+	if(img->rayfacing->up && ystep > 0)
 		ystep *=  -1;
-	else if(israyfacingdown && ystep < 0)
+	else if(img->rayfacing->down && ystep < 0)
 		ystep *= -1; 
-	while(xinterceptv >= 0 && xinterceptv <= 80 * img->mapx && yinterceptv >= 0 && yinterceptv <= 80 * img->mapy)
+	while(xintercept >= 0 && xintercept <= 80 * img->mapx && yintercept >= 0 && yintercept <= 80 * img->mapy)
 	{
-		if(israyfacingleft)
-			xinterceptv--;
-		if(haswallat(img,xinterceptv, yinterceptv))
+		if(img->rayfacing->left)
+			xintercept--;
+		if(haswallat(img,xintercept, yintercept))
 		{
-			if(israyfacingleft)
-				++xinterceptv;
-			img->rays->wallhitx = xinterceptv;
-			img->rays->wallhity = yinterceptv;
-			v = distanceBetweenPoints(img->px + 5, img->py + 5, xinterceptv, yinterceptv);
+			if(img->rayfacing->left)
+				++xintercept;
+			img->rays->wallhitx = xintercept;
+			img->rays->wallhity = yintercept;
+			img->rays->verthitdistance = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
 			break;
 		}
 		else
 		{
-			if(israyfacingleft)
-				++xinterceptv;
-			xinterceptv += xstep;
-			yinterceptv += ystep;
+			if(img->rayfacing->left)
+				++xintercept;
+			xintercept += xstep;
+			yintercept += ystep;
 		}
 	}
-	if(!v)
-		img->rays->raylenght = h;
-	else if(!h)
-		img->rays->raylenght = v;
-	else if(v < h )
+}
+
+void	cast(t_data	*img)
+{
+	raysfacing(img);
+	horizontal_raygrid(img);
+	vertical_raygrid(img);
+	if(!img->rays->verthitdistance)
+		img->rays->raylenght = img->rays->horzhitdistance;
+	else if(!img->rays->horzhitdistance)
+		img->rays->raylenght = img->rays->verthitdistance;
+	else if(img->rays->verthitdistance < img->rays->horzhitdistance)
 	{
-		img->rays->wallhitx = xinterceptv;
-		img->rays->wallhity = yinterceptv;
-		img->rays->raylenght = v;
+		img->rays->raylenght = img->rays->verthitdistance;
 	}
-	else if (v > h)
+	else if (img->rays->verthitdistance > img->rays->horzhitdistance)
 	{
-		img->rays->wallhitx = xintercept;
-		img->rays->wallhity = yintercept;
-		img->rays->raylenght = h;
+		img->rays->raylenght = img->rays->horzhitdistance;
 	}
 }
 
@@ -254,12 +258,8 @@ void	castallrays(t_data	*img)
 	int j = 0;
 	int x = 0;
 	int y = 0;
-	int index;
 	static int h;
-	int negative = 0;
 
-	
-	index = 0;
 	init_rays(img);
 	if(h==0)
 	{
@@ -271,12 +271,8 @@ void	castallrays(t_data	*img)
 		j = 1;
 		normalizeangle(img);
 		cast(img);
-		if(img->rays->raylenght < 0)
-			negative++;
 		while(img->rays->raylenght > j)
 		{
-			if(j == 0)
-				index++;
 			x = img->px + 5 + cos(img->rays->rayangle) * j;
 			y = img->py + 5 + sin(img->rays->rayangle) * j;
 			my_mlx_pixel_put(img, x, y,	0x800080);
@@ -285,7 +281,6 @@ void	castallrays(t_data	*img)
 		img->rays->rayangle += img->rays->fov_angle / img->rays->num_rays;
 		i++;
 	}
-	img->ray->lenght[i] = '\0';
 }
 
 void	draw(t_data *img)

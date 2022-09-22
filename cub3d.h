@@ -38,11 +38,11 @@ typedef	struct s_raytools
 	float	yintercept;
 	float	xstep;
 	float	ystep;
-	int		israyfacingdown;
-	int		israyfacingup;
-	int		israyfacingright;
-	int		israyfacingleft;
-}	t_raytools;
+	int		down;
+	int		up;
+	int		right;
+	int		left;
+}	t_rays;
 
 typedef	struct s_cast
 {
@@ -52,6 +52,8 @@ typedef	struct s_cast
 	double	fov_angle;
 	float	wallhitx;
 	float	wallhity;
+	float	horzhitdistance;
+	float	verthitdistance;
 	float	raylenght;
 
 }	t_cast;
@@ -82,7 +84,7 @@ typedef struct s_data
 	t_ray	*ray;
 	t_cast	*rays;
 	void	*img;
-	t_raytools	*tools;
+	t_rays	*rayfacing;
 	
 	// int		c;
 	int		fd;

@@ -48,6 +48,7 @@ int	main(int argc, char **argv)
 	var = malloc(sizeof(t_node));
 	img->ray = malloc(sizeof(t_ray));
 	img->rays = malloc(sizeof(t_cast));
+	img->rayfacing = malloc(sizeof(t_rays));
 	check_name(argc ,argv[1]);
 	init_data(img, var, argv[1]);
 	read_map(img);
