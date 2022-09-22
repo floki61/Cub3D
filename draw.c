@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/18 03:58:46 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/22 01:39:24 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,12 @@ void	put_ground(t_data	*img)
 	while(h < 80)
 	{
 		w = 0;
-		while (w < 79)
+		while (w < 80)
 		{
-			if(w == 0 || h == 79)
-				my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0x000000);
-			else
-				my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0xFFFFFF);
+			// if(w == 0 || h == 79)
+			// 	my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0x000000);
+			// else
+			my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0xFFFFFF);
 			i++;
 			w++;
 		}
@@ -119,77 +119,132 @@ int		haswallat(t_data	*img,int	x, int y)
 
 void	normalizeangle(t_data	*img)
 {
-	printf("rayanglenorm: %f\n",img->rays->rayangle);
-	img->rays->rayangle =	fmod(img->rays->rayangle, (2 * PI));
+	img->rays->rayangle =	remainder(img->rays->rayangle, (2 * PI)); //c
 	if (img->rays->rayangle < 0)
 		img->rays->rayangle = (2 * PI) + img->rays->rayangle;
-	printf("rayanglenorm2: %f\n",img->rays->rayangle);
+	// printf("norm-rayangle: %f\n",img->rays->rayangle);
 }
+
+float distanceBetweenPoints(float x1, float y1, float x2, float y2) 
+{
+    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+// int		distanceBetweenPoints(float x, float y, float xd, float yd)
+// {
+// 	return (sqrt(pow((xd - x), 2) + pow(yd - y, 2)));
+// }
 void	cast(t_data	*img)
 {
-	int		xintercept;
-	int		yintercept;
-	int		xstep;
-	int		ystep;
-	int		israyfacingdown = 0;
-	int		israyfacingup = 1;
-	int		israyfacingright = 1;
-	int		israyfacingleft = 1;
-	
-	if(img->rays->rayangle > 0 && img->rays->rayangle < PI)
-		israyfacingdown = 80;
-	printf("rayangle: %f\n", img->rays->rayangle);
-	printf("hisfacingdown: %d\n", israyfacingdown);
-	if(!israyfacingdown)
-		israyfacingup = -1;
-	printf("hisfacingup: %d\n", israyfacingup);
-	if(img->rays->rayangle < (0.5 * PI) || img->rays->rayangle > (1.5 * PI))
-		israyfacingright = -1;
-	else
-		israyfacingleft = -1;
-		
-	yintercept = (img->py / 80) * 80;
-	yintercept += israyfacingdown; 
-	
-	xintercept = img->px + (yintercept - img->py) / tan(img->rays->rayangle);
+	float	xintercept;
+	float	yintercept;
+	float	xstep;
+	float	ystep;
+	int		israyfacingdown;
+	int		israyfacingup;
+	int		israyfacingright;
+	int		israyfacingleft;
 
+	float h = 0;
+	float v = 0;
+	israyfacingdown = img->rays->rayangle > 0 && img->rays->rayangle < PI;
+	israyfacingup = !israyfacingdown;
+	israyfacingright = img->rays->rayangle < (0.5 * PI) || img->rays->rayangle > (1.5 * PI);
+	israyfacingleft = !israyfacingright;
+	
+	yintercept = floor((img->py + 5) / 80) * 80;
+	if(israyfacingdown)
+		yintercept += 80;
+	xintercept = img->px + 5 + (yintercept - img->py - 5) / tan(img->rays->rayangle);
+	
 	ystep = 80;
-	ystep *= israyfacingup;
-
+	if(israyfacingup)
+		ystep *=  -1;
 	xstep = 80	/ tan(img->rays->rayangle);
-	if(israyfacingleft == -1 && ystep > 0)
-		xstep *= israyfacingleft;
-	if(israyfacingright == -1 && ystep < 0)
-		xstep *= israyfacingright;
-
-	int		nexthorztouchx = xintercept;
-	int		nexthorztouchy = yintercept;
+	if(israyfacingleft && xstep > 0)
+		xstep *=  -1;
+	else if(israyfacingright && xstep < 0)
+		xstep *= -1;
 	
-	if(israyfacingup == -1)
-		nexthorztouchy--;
-	while(1)
+	while(xintercept >= 0 && xintercept <= 80 * img->mapx && yintercept >= 0 && yintercept <= 80 * img->mapy)
 	{
-		if(haswallat(img, nexthorztouchx, nexthorztouchy))
+		if(israyfacingup)
+			yintercept -= 1;
+		if(haswallat(img,xintercept, yintercept))
 		{
-			printf("hey\n");
-			// int	foundhorzwallhit = 1;
-			img->rays->wallhitx = nexthorztouchx;
-			img->rays->wallhity = nexthorztouchy;
+			if(israyfacingup)
+				++yintercept;
+			img->rays->wallhitx = xintercept;
+			img->rays->wallhity = yintercept;
+			// img->rays->raylenght = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
+			h = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
 			break;
 		}
 		else
 		{
-			nexthorztouchx += xstep;
-			nexthorztouchy += ystep;
+			if(israyfacingup)
+				yintercept += 1;
+			xintercept += xstep;
+			yintercept += ystep;
 		}
 	}
-	
+	float		xinterceptv;
+	float		yinterceptv;
+
+	xinterceptv = floor((img->px + 5) / 80) * 80;
+	if(israyfacingright)
+		xinterceptv += 80;
+	yinterceptv = img->py + 5 + (xinterceptv - img->px - 5) * tan(img->rays->rayangle);
+	xstep = 80;
+	if(israyfacingleft)
+		xstep *= -1;
+	ystep = 80 * tan(img->rays->rayangle);
+	if(israyfacingup && ystep > 0)
+		ystep *=  -1;
+	else if(israyfacingdown && ystep < 0)
+		ystep *= -1; 
+	while(xinterceptv >= 0 && xinterceptv <= 80 * img->mapx && yinterceptv >= 0 && yinterceptv <= 80 * img->mapy)
+	{
+		if(israyfacingleft)
+			xinterceptv--;
+		if(haswallat(img,xinterceptv, yinterceptv))
+		{
+			if(israyfacingleft)
+				++xinterceptv;
+			img->rays->wallhitx = xinterceptv;
+			img->rays->wallhity = yinterceptv;
+			v = distanceBetweenPoints(img->px + 5, img->py + 5, xinterceptv, yinterceptv);
+			break;
+		}
+		else
+		{
+			if(israyfacingleft)
+				++xinterceptv;
+			xinterceptv += xstep;
+			yinterceptv += ystep;
+		}
+	}
+	if(!v)
+		img->rays->raylenght = h;
+	else if(!h)
+		img->rays->raylenght = v;
+	else if(v < h )
+	{
+		img->rays->wallhitx = xinterceptv;
+		img->rays->wallhity = yinterceptv;
+		img->rays->raylenght = v;
+	}
+	else if (v > h)
+	{
+		img->rays->wallhitx = xintercept;
+		img->rays->wallhity = yintercept;
+		img->rays->raylenght = h;
+	}
 }
 
 void	init_rays(t_data	*img)
 {
 	img->rays->wall_strip_width = 1;
-	img->rays->num_rays = (img->mapx / img->rays->wall_strip_width)  * 100; 
+	img->rays->num_rays = (img->mapx / img->rays->wall_strip_width) * 100; 
 	img->rays->fov_angle = 60 * (PI / 180);
 	img->rays->rayangle = img->rotationangle - (img->rays->fov_angle / 2);	
 }
@@ -199,12 +254,13 @@ void	castallrays(t_data	*img)
 	int j = 0;
 	int x = 0;
 	int y = 0;
+	int index;
 	static int h;
+	int negative = 0;
 
 	
+	index = 0;
 	init_rays(img);
-	printf("rotationangle§: %f\n", img->rotationangle);
-	printf("rayangle befor cast§: %f\n", img->rays->rayangle);
 	if(h==0)
 	{
 		img->ray->lenght = malloc(sizeof(int) * img->rays->num_rays);
@@ -212,25 +268,20 @@ void	castallrays(t_data	*img)
 	}
 	while(i < img->rays->num_rays)
 	{
-		j = 0;
+		j = 1;
 		normalizeangle(img);
-		printf("hey---------\n");
 		cast(img);
-		// while(x != img->rays->wallhitx && y != img->rays->wallhity)
-		while(1)
+		if(img->rays->raylenght < 0)
+			negative++;
+		while(img->rays->raylenght > j)
 		{
+			if(j == 0)
+				index++;
 			x = img->px + 5 + cos(img->rays->rayangle) * j;
 			y = img->py + 5 + sin(img->rays->rayangle) * j;
-			
-			printf("walhitx: %d\nwalhity: %d\n", img->rays->wallhitx, img->rays->wallhity);
-			printf("x: %d\ny: %d\n", x, y);
-			exit(0);
-			if(!check_point(img, x, y))
-				break ;
 			my_mlx_pixel_put(img, x, y,	0x800080);
 			j++;
 		}
-		img->ray->lenght[i] = j;
 		img->rays->rayangle += img->rays->fov_angle / img->rays->num_rays;
 		i++;
 	}

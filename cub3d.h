@@ -2,7 +2,7 @@
 # define CUB3D_H
 
 // #define PI 3.14159265
-#define PI 3.14159265358979323846
+#define PI 3.14159265
 
 # include <stdio.h>
 # include <unistd.h>
@@ -26,12 +26,23 @@ typedef struct s_ray
 	int		redline;
 	int		*lenght;
 }				t_ray;
-
 typedef struct s_player
 {
 	int	x;
 	int y;
 }	t_player;
+
+typedef	struct s_raytools
+{
+	float	xintercept;
+	float	yintercept;
+	float	xstep;
+	float	ystep;
+	int		israyfacingdown;
+	int		israyfacingup;
+	int		israyfacingright;
+	int		israyfacingleft;
+}	t_raytools;
 
 typedef	struct s_cast
 {
@@ -39,8 +50,9 @@ typedef	struct s_cast
 	int		num_rays;
 	double	rayangle;
 	double	fov_angle;
-	int		wallhitx;
-	int		wallhity;
+	float	wallhitx;
+	float	wallhity;
+	float	raylenght;
 
 }	t_cast;
 
@@ -70,6 +82,7 @@ typedef struct s_data
 	t_ray	*ray;
 	t_cast	*rays;
 	void	*img;
+	t_raytools	*tools;
 	
 	// int		c;
 	int		fd;
