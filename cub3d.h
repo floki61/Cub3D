@@ -3,6 +3,8 @@
 
 // #define PI 3.14159265
 #define PI 3.14159265
+#define	wall_strip_width 1
+#define fov_angle  60 * (PI / 180)
 
 # include <stdio.h>
 # include <unistd.h>
@@ -46,15 +48,17 @@ typedef	struct s_raytools
 
 typedef	struct s_cast
 {
-	int		wall_strip_width;
+	// int		wall_strip_width;
 	int		num_rays;
 	double	rayangle;
-	double	fov_angle;
+	// double	fov_angle;
 	float	wallhitx;
 	float	wallhity;
 	float	horzhitdistance;
 	float	verthitdistance;
-	float	raylenght;
+	float	distance;
+	int		redline;
+	int		*raylenght;
 
 }	t_cast;
 

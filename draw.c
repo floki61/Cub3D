@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/22 02:07:54 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/22 02:40:55 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ void	normalizeangle(t_data	*img)
 	img->rays->rayangle =	remainder(img->rays->rayangle, (2 * PI)); //c
 	if (img->rays->rayangle < 0)
 		img->rays->rayangle = (2 * PI) + img->rays->rayangle;
-	// printf("norm-rayangle: %f\n",img->rays->rayangle);
 }
 
 float distanceBetweenPoints(float x1, float y1, float x2, float y2) 
@@ -150,7 +149,6 @@ void	horizontal_raygrid(t_data	*img)
 	if(img->rayfacing->down)
 		yintercept += 80;
 	xintercept = img->px + 5 + (yintercept - img->py - 5) / tan(img->rays->rayangle);
-	
 	ystep = 80;
 	if(img->rayfacing->up)
 		ystep *=  -1;
@@ -159,7 +157,6 @@ void	horizontal_raygrid(t_data	*img)
 		xstep *=  -1;
 	else if(img->rayfacing->right && xstep < 0)
 		xstep *= -1;
-	
 	while(xintercept >= 0 && xintercept <= 80 * img->mapx && yintercept >= 0 && yintercept <= 80 * img->mapy)
 	{
 		if(img->rayfacing->up)
@@ -232,55 +229,53 @@ void	cast(t_data	*img)
 	horizontal_raygrid(img);
 	vertical_raygrid(img);
 	if(!img->rays->verthitdistance)
-		img->rays->raylenght = img->rays->horzhitdistance;
+		img->rays->distance = img->rays->horzhitdistance;
 	else if(!img->rays->horzhitdistance)
-		img->rays->raylenght = img->rays->verthitdistance;
+		img->rays->distance = img->rays->verthitdistance;
 	else if(img->rays->verthitdistance < img->rays->horzhitdistance)
 	{
-		img->rays->raylenght = img->rays->verthitdistance;
+		img->rays->distance = img->rays->verthitdistance;
 	}
 	else if (img->rays->verthitdistance > img->rays->horzhitdistance)
 	{
-		img->rays->raylenght = img->rays->horzhitdistance;
+		img->rays->distance = img->rays->horzhitdistance;
 	}
 }
 
 void	init_rays(t_data	*img)
 {
-	img->rays->wall_strip_width = 1;
-	img->rays->num_rays = (img->mapx / img->rays->wall_strip_width) * 100; 
-	img->rays->fov_angle = 60 * (PI / 180);
-	img->rays->rayangle = img->rotationangle - (img->rays->fov_angle / 2);	
+	img->rays->num_rays = (img->mapx / wall_strip_width); 
+	img->rays->rayangle = img->rotationangle - (fov_angle / 2);
+	if(!img->rays->raylenght)
+		img->rays->raylenght = malloc(sizeof(int) * img->rays->num_rays);
 }
+
 void	castallrays(t_data	*img)
 {
 	int i = 0;
-	int j = 0;
-	int x = 0;
-	int y = 0;
-	static int h;
+	int j;
+	int x;
+	int y;
 
 	init_rays(img);
-	if(h==0)
-	{
-		img->ray->lenght = malloc(sizeof(int) * img->rays->num_rays);
-		h = 1;
-	}
 	while(i < img->rays->num_rays)
 	{
 		j = 1;
 		normalizeangle(img);
 		cast(img);
-		while(img->rays->raylenght > j)
+		while(img->rays->distance > j)
 		{
 			x = img->px + 5 + cos(img->rays->rayangle) * j;
 			y = img->py + 5 + sin(img->rays->rayangle) * j;
 			my_mlx_pixel_put(img, x, y,	0x800080);
 			j++;
 		}
-		img->rays->rayangle += img->rays->fov_angle / img->rays->num_rays;
+		img->rays->raylenght[i] = img->rays->distance;
+		img->rays->rayangle += fov_angle / img->rays->num_rays;
 		i++;
 	}
+	img->rays->raylenght[i] = '\0';
+	
 }
 
 void	draw(t_data *img)
@@ -301,7 +296,7 @@ void	draw(t_data *img)
 	}
 	put_myplayer(img);
 	castallrays(img);
-	redray(img);
+	// redray(img);
 }
 
 int	destroy(t_data *data)
@@ -318,7 +313,7 @@ int	open_window(t_data *img)
 	img->mlx_win = mlx_new_window(img->mlx, img->mapx * 80, img->mapy * 80, "game");
 	img->img = mlx_new_image(img->mlx, img->mapx * 80, img->mapy * 80);
 	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
-	draw(img);
+	// draw(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	mlx_loop_hook(img->mlx, loop_game, img);
 	mlx_hook(img->mlx_win, 17, 0, destroy, img);

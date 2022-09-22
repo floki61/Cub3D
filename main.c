@@ -28,10 +28,13 @@ void	read_map(t_data *img)
 }
 
 
-void	init_data(t_data	*img, t_node	*var, char	*fd)
+void	init_data(t_data	*img, char	*fd)
 {
+	img->ray = malloc(sizeof(t_ray));
+	img->rays = malloc(sizeof(t_cast));
+	img->rayfacing = malloc(sizeof(t_rays));
 	img->fd = open(fd, O_RDONLY);
-	if (!(img->fd) || !img || !var)
+	if (!(img->fd) || !img)
 	{
 		write(1, "Error\n", 6);
 		exit (0);
@@ -42,15 +45,10 @@ void	init_data(t_data	*img, t_node	*var, char	*fd)
 int	main(int argc, char **argv)
 {
 	t_data	*img;
-	t_node	*var;
 
 	img = malloc(sizeof(t_data));
-	var = malloc(sizeof(t_node));
-	img->ray = malloc(sizeof(t_ray));
-	img->rays = malloc(sizeof(t_cast));
-	img->rayfacing = malloc(sizeof(t_rays));
 	check_name(argc ,argv[1]);
-	init_data(img, var, argv[1]);
+	init_data(img, argv[1]);
 	read_map(img);
 	open_window(img);
 }
