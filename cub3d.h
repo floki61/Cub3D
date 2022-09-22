@@ -2,9 +2,11 @@
 # define CUB3D_H
 
 // #define PI 3.14159265
-#define PI 3.14159265
-#define	wall_strip_width 1
-#define fov_angle  60 * (PI / 180)
+# define PI 3.14159265
+# define TILE_SIZE  64
+# define FOV_ANGLE (60 * (PI / 180))
+# define WALL_STRIP_WIDTH 1 
+# define MINIMAP_SCALE_FACTOR 0.2
 
 # include <stdio.h>
 # include <unistd.h>
@@ -89,6 +91,8 @@ typedef struct s_data
 	t_ray	*ray;
 	t_cast	*rays;
 	void	*img;
+	int		img_h;
+	int		img_w;
 	t_rays	*rayfacing;
 	
 	// int		c;

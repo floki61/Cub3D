@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/22 02:40:55 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/22 19:05:19 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	put_wall(t_data	*img)
 		w = 0;
 		while (w < 80)
 		{
-			my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0x27329F);
+			my_mlx_pixel_put(img, ((img->var.x * 80) + w) * 0.2, ((img->var.y * 80) + h) * 0.2 , 0x27329F);
 			i++;
 			w++;
 		}
@@ -64,7 +64,7 @@ void	put_ground(t_data	*img)
 			// if(w == 0 || h == 79)
 			// 	my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0x000000);
 			// else
-			my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0xFFFFFF);
+			my_mlx_pixel_put(img, ((img->var.x * 80) + w) * 0.2, ((img->var.y * 80) + h) * 0.2, 0xFFFFFF);
 			i++;
 			w++;
 		}
@@ -84,7 +84,7 @@ void	redray(t_data *img)
 		y = img->py + 5 + sin(img->rotationangle) * img->ray->redline;
 		if(!check_point(img, x, y))
 			return ;
-		my_mlx_pixel_put(img, x, y, 0xFF0000);
+		my_mlx_pixel_put(img, x * 0.2, y * 0.2, 0xFF0000);
 		img->ray->redline++;
 	}
 }
@@ -102,7 +102,7 @@ void	put_myplayer(t_data *img)
 		w = 0;
 		while (w < 10)
 		{
-			my_mlx_pixel_put(img, img->px + w, img->py + h, 0xFF0000);
+			my_mlx_pixel_put(img, (img->px + w) * 0.2, (img->py + h) * 0.2, 0xFF0000);
 			i++;
 			w++;
 		}
@@ -244,8 +244,8 @@ void	cast(t_data	*img)
 
 void	init_rays(t_data	*img)
 {
-	img->rays->num_rays = (img->mapx / wall_strip_width); 
-	img->rays->rayangle = img->rotationangle - (fov_angle / 2);
+	img->rays->num_rays = (img->mapx / WALL_STRIP_WIDTH); 
+	img->rays->rayangle = img->rotationangle - (FOV_ANGLE / 2);
 	if(!img->rays->raylenght)
 		img->rays->raylenght = malloc(sizeof(int) * img->rays->num_rays);
 }
@@ -267,15 +267,51 @@ void	castallrays(t_data	*img)
 		{
 			x = img->px + 5 + cos(img->rays->rayangle) * j;
 			y = img->py + 5 + sin(img->rays->rayangle) * j;
-			my_mlx_pixel_put(img, x, y,	0x800080);
+			my_mlx_pixel_put(img, x * 0.2, y * 0.2,	0x800080);
 			j++;
 		}
 		img->rays->raylenght[i] = img->rays->distance;
-		img->rays->rayangle += fov_angle / img->rays->num_rays;
+		img->rays->rayangle += FOV_ANGLE / img->rays->num_rays;
 		i++;
 	}
 	img->rays->raylenght[i] = '\0';
 	
+}
+
+void ft_react(t_data *data, int x, int y, int hight)
+{
+	int	j;
+
+	j = 0;
+	while (j < hight)
+	{
+		if (y < 0)
+			y = 0;
+		if (x < 0)
+			x = 0;
+		printf("x;%d   y;%d\n", x, y);
+		if (y >= 0 && x >= 0 && x > data->img_w * 0.2 && data->img_h * 0.2 < y)
+		{
+			my_mlx_pixel_put(data, x, y + j, 0x00FF0000);
+		}
+		j++;
+	}
+}
+
+void rander_3dprojectedwall(t_data	*data)
+{
+	int i;
+	int distance_projection_plan;
+	int wall_hight;
+
+	i = 0;
+	while(i < data->rays->num_rays)
+	{
+		distance_projection_plan = (data->var.x * 80 / 2) / tan(FOV_ANGLE / 2);
+		wall_hight = (int)((TILE_SIZE / ((double)data->rays->raylenght[i])) * ((double)distance_projection_plan));
+		ft_react(data, i * WALL_STRIP_WIDTH, ((data->mapy * 80) /2) - (wall_hight / 2), wall_hight);
+		i++;
+	}
 }
 
 void	draw(t_data *img)
@@ -296,6 +332,7 @@ void	draw(t_data *img)
 	}
 	put_myplayer(img);
 	castallrays(img);
+	// rander_3dprojectedwall(img);
 	// redray(img);
 }
 
@@ -312,6 +349,8 @@ int	open_window(t_data *img)
 	img->mlx = mlx_init();
 	img->mlx_win = mlx_new_window(img->mlx, img->mapx * 80, img->mapy * 80, "game");
 	img->img = mlx_new_image(img->mlx, img->mapx * 80, img->mapy * 80);
+	img->img_w =  img->mapx * 80;
+	img->img_h =  img->mapy * 80;
 	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 	// draw(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);

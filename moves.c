@@ -50,7 +50,7 @@ void	update_direction1(t_data	*img)
 	double	rotationangle;		
 
 
-	rotationangle = img->rotationangle + (fov_angle * 1.5 * img->walkdirection2);
+	rotationangle = img->rotationangle + (FOV_ANGLE * 1.5 * img->walkdirection2);
 	img->movestep = img->movespeed;
 	while(img->movestep >= 0)
 	{
