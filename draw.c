@@ -6,7 +6,7 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/22 19:05:19 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/09/23 14:39:59 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,11 @@ void	my_mlx_pixel_put(t_data *img, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	if (x < img->img_w && img->img_h > y)
+	{
+		dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+		*(unsigned int*)dst = color;
+	}
 }
 
 void	put_wall(t_data	*img)
@@ -244,7 +247,7 @@ void	cast(t_data	*img)
 
 void	init_rays(t_data	*img)
 {
-	img->rays->num_rays = (img->mapx / WALL_STRIP_WIDTH); 
+	img->rays->num_rays = (img->img_w / WALL_STRIP_WIDTH); 
 	img->rays->rayangle = img->rotationangle - (FOV_ANGLE / 2);
 	if(!img->rays->raylenght)
 		img->rays->raylenght = malloc(sizeof(int) * img->rays->num_rays);
@@ -285,15 +288,11 @@ void ft_react(t_data *data, int x, int y, int hight)
 	j = 0;
 	while (j < hight)
 	{
-		if (y < 0)
-			y = 0;
-		if (x < 0)
-			x = 0;
-		printf("x;%d   y;%d\n", x, y);
-		if (y >= 0 && x >= 0 && x > data->img_w * 0.2 && data->img_h * 0.2 < y)
-		{
+			if (x < 0)
+				x = 0;
+			if (y < 0)
+				y = 0;
 			my_mlx_pixel_put(data, x, y + j, 0x00FF0000);
-		}
 		j++;
 	}
 }
@@ -332,7 +331,7 @@ void	draw(t_data *img)
 	}
 	put_myplayer(img);
 	castallrays(img);
-	// rander_3dprojectedwall(img);
+	rander_3dprojectedwall(img);
 	// redray(img);
 }
 

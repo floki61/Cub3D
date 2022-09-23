@@ -1,11 +1,10 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-// #define PI 3.14159265
 # define PI 3.14159265
 # define TILE_SIZE  64
 # define FOV_ANGLE (60 * (PI / 180))
-# define WALL_STRIP_WIDTH 1 
+# define WALL_STRIP_WIDTH 1
 # define MINIMAP_SCALE_FACTOR 0.2
 
 # include <stdio.h>
@@ -61,7 +60,6 @@ typedef	struct s_cast
 	float	distance;
 	int		redline;
 	int		*raylenght;
-
 }	t_cast;
 
 
@@ -76,9 +74,9 @@ typedef struct s_data
 	int mapx;
 	int mapy;
 	//line:
-	int	turndirection; // -1 if left +1 if right
-	int	walkdirection; // -1 if back +1 if front
-	int	walkdirection2;
+	int		turndirection; // -1 if left +1 if right
+	int		walkdirection; // -1 if back +1 if front
+	int		walkdirection2;
 	double	rotationangle; // p / 2
 	double	rotationspeed; // 2 * (p / 180 )
 	int		movespeed;	// 2
