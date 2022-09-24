@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 23:29:17 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/03 17:00:02 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/24 15:38:41 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static char	*ft_read_line(char	*str, int fd)
 	}
 	while (ft_check_line(str) == 0 && i != 0)
 	{
-		i = read (fd, buff, BUFFER_SIZE);
+		i = read (fd, buff, 100000000);
 		if (i == -1)
 		{
 			free (buff);

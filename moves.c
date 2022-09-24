@@ -131,6 +131,6 @@ int	loop_game(t_data	*img)
 	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 	draw(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
-	img->ray->redline = 0;
+	img->ray.redline = 0;
 	return (0);
 }

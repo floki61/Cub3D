@@ -30,9 +30,7 @@ void	read_map(t_data *img)
 
 void	init_data(t_data	*img, char	*fd)
 {
-	img->ray = malloc(sizeof(t_ray));
-	img->rays = malloc(sizeof(t_cast));
-	img->rayfacing = malloc(sizeof(t_rays));
+	img->rays.rayangle_pro = NULL;
 	img->fd = open(fd, O_RDONLY);
 	if (!(img->fd) || !img)
 	{
@@ -44,11 +42,10 @@ void	init_data(t_data	*img, char	*fd)
 
 int	main(int argc, char **argv)
 {
-	t_data	*img;
+	t_data	img;
 
-	img = malloc(sizeof(t_data));
 	check_name(argc ,argv[1]);
-	init_data(img, argv[1]);
-	read_map(img);
-	open_window(img);
+	init_data(&img, argv[1]);
+	read_map(&img);
+	open_window(&img);
 }

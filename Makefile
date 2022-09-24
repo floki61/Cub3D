@@ -1,7 +1,7 @@
 NAME = cub3d
 # BNAME = so_long_bonus
-FLAGS =  -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit
-
+FLAGS =  -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit 
+ 
 SRCS =	main.c 					\
 		tools/checker.c			\
 		draw.c					\

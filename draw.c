@@ -6,7 +6,7 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/23 14:39:59 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/09/24 15:36:19 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,23 +75,6 @@ void	put_ground(t_data	*img)
 	}
 }
 
-
-void	redray(t_data *img)
-{
-	int x;
-	int y;
-
-	while(1)
-	{
-		x = img->px + 5 + cos(img->rotationangle) * img->ray->redline;
-		y = img->py + 5 + sin(img->rotationangle) * img->ray->redline;
-		if(!check_point(img, x, y))
-			return ;
-		my_mlx_pixel_put(img, x * 0.2, y * 0.2, 0xFF0000);
-		img->ray->redline++;
-	}
-}
-
 void	put_myplayer(t_data *img)
 {
 	int i;
@@ -122,9 +105,9 @@ int		haswallat(t_data	*img,int	x, int y)
 
 void	normalizeangle(t_data	*img)
 {
-	img->rays->rayangle =	remainder(img->rays->rayangle, (2 * PI)); //c
-	if (img->rays->rayangle < 0)
-		img->rays->rayangle = (2 * PI) + img->rays->rayangle;
+	img->rays.rayangle =	remainder(img->rays.rayangle, (2 * PI)); //c
+	if (img->rays.rayangle < 0)
+		img->rays.rayangle = (2 * PI) + img->rays.rayangle;
 }
 
 float distanceBetweenPoints(float x1, float y1, float x2, float y2) 
@@ -134,10 +117,10 @@ float distanceBetweenPoints(float x1, float y1, float x2, float y2)
 
 void	raysfacing(t_data	*img)
 {
-	img->rayfacing->down = img->rays->rayangle > 0 && img->rays->rayangle < PI;
-	img->rayfacing->up = !img->rayfacing->down;
-	img->rayfacing->right = img->rays->rayangle < (0.5 * PI) || img->rays->rayangle > (1.5 * PI);
-	img->rayfacing->left = !img->rayfacing->right;
+	img->rayfacing.down = img->rays.rayangle > 0 && img->rays.rayangle < PI;
+	img->rayfacing.up = !img->rayfacing.down;
+	img->rayfacing.right = img->rays.rayangle < (0.5 * PI) || img->rays.rayangle > (1.5 * PI);
+	img->rayfacing.left = !img->rayfacing.right;
 }
 
 void	horizontal_raygrid(t_data	*img)
@@ -147,35 +130,35 @@ void	horizontal_raygrid(t_data	*img)
 	float	xstep;
 	float	ystep;
 
-	img->rays->horzhitdistance = 0;
+	img->rays.horzhitdistance = 0;
 	yintercept = floor((img->py + 5) / 80) * 80;
-	if(img->rayfacing->down)
+	if(img->rayfacing.down)
 		yintercept += 80;
-	xintercept = img->px + 5 + (yintercept - img->py - 5) / tan(img->rays->rayangle);
+	xintercept = img->px + 5 + (yintercept - img->py - 5) / tan(img->rays.rayangle);
 	ystep = 80;
-	if(img->rayfacing->up)
+	if(img->rayfacing.up)
 		ystep *=  -1;
-	xstep = 80	/ tan(img->rays->rayangle);
-	if(img->rayfacing->left && xstep > 0)
+	xstep = 80	/ tan(img->rays.rayangle);
+	if(img->rayfacing.left && xstep > 0)
 		xstep *=  -1;
-	else if(img->rayfacing->right && xstep < 0)
+	else if(img->rayfacing.right && xstep < 0)
 		xstep *= -1;
 	while(xintercept >= 0 && xintercept <= 80 * img->mapx && yintercept >= 0 && yintercept <= 80 * img->mapy)
 	{
-		if(img->rayfacing->up)
+		if(img->rayfacing.up)
 			yintercept -= 1;
 		if(haswallat(img,xintercept, yintercept))
 		{
-			if(img->rayfacing->up)
+			if(img->rayfacing.up)
 				++yintercept;
-			img->rays->wallhitx = xintercept;
-			img->rays->wallhity = yintercept;
-			img->rays->horzhitdistance = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
+			img->rays.wallhitx = xintercept;
+			img->rays.wallhity = yintercept;
+			img->rays.horzhitdistance = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
 			break;
 		}
 		else
 		{
-			if(img->rayfacing->up)
+			if(img->rayfacing.up)
 				yintercept += 1;
 			xintercept += xstep;
 			yintercept += ystep;
@@ -190,35 +173,35 @@ void	vertical_raygrid(t_data	*img)
 	float		xstep;
 	float		ystep;
 
-	img->rays->verthitdistance = 0;
+	img->rays.verthitdistance = 0;
 	xintercept = floor((img->px + 5) / 80) * 80;
-	if(img->rayfacing->right)
+	if(img->rayfacing.right)
 		xintercept += 80;
-	yintercept = img->py + 5 + (xintercept - img->px - 5) * tan(img->rays->rayangle);
+	yintercept = img->py + 5 + (xintercept - img->px - 5) * tan(img->rays.rayangle);
 	xstep = 80;
-	if(img->rayfacing->left)
+	if(img->rayfacing.left)
 		xstep *= -1;
-	ystep = 80 * tan(img->rays->rayangle);
-	if(img->rayfacing->up && ystep > 0)
+	ystep = 80 * tan(img->rays.rayangle);
+	if(img->rayfacing.up && ystep > 0)
 		ystep *=  -1;
-	else if(img->rayfacing->down && ystep < 0)
+	else if(img->rayfacing.down && ystep < 0)
 		ystep *= -1; 
 	while(xintercept >= 0 && xintercept <= 80 * img->mapx && yintercept >= 0 && yintercept <= 80 * img->mapy)
 	{
-		if(img->rayfacing->left)
+		if(img->rayfacing.left)
 			xintercept--;
 		if(haswallat(img,xintercept, yintercept))
 		{
-			if(img->rayfacing->left)
+			if(img->rayfacing.left)
 				++xintercept;
-			img->rays->wallhitx = xintercept;
-			img->rays->wallhity = yintercept;
-			img->rays->verthitdistance = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
+			img->rays.wallhitx = xintercept;
+			img->rays.wallhity = yintercept;
+			img->rays.verthitdistance = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
 			break;
 		}
 		else
 		{
-			if(img->rayfacing->left)
+			if(img->rayfacing.left)
 				++xintercept;
 			xintercept += xstep;
 			yintercept += ystep;
@@ -231,26 +214,28 @@ void	cast(t_data	*img)
 	raysfacing(img);
 	horizontal_raygrid(img);
 	vertical_raygrid(img);
-	if(!img->rays->verthitdistance)
-		img->rays->distance = img->rays->horzhitdistance;
-	else if(!img->rays->horzhitdistance)
-		img->rays->distance = img->rays->verthitdistance;
-	else if(img->rays->verthitdistance < img->rays->horzhitdistance)
+	if(!img->rays.verthitdistance)
+		img->rays.distance = img->rays.horzhitdistance;
+	else if(!img->rays.horzhitdistance)
+		img->rays.distance = img->rays.verthitdistance;
+	else if(img->rays.verthitdistance < img->rays.horzhitdistance)
 	{
-		img->rays->distance = img->rays->verthitdistance;
+		img->rays.distance = img->rays.verthitdistance;
 	}
-	else if (img->rays->verthitdistance > img->rays->horzhitdistance)
+	else if (img->rays.verthitdistance > img->rays.horzhitdistance)
 	{
-		img->rays->distance = img->rays->horzhitdistance;
+		img->rays.distance = img->rays.horzhitdistance;
 	}
 }
 
 void	init_rays(t_data	*img)
 {
-	img->rays->num_rays = (img->img_w / WALL_STRIP_WIDTH); 
-	img->rays->rayangle = img->rotationangle - (FOV_ANGLE / 2);
-	if(!img->rays->raylenght)
-		img->rays->raylenght = malloc(sizeof(int) * img->rays->num_rays);
+	img->rays.num_rays = (img->img_w / WALL_STRIP_WIDTH); 
+	img->rays.rayangle = img->rotationangle - (FOV_ANGLE / 2);
+	if(!img->rays.raylenght)
+		img->rays.raylenght = malloc(sizeof(int) * img->rays.num_rays);
+	if(!img->rays.rayangle_pro)
+		img->rays.rayangle_pro = malloc(sizeof(double) * img->rays.num_rays);
 }
 
 void	castallrays(t_data	*img)
@@ -261,23 +246,24 @@ void	castallrays(t_data	*img)
 	int y;
 
 	init_rays(img);
-	while(i < img->rays->num_rays)
+	while(i < img->rays.num_rays)
 	{
 		j = 1;
 		normalizeangle(img);
 		cast(img);
-		while(img->rays->distance > j)
+		while(img->rays.distance > j)
 		{
-			x = img->px + 5 + cos(img->rays->rayangle) * j;
-			y = img->py + 5 + sin(img->rays->rayangle) * j;
+			x = img->px + 5 + cos(img->rays.rayangle) * j;
+			y = img->py + 5 + sin(img->rays.rayangle) * j;
 			my_mlx_pixel_put(img, x * 0.2, y * 0.2,	0x800080);
 			j++;
 		}
-		img->rays->raylenght[i] = img->rays->distance;
-		img->rays->rayangle += FOV_ANGLE / img->rays->num_rays;
+		img->rays.raylenght[i] = img->rays.distance;
+		img->rays.rayangle += FOV_ANGLE / img->rays.num_rays;
+		img->rays.rayangle_pro[i] = img->rays.rayangle;
 		i++;
 	}
-	img->rays->raylenght[i] = '\0';
+	img->rays.raylenght[i] = '\0';
 	
 }
 
@@ -292,7 +278,7 @@ void ft_react(t_data *data, int x, int y, int hight)
 				x = 0;
 			if (y < 0)
 				y = 0;
-			my_mlx_pixel_put(data, x, y + j, 0x00FF0000);
+			my_mlx_pixel_put(data, x, y + j, 0x00FF00FF);
 		j++;
 	}
 }
@@ -302,12 +288,14 @@ void rander_3dprojectedwall(t_data	*data)
 	int i;
 	int distance_projection_plan;
 	int wall_hight;
+	int correct_dest;
 
 	i = 0;
-	while(i < data->rays->num_rays)
+	while(i < data->rays.num_rays)
 	{
+		correct_dest = data->rays.raylenght[i] * cos(data->rays.rayangle_pro[i] - data->rotationangle);
 		distance_projection_plan = (data->var.x * 80 / 2) / tan(FOV_ANGLE / 2);
-		wall_hight = (int)((TILE_SIZE / ((double)data->rays->raylenght[i])) * ((double)distance_projection_plan));
+		wall_hight = (int)((TILE_SIZE / ((double)correct_dest)) * ((double)distance_projection_plan));
 		ft_react(data, i * WALL_STRIP_WIDTH, ((data->mapy * 80) /2) - (wall_hight / 2), wall_hight);
 		i++;
 	}
@@ -332,7 +320,6 @@ void	draw(t_data *img)
 	put_myplayer(img);
 	castallrays(img);
 	rander_3dprojectedwall(img);
-	// redray(img);
 }
 
 int	destroy(t_data *data)

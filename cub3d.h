@@ -52,6 +52,7 @@ typedef	struct s_cast
 	// int		wall_strip_width;
 	int		num_rays;
 	double	rayangle;
+	double	*rayangle_pro;
 	// double	fov_angle;
 	float	wallhitx;
 	float	wallhity;
@@ -86,12 +87,12 @@ typedef struct s_data
 	int		line_length;
 	int		endian;
 	char 	*addr;
-	t_ray	*ray;
-	t_cast	*rays;
+	t_ray	ray;
+	t_cast	rays;
 	void	*img;
 	int		img_h;
 	int		img_w;
-	t_rays	*rayfacing;
+	t_rays	rayfacing;
 	
 	// int		c;
 	int		fd;
