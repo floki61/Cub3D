@@ -5,7 +5,7 @@
 # define TILE_SIZE  64
 # define FOV_ANGLE (60 * (PI / 180))
 # define WALL_STRIP_WIDTH 1
-# define MINIMAP_SCALE_FACTOR 0.2
+# define MINIMAP_SCALE_FACTOR img->mini_scall
 
 # include <stdio.h>
 # include <unistd.h>
@@ -90,6 +90,7 @@ typedef struct s_data
 	t_ray	ray;
 	t_cast	rays;
 	void	*img;
+	double		mini_scall;
 	int		img_h;
 	int		img_w;
 	t_rays	rayfacing;

@@ -6,7 +6,7 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/24 15:36:19 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/09/24 18:44:05 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	put_wall(t_data	*img)
 		w = 0;
 		while (w < 80)
 		{
-			my_mlx_pixel_put(img, ((img->var.x * 80) + w) * 0.2, ((img->var.y * 80) + h) * 0.2 , 0x27329F);
+			my_mlx_pixel_put(img, ((img->var.x * 80) + w) * img->mini_scall, ((img->var.y * 80) + h) * img->mini_scall , 0x27329F);
 			i++;
 			w++;
 		}
@@ -67,7 +67,7 @@ void	put_ground(t_data	*img)
 			// if(w == 0 || h == 79)
 			// 	my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0x000000);
 			// else
-			my_mlx_pixel_put(img, ((img->var.x * 80) + w) * 0.2, ((img->var.y * 80) + h) * 0.2, 0xFFFFFF);
+			my_mlx_pixel_put(img, ((img->var.x * 80) + w) * img->mini_scall, ((img->var.y * 80) + h) * img->mini_scall, 0xFFFFFF);
 			i++;
 			w++;
 		}
@@ -88,7 +88,7 @@ void	put_myplayer(t_data *img)
 		w = 0;
 		while (w < 10)
 		{
-			my_mlx_pixel_put(img, (img->px + w) * 0.2, (img->py + h) * 0.2, 0xFF0000);
+			my_mlx_pixel_put(img, (img->px + w) * img->mini_scall, (img->py + h) * img->mini_scall, 0xFF0000);
 			i++;
 			w++;
 		}
@@ -255,7 +255,7 @@ void	castallrays(t_data	*img)
 		{
 			x = img->px + 5 + cos(img->rays.rayangle) * j;
 			y = img->py + 5 + sin(img->rays.rayangle) * j;
-			my_mlx_pixel_put(img, x * 0.2, y * 0.2,	0x800080);
+			my_mlx_pixel_put(img, x * img->mini_scall, y * img->mini_scall,	0x800080);
 			j++;
 		}
 		img->rays.raylenght[i] = img->rays.distance;
@@ -266,20 +266,34 @@ void	castallrays(t_data	*img)
 	img->rays.raylenght[i] = '\0';
 	
 }
+int	create_trgb(int t, int r, int g, int b)
+{
+	return (t << 24 | r << 16 | g << 8 | b);
+}
+
 
 void ft_react(t_data *data, int x, int y, int hight)
 {
 	int	j;
+	int i;
+	int	alpha;
 
-	j = 0;
-	while (j < hight)
-	{
-			if (x < 0)
-				x = 0;
+	i = 0;
+	while (i < WALL_STRIP_WIDTH)
+	{		
+		j = 0;
+		while (j < hight)
+		{
 			if (y < 0)
 				y = 0;
-			my_mlx_pixel_put(data, x, y + j, 0x00FF00FF);
-		j++;
+			if (x >= 0)
+			{
+				alpha = 10700 / hight;
+				my_mlx_pixel_put(data, x + i, y + j, create_trgb(alpha, 255, 255, 255));
+				}
+			j++;
+		}
+		i++;
 	}
 }
 
@@ -319,7 +333,8 @@ void	draw(t_data *img)
 	}
 	put_myplayer(img);
 	castallrays(img);
-	rander_3dprojectedwall(img);
+	if (img->mini_scall != 1)
+		rander_3dprojectedwall(img);
 }
 
 int	destroy(t_data *data)

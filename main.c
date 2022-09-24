@@ -31,6 +31,7 @@ void	read_map(t_data *img)
 void	init_data(t_data	*img, char	*fd)
 {
 	img->rays.rayangle_pro = NULL;
+	img->mini_scall = 0;
 	img->fd = open(fd, O_RDONLY);
 	if (!(img->fd) || !img)
 	{

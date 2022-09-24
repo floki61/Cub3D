@@ -118,6 +118,10 @@ int	key_hook2(int keycode, t_data *img)
 		img->turndirection = 0;
 	else if(keycode == 0 || keycode == 2)
 		img->walkdirection2 = 0;
+	else if(keycode == 46)
+		img->mini_scall = 1;
+	else if(keycode == 11)
+		img->mini_scall = 0;
 	return (0);
 }
 
