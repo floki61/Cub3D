@@ -6,7 +6,7 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/24 18:44:05 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/09/25 15:35:38 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -353,8 +353,6 @@ int	open_window(t_data *img)
 	img->img_w =  img->mapx * 80;
 	img->img_h =  img->mapy * 80;
 	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
-	// draw(img);
-	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	mlx_loop_hook(img->mlx, loop_game, img);
 	mlx_hook(img->mlx_win, 17, 0, destroy, img);
 	mlx_loop(img->mlx);

@@ -130,6 +130,7 @@ int	loop_game(t_data	*img)
 	mlx_hook(img->mlx_win, 2, 1L, key_hook, img);
 	mlx_hook(img->mlx_win, 3, 2L, key_hook2, img);
 	update(img);
+	mlx_destroy_image (img->mlx, img->img);
 	mlx_clear_window (img->mlx, img->mlx_win);
 	img->img = mlx_new_image(img->mlx,  img->mapx* 80, img->mapy * 80);
 	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
