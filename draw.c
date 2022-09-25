@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/25 16:23:15 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/25 16:59:52 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	put_wall(t_data	*img)
 		w = 0;
 		while (w < 80)
 		{
-			my_mlx_pixel_put(img, ((img->var.x * 80) + w) * img->mini_scall, ((img->var.y * 80) + h) * img->mini_scall , 0x27329F);
+			my_mlx_pixel_put(img, ((img->var.x * 80) + w) * 0.2, ((img->var.y * 80) + h) * 0.2 , 0x27329F);
 			i++;
 			w++;
 		}
@@ -62,12 +62,12 @@ void	put_ground(t_data	*img)
 	while(h < 80)
 	{
 		w = 0;
-		while (w < 80)
+		while (w < 79)
 		{
-			// if(w == 0 || h == 79)
-			// 	my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0x000000);
-			// else
-			my_mlx_pixel_put(img, ((img->var.x * 80) + w) * img->mini_scall, ((img->var.y * 80) + h) * img->mini_scall, 0xFFFFFF);
+			if(w == 0 || h == 79)
+				my_mlx_pixel_put(img, ((img->var.x * 80) + w) * 0.2, ((img->var.y * 80) + h) * 0.2, 0x000000);
+			else
+				my_mlx_pixel_put(img, ((img->var.x * 80) + w) * 0.2, ((img->var.y * 80) + h) * 0.2, 0xFFFFFF);
 			i++;
 			w++;
 		}
@@ -88,14 +88,13 @@ void	put_myplayer(t_data *img)
 		w = 0;
 		while (w < 10)
 		{
-			my_mlx_pixel_put(img, (img->px + w) * img->mini_scall, (img->py + h) * img->mini_scall, 0xFF0000);
+			my_mlx_pixel_put(img, (img->px + w) * 0.2, (img->py + h) * 0.2, 0xFF0000);
 			i++;
 			w++;
 		}
 		h++;
 	}
 }
-
 int		haswallat(t_data	*img,int	x, int y)
 {
 	if(img->map[y / 80][x / 80] == '1')
@@ -245,15 +244,16 @@ void	castallrays(t_data	*img)
 	init_rays(img);
 	while(i < img->rays.num_rays)
 	{
-		write(2,"hello1\n", 7);
+		// write(2,"hello1\n", 7);
 		normalizeangle(img);
 		cast(img);
 		img->rays.raylenght[i] = img->rays.distance;
 		img->rays.rayangle_pro[i] = img->rays.rayangle;
-		write(2,"hello2\n", 7);
+		// write(2,"hello2\n", 7);
 		img->rays.rayangle += FOV_ANGLE / img->rays.num_rays;
 		i++;
 	}
+	// img->rays.raylenght[i] = '\0';
 }
 
 int	create_trgb(int t, int r, int g, int b)
@@ -334,8 +334,6 @@ void	draw_map(t_data *img)
 		img->var.x = 0;
 		while (img->map[img->var.y][img->var.x])
 		{
-			// if(img->map[img->var.y][img->var.x] == '')
-			// 	put_wall(img);
 			if(img->map[img->var.y][img->var.x] == '1')
 				put_wall(img);
 			else if (img->map[img->var.y][img->var.x] == ' ' || img->map[img->var.y][img->var.x] == '\t')
