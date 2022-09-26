@@ -99,7 +99,6 @@ void	update(t_data	*img)
 
 int	key_hook(int keycode, t_data *img)
 {
-	printf("keycode : %d\n",keycode);
 	if (keycode == 53 || keycode == 1 || keycode == 13)
 		moves1(keycode, img);
 	else if (keycode == 0 || keycode == 2)

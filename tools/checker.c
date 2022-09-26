@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 22:38:37 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/25 16:23:24 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/27 00:42:36 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	init_player(t_data	*img, int	y, int	x)
 	img->ray.redline = 0;
 	img->walkdirection = 0;
 	img->turndirection = 0;
-	img->drawmap	= 0;
+	img->drawmap	= 1;
 	if(img->map[y][x] == 'N') // -PI/2
 		img->rotationangle = -PI / 2;
 	else if(img->map[y][x] == 'W')
@@ -78,7 +78,6 @@ void	init_player(t_data	*img, int	y, int	x)
 	else if(img->map[y][x] == 'E')
 		img->rotationangle = 0;
 	img->map[y][x] = '0';
-	printf("angle: %f\n", img->rotationangle);
 	img->rotationspeed = 2 * (PI / 180);
 	img->movespeed = 10;
 }

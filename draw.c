@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/25 16:59:52 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/09/27 00:54:27 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,12 +244,10 @@ void	castallrays(t_data	*img)
 	init_rays(img);
 	while(i < img->rays.num_rays)
 	{
-		// write(2,"hello1\n", 7);
 		normalizeangle(img);
 		cast(img);
 		img->rays.raylenght[i] = img->rays.distance;
 		img->rays.rayangle_pro[i] = img->rays.rayangle;
-		// write(2,"hello2\n", 7);
 		img->rays.rayangle += FOV_ANGLE / img->rays.num_rays;
 		i++;
 	}
@@ -264,26 +262,28 @@ int	create_trgb(int t, int r, int g, int b)
 
 void ft_react(t_data *data, int x, int y, int hight)
 {
+	int	i;
 	int	j;
-	int i;
 	int	alpha;
 
-	i = 0;
-	while (i < WALL_STRIP_WIDTH)
-	{		
-		j = 0;
-		while (j < hight)
+			
+	j = 0;
+	i = -1;
+	while(y > i++)
+		my_mlx_pixel_put(data, x, i, 0x85C1E9);
+	i = y + hight - 1;
+	while(++i < data->mapy * 80)
+		my_mlx_pixel_put(data,  x, i, 0x95A5A6);
+	while (j < hight)
+	{
+		if (y < 0)
+			y = 0;
+		if (x >= 0)
 		{
-			if (y < 0)
-				y = 0;
-			if (x >= 0)
-			{
-				alpha = 10700 / hight;
-				my_mlx_pixel_put(data, x + i, y + j, create_trgb(alpha, 255, 255, 255));
-				}
-			j++;
+			alpha = 10700 / hight;
+			my_mlx_pixel_put(data, x, y + j, create_trgb(alpha, 255, 255, 255));
 		}
-		i++;
+		j++;
 	}
 }
 
@@ -296,7 +296,7 @@ void rander_3dprojectedwall(t_data	*data)
 
 	i = 0;
 	while(i < data->rays.num_rays)
-	{
+	{	
 		correct_dest = data->rays.raylenght[i] * cos(data->rays.rayangle_pro[i] - data->rotationangle);
 		distance_projection_plan = (data->var.x * 80 / 2) / tan(FOV_ANGLE / 2);
 		wall_hight = (int)((TILE_SIZE / ((double)correct_dest)) * ((double)distance_projection_plan));
@@ -350,7 +350,7 @@ void	draw_map(t_data *img)
 		img->var.y++;
 	}
 	put_myplayer(img);
-	drawrays(img);
+	// drawrays(img);
 }
 
 void	draw(t_data *img)
