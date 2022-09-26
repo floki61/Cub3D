@@ -50,9 +50,7 @@ typedef	struct s_raytools
 typedef	struct s_cast
 {
 	// int		wall_strip_width;
-	int		num_rays;
-	double	rayangle;
-	double	*rayangle_pro;
+	double	rayangle_pro;
 	// double	fov_angle;
 	float	wallhitx;
 	float	wallhity;
@@ -60,7 +58,6 @@ typedef	struct s_cast
 	float	verthitdistance;
 	float	distance;
 	int		redline;
-	int		*raylenght;
 }	t_cast;
 
 
@@ -72,6 +69,8 @@ typedef struct s_data
 	int		px;
 	int		py;
 	
+	int		num_rays;
+	double	rayangle;
 	int mapx;
 	int mapy;
 	//line:
@@ -88,8 +87,9 @@ typedef struct s_data
 	int		endian;
 	char 	*addr;
 	t_ray	ray;
-	t_cast	rays;
+	t_cast	*rays;
 	void	*img;
+	int			*is_hor;
 	double		mini_scall;
 	int		img_h;
 	int		img_w;

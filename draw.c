@@ -6,7 +6,7 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/25 15:35:38 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/09/26 15:42:24 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,9 @@ int		haswallat(t_data	*img,int	x, int y)
 
 void	normalizeangle(t_data	*img)
 {
-	img->rays.rayangle =	remainder(img->rays.rayangle, (2 * PI)); //c
-	if (img->rays.rayangle < 0)
-		img->rays.rayangle = (2 * PI) + img->rays.rayangle;
+	img->rayangle =	remainder(img->rayangle, (2 * PI)); //c
+	if (img->rayangle < 0)
+		img->rayangle = (2 * PI) + img->rayangle;
 }
 
 float distanceBetweenPoints(float x1, float y1, float x2, float y2) 
@@ -117,28 +117,28 @@ float distanceBetweenPoints(float x1, float y1, float x2, float y2)
 
 void	raysfacing(t_data	*img)
 {
-	img->rayfacing.down = img->rays.rayangle > 0 && img->rays.rayangle < PI;
+	img->rayfacing.down = img->rayangle > 0 && img->rayangle < PI;
 	img->rayfacing.up = !img->rayfacing.down;
-	img->rayfacing.right = img->rays.rayangle < (0.5 * PI) || img->rays.rayangle > (1.5 * PI);
+	img->rayfacing.right = img->rayangle < (0.5 * PI) || img->rayangle > (1.5 * PI);
 	img->rayfacing.left = !img->rayfacing.right;
 }
 
-void	horizontal_raygrid(t_data	*img)
+void	horizontal_raygrid(t_data	*img, int	i)
 {
 	float	xintercept;
 	float	yintercept;
 	float	xstep;
 	float	ystep;
 
-	img->rays.horzhitdistance = 0;
+	img->rays[i].horzhitdistance = 0;
 	yintercept = floor((img->py + 5) / 80) * 80;
 	if(img->rayfacing.down)
 		yintercept += 80;
-	xintercept = img->px + 5 + (yintercept - img->py - 5) / tan(img->rays.rayangle);
+	xintercept = img->px + 5 + (yintercept - img->py - 5) / tan(img->rayangle);
 	ystep = 80;
 	if(img->rayfacing.up)
 		ystep *=  -1;
-	xstep = 80	/ tan(img->rays.rayangle);
+	xstep = 80	/ tan(img->rayangle);
 	if(img->rayfacing.left && xstep > 0)
 		xstep *=  -1;
 	else if(img->rayfacing.right && xstep < 0)
@@ -151,9 +151,9 @@ void	horizontal_raygrid(t_data	*img)
 		{
 			if(img->rayfacing.up)
 				++yintercept;
-			img->rays.wallhitx = xintercept;
-			img->rays.wallhity = yintercept;
-			img->rays.horzhitdistance = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
+			img->rays[i].wallhitx = xintercept;
+			img->rays[i].wallhity = yintercept;
+			img->rays[i].horzhitdistance = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
 			break;
 		}
 		else
@@ -166,22 +166,22 @@ void	horizontal_raygrid(t_data	*img)
 	}
 }
 
-void	vertical_raygrid(t_data	*img)
+void	vertical_raygrid(t_data	*img, int i)
 {
 	float		xintercept;
 	float		yintercept;
 	float		xstep;
 	float		ystep;
 
-	img->rays.verthitdistance = 0;
+	img->rays[i].verthitdistance = 0;
 	xintercept = floor((img->px + 5) / 80) * 80;
 	if(img->rayfacing.right)
 		xintercept += 80;
-	yintercept = img->py + 5 + (xintercept - img->px - 5) * tan(img->rays.rayangle);
+	yintercept = img->py + 5 + (xintercept - img->px - 5) * tan(img->rayangle);
 	xstep = 80;
 	if(img->rayfacing.left)
 		xstep *= -1;
-	ystep = 80 * tan(img->rays.rayangle);
+	ystep = 80 * tan(img->rayangle);
 	if(img->rayfacing.up && ystep > 0)
 		ystep *=  -1;
 	else if(img->rayfacing.down && ystep < 0)
@@ -194,9 +194,9 @@ void	vertical_raygrid(t_data	*img)
 		{
 			if(img->rayfacing.left)
 				++xintercept;
-			img->rays.wallhitx = xintercept;
-			img->rays.wallhity = yintercept;
-			img->rays.verthitdistance = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
+			img->rays[i].wallhitx = xintercept;
+			img->rays[i].wallhity = yintercept;
+			img->rays[i].verthitdistance = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
 			break;
 		}
 		else
@@ -209,33 +209,35 @@ void	vertical_raygrid(t_data	*img)
 	}
 }
 
-void	cast(t_data	*img)
+void	cast(t_data	*img, int i)
 {
 	raysfacing(img);
-	horizontal_raygrid(img);
-	vertical_raygrid(img);
-	if(!img->rays.verthitdistance)
-		img->rays.distance = img->rays.horzhitdistance;
-	else if(!img->rays.horzhitdistance)
-		img->rays.distance = img->rays.verthitdistance;
-	else if(img->rays.verthitdistance < img->rays.horzhitdistance)
+	horizontal_raygrid(img, i);
+	vertical_raygrid(img, i);
+	if(!img->rays[i].verthitdistance)
 	{
-		img->rays.distance = img->rays.verthitdistance;
+		img->rays[i].distance = img->rays[i].horzhitdistance;
+		img->is_hor[i] = 1;
 	}
-	else if (img->rays.verthitdistance > img->rays.horzhitdistance)
+	else if(!img->rays[i].horzhitdistance)
 	{
-		img->rays.distance = img->rays.horzhitdistance;
+		img->rays[i].distance = img->rays[i].verthitdistance;
+		img->is_hor[i] = 0;
 	}
+	else if(img->rays[i].verthitdistance < img->rays[i].horzhitdistance)
+		img->rays[i].distance = img->rays[i].verthitdistance;
+	else if (img->rays[i].verthitdistance > img->rays[i].horzhitdistance)
+		img->rays[i].distance = img->rays[i].horzhitdistance;
 }
 
 void	init_rays(t_data	*img)
 {
-	img->rays.num_rays = (img->img_w / WALL_STRIP_WIDTH); 
-	img->rays.rayangle = img->rotationangle - (FOV_ANGLE / 2);
-	if(!img->rays.raylenght)
-		img->rays.raylenght = malloc(sizeof(int) * img->rays.num_rays);
-	if(!img->rays.rayangle_pro)
-		img->rays.rayangle_pro = malloc(sizeof(double) * img->rays.num_rays);
+	img->num_rays = (img->img_w / WALL_STRIP_WIDTH); 
+	img->rayangle = img->rotationangle - (FOV_ANGLE / 2);
+	if(!img->rays)
+		img->rays = malloc(sizeof(t_cast) * img->num_rays);
+	if(!img->is_hor)
+		img->is_hor = malloc(sizeof(int) * img->num_rays);
 }
 
 void	castallrays(t_data	*img)
@@ -246,25 +248,22 @@ void	castallrays(t_data	*img)
 	int y;
 
 	init_rays(img);
-	while(i < img->rays.num_rays)
+	while(i < img->num_rays)
 	{
 		j = 1;
 		normalizeangle(img);
-		cast(img);
-		while(img->rays.distance > j)
+		cast(img, i);
+		while(img->rays[i].distance > j)
 		{
-			x = img->px + 5 + cos(img->rays.rayangle) * j;
-			y = img->py + 5 + sin(img->rays.rayangle) * j;
+			x = img->px + 5 + cos(img->rayangle) * j;
+			y = img->py + 5 + sin(img->rayangle) * j;
 			my_mlx_pixel_put(img, x * img->mini_scall, y * img->mini_scall,	0x800080);
 			j++;
 		}
-		img->rays.raylenght[i] = img->rays.distance;
-		img->rays.rayangle += FOV_ANGLE / img->rays.num_rays;
-		img->rays.rayangle_pro[i] = img->rays.rayangle;
+		img->rayangle += FOV_ANGLE / img->num_rays;
+		img->rays[i].rayangle_pro = img->rayangle;
 		i++;
 	}
-	img->rays.raylenght[i] = '\0';
-	
 }
 int	create_trgb(int t, int r, int g, int b)
 {
@@ -277,6 +276,7 @@ void ft_react(t_data *data, int x, int y, int hight)
 	int	j;
 	int i;
 	int	alpha;
+	int coler;
 
 	i = 0;
 	while (i < WALL_STRIP_WIDTH)
@@ -288,8 +288,12 @@ void ft_react(t_data *data, int x, int y, int hight)
 				y = 0;
 			if (x >= 0)
 			{
+				// if (data->is_hor[i] == 1)
+				// 	coler = 200;
+				// else
+					coler = 255;
 				alpha = 10700 / hight;
-				my_mlx_pixel_put(data, x + i, y + j, create_trgb(alpha, 255, 255, 255));
+				my_mlx_pixel_put(data, x + i, y + j, create_trgb(10, coler, coler, coler));
 				}
 			j++;
 		}
@@ -305,9 +309,9 @@ void rander_3dprojectedwall(t_data	*data)
 	int correct_dest;
 
 	i = 0;
-	while(i < data->rays.num_rays)
+	while(i < data->num_rays)
 	{
-		correct_dest = data->rays.raylenght[i] * cos(data->rays.rayangle_pro[i] - data->rotationangle);
+		correct_dest = data->rays[i].distance * cos(data->rays[i].rayangle_pro - data->rotationangle);
 		distance_projection_plan = (data->var.x * 80 / 2) / tan(FOV_ANGLE / 2);
 		wall_hight = (int)((TILE_SIZE / ((double)correct_dest)) * ((double)distance_projection_plan));
 		ft_react(data, i * WALL_STRIP_WIDTH, ((data->mapy * 80) /2) - (wall_hight / 2), wall_hight);
