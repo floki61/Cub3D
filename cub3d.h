@@ -52,6 +52,7 @@ typedef	struct s_cast
 	// int		wall_strip_width;
 	double	rayangle_pro;
 	// double	fov_angle;
+	int		is_hor;
 	float	wallhitx;
 	float	wallhity;
 	float	horzhitdistance;
@@ -89,7 +90,6 @@ typedef struct s_data
 	t_ray	ray;
 	t_cast	*rays;
 	void	*img;
-	int			*is_hor;
 	double		mini_scall;
 	int		img_h;
 	int		img_w;

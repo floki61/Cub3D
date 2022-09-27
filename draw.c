@@ -6,7 +6,7 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/26 15:42:24 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/09/27 03:42:49 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,9 @@ void	put_myplayer(t_data *img)
 }
 
 int		haswallat(t_data	*img,int	x, int y)
-{
+{	
+	if (y / 80 >= img->mapy)
+		return (0);
 	if(img->map[y / 80][x / 80] == '1')
 		return(1);
 	return (0);
@@ -214,20 +216,29 @@ void	cast(t_data	*img, int i)
 	raysfacing(img);
 	horizontal_raygrid(img, i);
 	vertical_raygrid(img, i);
-	if(!img->rays[i].verthitdistance)
+	if(!img->rays[i].verthitdistance || (img->rays[i].verthitdistance > img->rays[i].horzhitdistance && img->rays[i].horzhitdistance))
 	{
+		img->rays[i].is_hor = 2;
 		img->rays[i].distance = img->rays[i].horzhitdistance;
-		img->is_hor[i] = 1;
 	}
-	else if(!img->rays[i].horzhitdistance)
+	else if(!img->rays[i].horzhitdistance || img->rays[i].verthitdistance < img->rays[i].horzhitdistance)
 	{
+		img->rays[i].is_hor = 1;
 		img->rays[i].distance = img->rays[i].verthitdistance;
-		img->is_hor[i] = 0;
 	}
-	else if(img->rays[i].verthitdistance < img->rays[i].horzhitdistance)
-		img->rays[i].distance = img->rays[i].verthitdistance;
-	else if (img->rays[i].verthitdistance > img->rays[i].horzhitdistance)
-		img->rays[i].distance = img->rays[i].horzhitdistance;
+	// if(img->rays[i].verthitdistance < img->rays[i].horzhitdistance)
+	// {
+	// 	printf("hello3\n");
+	// 	img->rays[i].is_hor = 2;
+	// 	img->rays[i].distance = img->rays[i].verthitdistance;
+	// }
+	// else if (img->rays[i].verthitdistance > img->rays[i].horzhitdistance)
+	// {
+	// 	printf("hello4\n");
+	// 	img->rays[i].is_hor = 1;
+	// 	img->rays[i].distance = img->rays[i].horzhitdistance;
+	// }
+	// printf("i: %d\n", img->rays[i].is_hor); 
 }
 
 void	init_rays(t_data	*img)
@@ -236,8 +247,6 @@ void	init_rays(t_data	*img)
 	img->rayangle = img->rotationangle - (FOV_ANGLE / 2);
 	if(!img->rays)
 		img->rays = malloc(sizeof(t_cast) * img->num_rays);
-	if(!img->is_hor)
-		img->is_hor = malloc(sizeof(int) * img->num_rays);
 }
 
 void	castallrays(t_data	*img)
@@ -253,6 +262,7 @@ void	castallrays(t_data	*img)
 		j = 1;
 		normalizeangle(img);
 		cast(img, i);
+		
 		while(img->rays[i].distance > j)
 		{
 			x = img->px + 5 + cos(img->rayangle) * j;
@@ -279,6 +289,12 @@ void ft_react(t_data *data, int x, int y, int hight)
 	int coler;
 
 	i = 0;
+	while(y > i++)
+		my_mlx_pixel_put(data, x, i, 0x85C1E9);
+	i = y + hight - 1;
+	while(++i < data->mapy * 80)
+		my_mlx_pixel_put(data,  x, i, 0x95A5A6);
+	i = 0;
 	while (i < WALL_STRIP_WIDTH)
 	{		
 		j = 0;
@@ -288,12 +304,15 @@ void ft_react(t_data *data, int x, int y, int hight)
 				y = 0;
 			if (x >= 0)
 			{
-				// if (data->is_hor[i] == 1)
-				// 	coler = 200;
-				// else
+				coler = 0;
+				if (data->rays[x / WALL_STRIP_WIDTH].is_hor == 1)
+					coler = 200;
+				else if(data->rays[x / WALL_STRIP_WIDTH].is_hor == 2)
 					coler = 255;
+				else
+					exit(0);
 				alpha = 10700 / hight;
-				my_mlx_pixel_put(data, x + i, y + j, create_trgb(10, coler, coler, coler));
+				my_mlx_pixel_put(data, x + i, y + j, create_trgb(alpha, coler, coler, coler));
 				}
 			j++;
 		}

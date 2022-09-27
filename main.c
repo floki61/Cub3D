@@ -18,7 +18,9 @@ void	read_map(t_data *img)
 		free(instruction);
 		instruction = get_next_line(img->fd);
 	}
+	free(instruction);
 	img->map = ft_split(tab, '\n');
+	free(tab);
 	if (!check_map(img->map, img))
 	{
 		ft_putstr("Error Invalide Map\n");
@@ -31,7 +33,8 @@ void	read_map(t_data *img)
 void	init_data(t_data	*img, char	*fd)
 {
 	img->rays = NULL;
-	img->is_hor = NULL;
+	img->walkdirection2 = 0;
+	img->walkdirection = 0;
 	img->mini_scall = 0;
 	img->fd = open(fd, O_RDONLY);
 	if (!(img->fd) || !img)
@@ -50,4 +53,5 @@ int	main(int argc, char **argv)
 	init_data(&img, argv[1]);
 	read_map(&img);
 	open_window(&img);
+	system("leaks cub3d");
 }
