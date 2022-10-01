@@ -6,18 +6,11 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/27 03:42:49 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/10/01 17:17:49 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-int		check_point(t_data	*img, int x, int y)
-{
-	if(img->map[y / 80][x / 80] == '1')
-		return (0);
-	return (1);
-}
 
 void	my_mlx_pixel_put(t_data *img, int x, int y, int color)
 {
@@ -43,7 +36,8 @@ void	put_wall(t_data	*img)
 		w = 0;
 		while (w < 80)
 		{
-			my_mlx_pixel_put(img, ((img->var.x * 80) + w) * img->mini_scall, ((img->var.y * 80) + h) * img->mini_scall , 0x27329F);
+			if (img->mini_scall == 1)
+				my_mlx_pixel_put(img, ((img->var.x * 80) + w), ((img->var.y * 80) + h) , 0x27329F);
 			i++;
 			w++;
 		}
@@ -53,22 +47,19 @@ void	put_wall(t_data	*img)
 
 void	put_ground(t_data	*img)
 {
-	int i;
 	int	h;
 	int w;
 	
-	i = 0;
 	h = 0;
 	while(h < 80)
 	{
 		w = 0;
 		while (w < 80)
 		{
-			// if(w == 0 || h == 79)
-			// 	my_mlx_pixel_put(img, (img->var.x * 80) + w, (img->var.y * 80) + h, 0x000000);
-			// else
-			my_mlx_pixel_put(img, ((img->var.x * 80) + w) * img->mini_scall, ((img->var.y * 80) + h) * img->mini_scall, 0xFFFFFF);
-			i++;
+			if((w == 0 || h == 79) && img->mini_scall == 1)
+				my_mlx_pixel_put(img, ((img->var.x * 80) + w) , ((img->var.y * 80) + h) , 0x000000);
+			else if (img->mini_scall == 1)
+				my_mlx_pixel_put(img, ((img->var.x * 80) + w), ((img->var.y * 80) + h), 0xFFFFFF);
 			w++;
 		}
 		h++;
@@ -77,19 +68,17 @@ void	put_ground(t_data	*img)
 
 void	put_myplayer(t_data *img)
 {
-	int i;
 	int	h;
 	int w;
-	
-	i = 0;
+
 	h = 0;
 	while(h < 10)
 	{
 		w = 0;
 		while (w < 10)
 		{
-			my_mlx_pixel_put(img, (img->px + w) * img->mini_scall, (img->py + h) * img->mini_scall, 0xFF0000);
-			i++;
+			if (img->mini_scall == 1)
+				my_mlx_pixel_put(img, (img->px + w), (img->py + h), 0xFF0000);
 			w++;
 		}
 		h++;
@@ -99,7 +88,7 @@ void	put_myplayer(t_data *img)
 int		haswallat(t_data	*img,int	x, int y)
 {	
 	if (y / 80 >= img->mapy)
-		return (0);
+		return (1);
 	if(img->map[y / 80][x / 80] == '1')
 		return(1);
 	return (0);
@@ -139,7 +128,7 @@ void	horizontal_raygrid(t_data	*img, int	i)
 	xintercept = img->px + 5 + (yintercept - img->py - 5) / tan(img->rayangle);
 	ystep = 80;
 	if(img->rayfacing.up)
-		ystep *=  -1;
+		ystep *= -1;
 	xstep = 80	/ tan(img->rayangle);
 	if(img->rayfacing.left && xstep > 0)
 		xstep *=  -1;
@@ -162,6 +151,7 @@ void	horizontal_raygrid(t_data	*img, int	i)
 		{
 			if(img->rayfacing.up)
 				yintercept += 1;
+			img->rays[i].horzhitdistance = 0;
 			xintercept += xstep;
 			yintercept += ystep;
 		}
@@ -226,19 +216,6 @@ void	cast(t_data	*img, int i)
 		img->rays[i].is_hor = 1;
 		img->rays[i].distance = img->rays[i].verthitdistance;
 	}
-	// if(img->rays[i].verthitdistance < img->rays[i].horzhitdistance)
-	// {
-	// 	printf("hello3\n");
-	// 	img->rays[i].is_hor = 2;
-	// 	img->rays[i].distance = img->rays[i].verthitdistance;
-	// }
-	// else if (img->rays[i].verthitdistance > img->rays[i].horzhitdistance)
-	// {
-	// 	printf("hello4\n");
-	// 	img->rays[i].is_hor = 1;
-	// 	img->rays[i].distance = img->rays[i].horzhitdistance;
-	// }
-	// printf("i: %d\n", img->rays[i].is_hor); 
 }
 
 void	init_rays(t_data	*img)
@@ -267,7 +244,8 @@ void	castallrays(t_data	*img)
 		{
 			x = img->px + 5 + cos(img->rayangle) * j;
 			y = img->py + 5 + sin(img->rayangle) * j;
-			my_mlx_pixel_put(img, x * img->mini_scall, y * img->mini_scall,	0x800080);
+			if (img->mini_scall == 1)
+				my_mlx_pixel_put(img, x * img->mini_scall, y * img->mini_scall,	0x800080);
 			j++;
 		}
 		img->rayangle += FOV_ANGLE / img->num_rays;
@@ -280,60 +258,74 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
+void	pint_sc_gr(t_data *data, int top, int y, int x)
+{
+	int	i;
 
-void ft_react(t_data *data, int x, int y, int hight)
+	i = -1;
+	while(++i < top)
+		*(unsigned int *)(data->addr + (i * data->line_length + x * (data->bits_per_pixel / 8))) = (unsigned int)0x85C1E9;
+	i = y -1;
+	while(data->img_h > ++i)
+		*(unsigned int *)(data->addr + (i * data->line_length + x * (data->bits_per_pixel / 8))) = (unsigned int)0x95A5A6;
+}
+
+void ft_react(t_data *data, int x, int hight)
 {
 	int	j;
-	int i;
-	int	alpha;
-	int coler;
+	int alpha;
+	int	top_pixl;
+	int	textureoffsetx;
+	int bottem_pixl;
+	int distancefromtop;
+	int textureoffsety;
 
-	i = 0;
-	while(y > i++)
-		my_mlx_pixel_put(data, x, i, 0x85C1E9);
-	i = y + hight - 1;
-	while(++i < data->mapy * 80)
-		my_mlx_pixel_put(data,  x, i, 0x95A5A6);
-	i = 0;
-	while (i < WALL_STRIP_WIDTH)
-	{		
-		j = 0;
-		while (j < hight)
-		{
-			if (y < 0)
-				y = 0;
-			if (x >= 0)
-			{
-				coler = 0;
-				if (data->rays[x / WALL_STRIP_WIDTH].is_hor == 1)
-					coler = 200;
-				else if(data->rays[x / WALL_STRIP_WIDTH].is_hor == 2)
-					coler = 255;
-				else
-					exit(0);
-				alpha = 10700 / hight;
-				my_mlx_pixel_put(data, x + i, y + j, create_trgb(alpha, coler, coler, coler));
-				}
-			j++;
-		}
-		i++;
+	top_pixl = (data->img_h/2) - (hight/2);
+	top_pixl = top_pixl < 0 ? 0 : top_pixl;
+	bottem_pixl = (data->img_h/2) + (hight/2);
+	bottem_pixl = bottem_pixl >  data->img_h ? data->img_h : bottem_pixl;
+	pint_sc_gr(data, top_pixl, bottem_pixl, x);
+	if (data->rays[x].verthitdistance)
+		textureoffsetx = (int)data->rays[x].wallhity % TEXTUR_HIGHT;
+     else
+		textureoffsetx = (int)data->rays[x].wallhitx % TEXTUR_WIDTH;
+	j = top_pixl + 1;
+	while (j < bottem_pixl)
+	{
+		distancefromtop = j + (hight / 2) - (data->img_h / 2);
+		textureoffsety = distancefromtop * TEXTUR_HIGHT / hight;
+		alpha = 50;
+		if (data->rays[x].is_hor == 1)
+			alpha = 10;
+		data->addr[j * data->line_length + x * (data->bits_per_pixel / 8)] = data->wall_textur[(TEXTUR_HIGHT * textureoffsety)+ textureoffsetx];
+		j++;
 	}
 }
 
 void rander_3dprojectedwall(t_data	*data)
 {
 	int i;
+	int j;
 	int distance_projection_plan;
 	int wall_hight;
 	int correct_dest;
 
+	if (!data->wall_textur)
+		data->wall_textur = (unsigned int *)malloc(sizeof(unsigned int) * TEXTUR_HIGHT * TEXTUR_WIDTH);
+	i = -1;
+	while (++i < TEXTUR_WIDTH)
+	{
+		j = -1;
+		while (++j < TEXTUR_HIGHT)
+			data->wall_textur[(TEXTUR_WIDTH * j) + i] = (i % 8 && j % 8) ?  create_trgb(100,0,0,255):create_trgb(255,0,0,0) ;
+	}
+	distance_projection_plan = (data->var.x * 80 / 2) / tan(FOV_ANGLE / 2);
 	i = 0;
 	while(i < data->num_rays)
 	{
 		correct_dest = data->rays[i].distance * cos(data->rays[i].rayangle_pro - data->rotationangle);
-		distance_projection_plan = (data->var.x * 80 / 2) / tan(FOV_ANGLE / 2);
 		wall_hight = (int)((TILE_SIZE / ((double)correct_dest)) * ((double)distance_projection_plan));
-		ft_react(data, i * WALL_STRIP_WIDTH, ((data->mapy * 80) /2) - (wall_hight / 2), wall_hight);
+		ft_react(data, i, wall_hight);
 		i++;
 	}
 }
@@ -372,10 +364,8 @@ int	open_window(t_data *img)
 	img->mapx = ft_strlen(img->map[0]);
 	img->mlx = mlx_init();
 	img->mlx_win = mlx_new_window(img->mlx, img->mapx * 80, img->mapy * 80, "game");
-	img->img = mlx_new_image(img->mlx, img->mapx * 80, img->mapy * 80);
 	img->img_w =  img->mapx * 80;
 	img->img_h =  img->mapy * 80;
-	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 	mlx_loop_hook(img->mlx, loop_game, img);
 	mlx_hook(img->mlx_win, 17, 0, destroy, img);
 	mlx_loop(img->mlx);

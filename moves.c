@@ -99,7 +99,7 @@ void	update(t_data	*img)
 
 int	key_hook(int keycode, t_data *img)
 {
-	printf("keycode : %d\n",keycode);
+	// printf("keycode : %d\n",keycode);
 	if (keycode == 53 || keycode == 1 || keycode == 13)
 		moves1(keycode, img);
 	else if (keycode == 0 || keycode == 2)
@@ -127,15 +127,16 @@ int	key_hook2(int keycode, t_data *img)
 
 int	loop_game(t_data	*img)
 {
-	mlx_hook(img->mlx_win, 2, 1L, key_hook, img);
-	mlx_hook(img->mlx_win, 3, 2L, key_hook2, img);
 	update(img);
-	mlx_destroy_image (img->mlx, img->img);
+	if(img->img)
+		mlx_destroy_image (img->mlx, img->img);
 	mlx_clear_window (img->mlx, img->mlx_win);
 	img->img = mlx_new_image(img->mlx,  img->mapx* 80, img->mapy * 80);
 	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 	draw(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
+	mlx_hook(img->mlx_win, 2, 1L, key_hook, img);
+	mlx_hook(img->mlx_win, 3, 2L, key_hook2, img);
 	img->ray.redline = 0;
 	return (0);
 }

@@ -33,6 +33,9 @@ void	read_map(t_data *img)
 void	init_data(t_data	*img, char	*fd)
 {
 	img->rays = NULL;
+	img->img = NULL;
+	img->wall_textur = NULL;
+	img->color_buff = NULL;
 	img->walkdirection2 = 0;
 	img->walkdirection = 0;
 	img->mini_scall = 0;
@@ -53,5 +56,4 @@ int	main(int argc, char **argv)
 	init_data(&img, argv[1]);
 	read_map(&img);
 	open_window(&img);
-	system("leaks cub3d");
 }

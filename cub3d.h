@@ -5,6 +5,8 @@
 # define TILE_SIZE  64
 # define FOV_ANGLE (60 * (PI / 180))
 # define WALL_STRIP_WIDTH 1
+# define TEXTUR_WIDTH 64
+# define TEXTUR_HIGHT 64
 # define MINIMAP_SCALE_FACTOR img->mini_scall
 
 # include <stdio.h>
@@ -74,7 +76,6 @@ typedef struct s_data
 	double	rayangle;
 	int mapx;
 	int mapy;
-	//line:
 	int		turndirection; // -1 if left +1 if right
 	int		walkdirection; // -1 if back +1 if front
 	int		walkdirection2;
@@ -87,12 +88,14 @@ typedef struct s_data
 	int		line_length;
 	int		endian;
 	char 	*addr;
+	unsigned int	*wall_textur;
 	t_ray	ray;
 	t_cast	*rays;
 	void	*img;
 	double		mini_scall;
 	int		img_h;
 	int		img_w;
+	unsigned int	*color_buff;
 	t_rays	rayfacing;
 	
 	// int		c;
@@ -122,7 +125,6 @@ void	moves1(int keycode, t_data *img);
 void	moves2(int keycode, t_data *img);
 int		key_hook(int keycode, t_data *img);
 int		key_hook2(int keycode, t_data *img);
-int		destroy(t_data *data);
 void	put_player(t_data *img);
 int		check_name(int	argc, char *str);
 void	put_string(t_data *img);
