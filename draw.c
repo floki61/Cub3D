@@ -6,7 +6,7 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/03 15:23:02 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/10/03 17:17:44 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,7 +291,7 @@ void ft_react(t_data *data, int x, int hight)
 	pint_sc_gr(data, top_pixl, bottem_pixl, x);
 	if (data->rays[x].verthitdistance)
 		textureoffsetx = (int)data->rays[x].wallhity % TEXTUR_HIGHT;
-	else
+	else(data->rays[x].horzhitdistance)
 		textureoffsetx = (int)data->rays[x].wallhitx % TEXTUR_WIDTH;
 	j = top_pixl;
 	while (j < bottem_pixl)
@@ -301,7 +301,15 @@ void ft_react(t_data *data, int x, int hight)
 		alpha = 50;
 		if (data->rays[x].is_hor == 1)
 			alpha = 10;
-		data->addr[j * data->line_length + x * (data->bits_per_pixel / 8)] = data->wall_textur[(TEXTUR_HIGHT * textureoffsety) + textureoffsetx];
+			// data->addr[j * data->line_length + x * (data->bits_per_pixel / 8)] = data->wall_textur[(TEXTUR_HIGHT * textureoffsety) + textureoffsetx];
+		if (data->rays[x].dir =='S')
+			*(unsigned int *)(data->addr + (j * data->line_length + x * (data->bits_per_pixel / 8))) = 0x3EC7FF;
+		else if (data->rays[x].dir == 'N')
+			*(unsigned int *)(data->addr + (j * data->line_length + x * (data->bits_per_pixel / 8))) = 0xB44AFF;
+		else if (data->rays[x].dir == 'W')
+			*(unsigned int *)(data->addr + (j * data->line_length + x * (data->bits_per_pixel / 8))) = data->wall_textur[(TEXTUR_HIGHT * textureoffsety) + textureoffsetx];
+		else if (data->rays[x].dir == 'E')
+			*(unsigned int *)(data->addr + (j * data->line_length + x * (data->bits_per_pixel / 8))) = data->wall_textur[(TEXTUR_HIGHT * textureoffsety) + textureoffsetx];
 		j++;
 	}
 }
@@ -314,7 +322,7 @@ void	ray_diriction(t_data	*data, int i)
 		else if(data->rays[i].rayfacing.left)
 			data->rays[i].dir = 'W';	
 	}
-	else if (data->rays[i].is_hor  == 2)
+	else
 	{
 		if (data->rays[i].rayfacing.down)
 			data->rays[i].dir = 'S';
@@ -344,7 +352,7 @@ void rander_3dprojectedwall(t_data *data)
 	i = 0;
 	while(i < data->num_rays)
 	{
-		// ray_diriction(data, i);
+		ray_diriction(data, i);
 		correct_dest = data->rays[i].distance * cos(data->rays[i].rayangle_pro - data->rotationangle);
 		wall_hight = (int)((TILE_SIZE / ((double)correct_dest)) * ((double)distance_projection_plan));
 		ft_react(data, i, wall_hight);
