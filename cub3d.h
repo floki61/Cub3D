@@ -2,11 +2,11 @@
 # define CUB3D_H
 
 # define PI 3.14159265
-# define TILE_SIZE  64
+# define TILE_SIZE  80
 # define FOV_ANGLE (60 * (PI / 180))
 # define WALL_STRIP_WIDTH 1
-# define TEXTUR_WIDTH 64
-# define TEXTUR_HIGHT 64
+# define TEXTUR_WIDTH 80
+# define TEXTUR_HIGHT 80
 # define MINIMAP_SCALE_FACTOR img->mini_scall
 
 # include <stdio.h>
@@ -61,6 +61,8 @@ typedef	struct s_cast
 	float	verthitdistance;
 	float	distance;
 	int		redline;
+	t_rays	rayfacing;
+	char	dir;
 }	t_cast;
 
 
@@ -96,7 +98,6 @@ typedef struct s_data
 	int		img_h;
 	int		img_w;
 	unsigned int	*color_buff;
-	t_rays	rayfacing;
 	
 	// int		c;
 	int		fd;

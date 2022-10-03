@@ -6,7 +6,7 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/01 17:17:49 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/10/03 15:23:02 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,12 +106,12 @@ float distanceBetweenPoints(float x1, float y1, float x2, float y2)
     return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
 
-void	raysfacing(t_data	*img)
+void	raysfacing(t_data	*img, int i)
 {
-	img->rayfacing.down = img->rayangle > 0 && img->rayangle < PI;
-	img->rayfacing.up = !img->rayfacing.down;
-	img->rayfacing.right = img->rayangle < (0.5 * PI) || img->rayangle > (1.5 * PI);
-	img->rayfacing.left = !img->rayfacing.right;
+	img->rays[i].rayfacing.down = img->rayangle > 0 && img->rayangle < PI;
+	img->rays[i].rayfacing.up = !img->rays[i].rayfacing.down;
+	img->rays[i].rayfacing.right = img->rayangle < (0.5 * PI) || img->rayangle > (1.5 * PI);
+	img->rays[i].rayfacing.left = !img->rays[i].rayfacing.right;
 }
 
 void	horizontal_raygrid(t_data	*img, int	i)
@@ -121,26 +121,27 @@ void	horizontal_raygrid(t_data	*img, int	i)
 	float	xstep;
 	float	ystep;
 
+	img->rays[i].wallhity = 0;
 	img->rays[i].horzhitdistance = 0;
 	yintercept = floor((img->py + 5) / 80) * 80;
-	if(img->rayfacing.down)
+	if(img->rays[i].rayfacing.down)
 		yintercept += 80;
 	xintercept = img->px + 5 + (yintercept - img->py - 5) / tan(img->rayangle);
 	ystep = 80;
-	if(img->rayfacing.up)
+	if(img->rays[i].rayfacing.up)
 		ystep *= -1;
 	xstep = 80	/ tan(img->rayangle);
-	if(img->rayfacing.left && xstep > 0)
+	if(img->rays[i].rayfacing.left && xstep > 0)
 		xstep *=  -1;
-	else if(img->rayfacing.right && xstep < 0)
+	else if(img->rays[i].rayfacing.right && xstep < 0)
 		xstep *= -1;
 	while(xintercept >= 0 && xintercept <= 80 * img->mapx && yintercept >= 0 && yintercept <= 80 * img->mapy)
 	{
-		if(img->rayfacing.up)
+		if(img->rays[i].rayfacing.up)
 			yintercept -= 1;
 		if(haswallat(img,xintercept, yintercept))
 		{
-			if(img->rayfacing.up)
+			if(img->rays[i].rayfacing.up)
 				++yintercept;
 			img->rays[i].wallhitx = xintercept;
 			img->rays[i].wallhity = yintercept;
@@ -149,7 +150,7 @@ void	horizontal_raygrid(t_data	*img, int	i)
 		}
 		else
 		{
-			if(img->rayfacing.up)
+			if(img->rays[i].rayfacing.up)
 				yintercept += 1;
 			img->rays[i].horzhitdistance = 0;
 			xintercept += xstep;
@@ -165,26 +166,28 @@ void	vertical_raygrid(t_data	*img, int i)
 	float		xstep;
 	float		ystep;
 
+	img->rays[i].wallhitx = 0;
+	img->rays[i].wallhity = 0;
 	img->rays[i].verthitdistance = 0;
 	xintercept = floor((img->px + 5) / 80) * 80;
-	if(img->rayfacing.right)
+	if(img->rays[i].rayfacing.right)
 		xintercept += 80;
 	yintercept = img->py + 5 + (xintercept - img->px - 5) * tan(img->rayangle);
 	xstep = 80;
-	if(img->rayfacing.left)
+	if(img->rays[i].rayfacing.left)
 		xstep *= -1;
 	ystep = 80 * tan(img->rayangle);
-	if(img->rayfacing.up && ystep > 0)
+	if(img->rays[i].rayfacing.up && ystep > 0)
 		ystep *=  -1;
-	else if(img->rayfacing.down && ystep < 0)
+	else if(img->rays[i].rayfacing.down && ystep < 0)
 		ystep *= -1; 
 	while(xintercept >= 0 && xintercept <= 80 * img->mapx && yintercept >= 0 && yintercept <= 80 * img->mapy)
 	{
-		if(img->rayfacing.left)
+		if(img->rays[i].rayfacing.left)
 			xintercept--;
 		if(haswallat(img,xintercept, yintercept))
 		{
-			if(img->rayfacing.left)
+			if(img->rays[i].rayfacing.left)
 				++xintercept;
 			img->rays[i].wallhitx = xintercept;
 			img->rays[i].wallhity = yintercept;
@@ -193,8 +196,9 @@ void	vertical_raygrid(t_data	*img, int i)
 		}
 		else
 		{
-			if(img->rayfacing.left)
+			if(img->rays[i].rayfacing.left)
 				++xintercept;
+			img->rays[i].verthitdistance = 0;
 			xintercept += xstep;
 			yintercept += ystep;
 		}
@@ -203,12 +207,12 @@ void	vertical_raygrid(t_data	*img, int i)
 
 void	cast(t_data	*img, int i)
 {
-	raysfacing(img);
+	raysfacing(img, i);
 	horizontal_raygrid(img, i);
 	vertical_raygrid(img, i);
 	if(!img->rays[i].verthitdistance || (img->rays[i].verthitdistance > img->rays[i].horzhitdistance && img->rays[i].horzhitdistance))
 	{
-		img->rays[i].is_hor = 2;
+		img->rays[i].is_hor = 0;
 		img->rays[i].distance = img->rays[i].horzhitdistance;
 	}
 	else if(!img->rays[i].horzhitdistance || img->rays[i].verthitdistance < img->rays[i].horzhitdistance)
@@ -220,7 +224,7 @@ void	cast(t_data	*img, int i)
 
 void	init_rays(t_data	*img)
 {
-	img->num_rays = (img->img_w / WALL_STRIP_WIDTH); 
+	img->num_rays = (img->img_w/ WALL_STRIP_WIDTH); 
 	img->rayangle = img->rotationangle - (FOV_ANGLE / 2);
 	if(!img->rays)
 		img->rays = malloc(sizeof(t_cast) * img->num_rays);
@@ -287,9 +291,9 @@ void ft_react(t_data *data, int x, int hight)
 	pint_sc_gr(data, top_pixl, bottem_pixl, x);
 	if (data->rays[x].verthitdistance)
 		textureoffsetx = (int)data->rays[x].wallhity % TEXTUR_HIGHT;
-     else
+	else
 		textureoffsetx = (int)data->rays[x].wallhitx % TEXTUR_WIDTH;
-	j = top_pixl + 1;
+	j = top_pixl;
 	while (j < bottem_pixl)
 	{
 		distancefromtop = j + (hight / 2) - (data->img_h / 2);
@@ -297,12 +301,29 @@ void ft_react(t_data *data, int x, int hight)
 		alpha = 50;
 		if (data->rays[x].is_hor == 1)
 			alpha = 10;
-		data->addr[j * data->line_length + x * (data->bits_per_pixel / 8)] = data->wall_textur[(TEXTUR_HIGHT * textureoffsety)+ textureoffsetx];
+		data->addr[j * data->line_length + x * (data->bits_per_pixel / 8)] = data->wall_textur[(TEXTUR_HIGHT * textureoffsety) + textureoffsetx];
 		j++;
 	}
 }
+void	ray_diriction(t_data	*data, int i)
+{
+	if (data->rays[i].is_hor)
+	{
+		if (data->rays[i].rayfacing.right)
+			data->rays[i].dir = 'E';
+		else if(data->rays[i].rayfacing.left)
+			data->rays[i].dir = 'W';	
+	}
+	else if (data->rays[i].is_hor  == 2)
+	{
+		if (data->rays[i].rayfacing.down)
+			data->rays[i].dir = 'S';
+		else if (data->rays[i].rayfacing.up)
+			data->rays[i].dir = 'N';
+	}
+}
 
-void rander_3dprojectedwall(t_data	*data)
+void rander_3dprojectedwall(t_data *data)
 {
 	int i;
 	int j;
@@ -323,6 +344,7 @@ void rander_3dprojectedwall(t_data	*data)
 	i = 0;
 	while(i < data->num_rays)
 	{
+		// ray_diriction(data, i);
 		correct_dest = data->rays[i].distance * cos(data->rays[i].rayangle_pro - data->rotationangle);
 		wall_hight = (int)((TILE_SIZE / ((double)correct_dest)) * ((double)distance_projection_plan));
 		ft_react(data, i, wall_hight);

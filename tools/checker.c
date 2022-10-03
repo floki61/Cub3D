@@ -6,7 +6,7 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 22:38:37 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/24 15:32:34 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/10/03 14:57:55 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void	init_player(t_data	*img, int	y, int	x)
 	img->walkdirection = 0;
 	img->turndirection = 0;
 	if(img->map[y][x] == 'N') // -PI/2
-		img->rotationangle = -PI / 2;
-	else if(img->map[y][x] == 'W')
+		img->rotationangle = -PI / 2;	
+	else if(img->map[y][x] == 'W')	
 		img->rotationangle = PI;
 	else if(img->map[y][x] == 'S')
 		img->rotationangle = PI / 2;
