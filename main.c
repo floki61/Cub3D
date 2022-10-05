@@ -258,6 +258,11 @@ void	read_images(t_data	*data)
 	int hight;
 	int with;
 
+	printf("%s\n", data->e_path);
+	printf("%s\n", data->n_path);
+	printf("%s\n", data->s_path);
+	printf("%s\n", data->w_path);
+	// exit(0);
 	data->n_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->n_path, &with, &hight);
 	data->s_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->s_path, &with, &hight);
 	data->e_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->e_path, &with, &hight);
