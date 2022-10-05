@@ -56,7 +56,7 @@ void	update_direction1(t_data	*img)
 	{
 		px = (img->px + cos(rotationangle) * img->movestep);
 		py = (img->py + sin(rotationangle) * img->movestep);
-		if(img->map[py / 80][px / 80] == '0' && img->map[py / 80][(px + 10) / 80] == '0' && img->map[(py + 10) / 80][px / 80] == '0' && img->map[(py + 10) / 80][(px + 10) / 80] == '0')
+		if(img->map[py / TILE_SIZE][px / TILE_SIZE] == '0' && img->map[py / TILE_SIZE][(px + 10) / TILE_SIZE] == '0' && img->map[(py + 10) / TILE_SIZE][px / TILE_SIZE] == '0' && img->map[(py + 10) / TILE_SIZE][(px + 10) / TILE_SIZE] == '0')
 		{
 			img->px = px;
 			img->py = py;
@@ -76,7 +76,7 @@ void	update_direction0(t_data	*img)
 		img->movestep = img->walkdirection * img->movespeed;
 		px = (img->px + cos(img->rotationangle) * img->movestep);
 		py = (img->py + sin(img->rotationangle) * img->movestep);
-		if(img->map[py / 80][px / 80] == '0' && img->map[py / 80][(px + 10) / 80] == '0' && img->map[(py + 10) / 80][px / 80] == '0' && img->map[(py + 10) / 80][(px + 10) / 80] == '0')
+		if(img->map[py / TILE_SIZE][px / TILE_SIZE] == '0' && img->map[py / TILE_SIZE][(px + 10) / TILE_SIZE] == '0' && img->map[(py + 10) / TILE_SIZE][px / TILE_SIZE] == '0' && img->map[(py + 10) / TILE_SIZE][(px + 10) / TILE_SIZE] == '0')
 		{
 			img->px = px;
 			img->py = py;
@@ -99,7 +99,6 @@ void	update(t_data	*img)
 
 int	key_hook(int keycode, t_data *img)
 {
-	// printf("keycode : %d\n",keycode);
 	if (keycode == 53 || keycode == 1 || keycode == 13)
 		moves1(keycode, img);
 	else if (keycode == 0 || keycode == 2)
@@ -139,6 +138,10 @@ int	loop_game(t_data	*img)
 	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 	draw(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
+	// mlx_destroy_image(img->mlx, img->s_textur_buffer.img);
+	// mlx_destroy_image(img->mlx, img->n_textur_buffer.img);
+	// mlx_destroy_image(img->mlx, img->e_textur_buffer.img);
+	// mlx_destroy_image(img->mlx, img->w_textur_buffer.img);
 	mlx_hook(img->mlx_win, 2, 1L, key_hook, img);
 	mlx_hook(img->mlx_win, 3, 2L, key_hook2, img);
 	img->ray.redline = 0;

@@ -2,14 +2,13 @@
 # define CUB3D_H
 
 # define PI 3.14159265
-# define TILE_SIZE  80
-# define TILE_SIZE  80
+# define TILE_SIZE  64
 # define W_WITHE  2000
 # define W_HIGHTE  800
 # define FOV_ANGLE (60 * (PI / 180))
 # define WALL_STRIP_WIDTH 1
-# define TEXTUR_WIDTH 80
-# define TEXTUR_HIGHT 80
+# define TEXTUR_WIDTH 64
+# define TEXTUR_HIGHT 64
 # define MINIMAP_SCALE_FACTOR img->mini_scall
 
 # include <stdio.h>
@@ -71,6 +70,16 @@ typedef	struct s_raytools
 	int		left;
 }	t_rays;
 
+typedef	struct s_textur
+{
+	void	*img;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	char 	*addr;
+}	t_textur;
+
+
 typedef	struct s_cast
 {
 	// int		wall_strip_width;
@@ -79,6 +88,10 @@ typedef	struct s_cast
 	int		is_hor;
 	float	wallhitx;
 	float	wallhity;
+	float	h_wallhitx;
+	float	h_wallhity;
+	float	v_wallhitx;
+	float	v_wallhity;
 	float	horzhitdistance;
 	float	verthitdistance;
 	float	distance;
@@ -95,7 +108,10 @@ typedef struct s_data
 	char	**map;
 	int		px;
 	int		py;
-	
+	char	*n_path;
+	char	*s_path;
+	char	*e_path;
+	char	*w_path;
 	int		num_rays;
 	double	rayangle;
 	int mapx;
@@ -123,6 +139,10 @@ typedef struct s_data
 	int		g_w;
 	unsigned int	*color_buff;
 	t_path	path;
+	t_textur	n_textur_buffer;
+	t_textur	s_textur_buffer;
+	t_textur	w_textur_buffer;
+	t_textur	e_textur_buffer;
 	t_color	color;
 	// int		c;
 	int		fd;
@@ -154,6 +174,7 @@ int		key_hook2(int keycode, t_data *img);
 void	put_player(t_data *img);
 int		check_name(int	argc, char *str);
 void	put_string(t_data *img);
+void	read_images(t_data	*data);
 void	find_player(t_player *player, t_data *img);
 void	put_myplayer2(t_data *img);
 int		loop_game(t_data	*img);

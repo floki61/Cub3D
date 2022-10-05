@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 22:38:37 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/27 04:36:51 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/05 20:44:05 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int	width(char **map, int i) //-> firt line must be 11111111111111
 
 void	init_player(t_data	*img, int	y, int	x)
 {
-	img->py = (80 * y) + 35;
-	img->px = (80 * x) + 35;
+	img->py = (TILE_SIZE * y) + 35;
+	img->px = (TILE_SIZE * x) + 35;
 	img->ray.redline = 0;
 	img->walkdirection = 0;
 	img->turndirection = 0;
@@ -77,7 +77,6 @@ void	init_player(t_data	*img, int	y, int	x)
 	else if(img->map[y][x] == 'E')
 		img->rotationangle = 0;
 	img->map[y][x] = '0';
-	printf("angle: %f\n", img->rotationangle);
 	img->rotationspeed = 2 * (PI / 180);
 	img->movespeed = 10;
 }

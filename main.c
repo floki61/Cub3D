@@ -4,7 +4,7 @@ int	NO_PATH(t_data *img, char	*identifier, char	*path)
 {
 	if(!strcmp(identifier, "NO"))
 	{	
-		printf("NO\n");
+		img->n_path = path;
 		img->path.NO = open(path, O_RDONLY);
 		img->path.index += 1;
 		return (img->path.NO);
@@ -15,7 +15,7 @@ int	SO_PATH(t_data *img, char	*identifier, char	*path)
 {
 	if(!strcmp(identifier, "SO"))
 	{	
-		printf("SO\n");
+		img->s_path = path;
 		img->path.SO = open(path, O_RDONLY);
 		img->path.index += 1;
 		return (img->path.SO);
@@ -26,7 +26,7 @@ int	WE_PATH(t_data *img, char	*identifier, char	*path)
 {
 	if(!strcmp(identifier, "WE"))
 	{	
-		printf("WE\n");
+		img->w_path = path;
 		img->path.WE = open(path, O_RDONLY);
 		img->path.index += 1;
 		return (img->path.WE);
@@ -37,7 +37,7 @@ int	EA_PATH(t_data *img, char	*identifier, char	*path)
 {
 	if(!strcmp(identifier, "EA"))
 	{	
-		printf("EA\n");
+		img->e_path = path;
 		img->path.EA = open(path, O_RDONLY);
 		img->path.index += 1;
 		return (img->path.EA);
@@ -60,7 +60,6 @@ int	path_texture(t_data *img, char	*path)
 	int		ret;
 	
 	ret = 0;
-	printf("PATH::: %s", path);
 	str = ft_split(path, ' ');
 	if(str[0] && str[1] && !str[2])
 	{
@@ -73,11 +72,10 @@ int	path_texture(t_data *img, char	*path)
 			ret = WE_PATH(img, str[0], str[1]);
 		else if(img->path.index == 3)
 			ret = EA_PATH(img, str[0], str[1]);
-		free_tab(str);
+		// free_tab(str);
 		if (ret != -1)
 			return (1);
 	}
-	printf("Path Error\n");
 	printf("--------ERROR--------\n");
 	return (0);
 		
@@ -102,7 +100,6 @@ int	FLOOR_COLOR(t_data *img, char	*value)
 
 	i = 0;
 	color_tab = ft_split(value, ',');
-	printf("FLOOR\n");
 	if(color_tab[2] && !color_tab[3])
 	{	
 		while(color_tab[i])
@@ -140,7 +137,6 @@ int	CEILLING_COLOR(t_data *img, char	*value)
 
 	i = 0;
 	color_tab = ft_split(value, ',');
-	printf("CEILLING\n");
 	if(color_tab[2] && !color_tab[3])
 	{	
 		while(color_tab[i])
@@ -178,7 +174,6 @@ int	set_color(t_data *img, char	*path)
 	int		ret;
 	
 	ret = -1;
-	printf("COLOR::: %s", path);
 	str = ft_split(path, ' ');
 	if(str[0] && str[1] && !str[2])
 	{
@@ -191,7 +186,6 @@ int	set_color(t_data *img, char	*path)
 		if(ret == 3)
 			return (1);
 	}
-	printf("Color Error\n");
 	printf("--------ERROR--------\n");
 	return (0);
 		
@@ -259,6 +253,22 @@ void	init_data(t_data	*img, char	*fd)
 	return ;
 }
 
+void	read_images(t_data	*data)
+{
+	int hight;
+	int with;
+
+	data->n_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->n_path, &with, &hight);
+	data->s_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->s_path, &with, &hight);
+	data->e_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->e_path, &with, &hight);
+	data->w_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->w_path, &with, &hight);
+	data->n_textur_buffer.addr = mlx_get_data_addr(data->n_textur_buffer.img, &data->n_textur_buffer.bits_per_pixel, &data->n_textur_buffer.line_length, &data->n_textur_buffer.endian);
+	data->s_textur_buffer.addr = mlx_get_data_addr(data->s_textur_buffer.img, &data->s_textur_buffer.bits_per_pixel, &data->s_textur_buffer.line_length, &data->s_textur_buffer.endian);
+	data->e_textur_buffer.addr = mlx_get_data_addr(data->e_textur_buffer.img, &data->e_textur_buffer.bits_per_pixel, &data->e_textur_buffer.line_length, &data->e_textur_buffer.endian);
+	data->w_textur_buffer.addr = mlx_get_data_addr(data->w_textur_buffer.img, &data->w_textur_buffer.bits_per_pixel, &data->w_textur_buffer.line_length, &data->w_textur_buffer.endian);
+	// printf("%p \")
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	img;
@@ -268,3 +278,4 @@ int	main(int argc, char **argv)
 	read_map(&img);
 	open_window(&img);
 }
+
