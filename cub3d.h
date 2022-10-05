@@ -3,6 +3,9 @@
 
 # define PI 3.14159265
 # define TILE_SIZE  80
+# define TILE_SIZE  80
+# define W_WITHE  2000
+# define W_HIGHTE  800
 # define FOV_ANGLE (60 * (PI / 180))
 # define WALL_STRIP_WIDTH 1
 # define TEXTUR_WIDTH 80
@@ -26,6 +29,25 @@ typedef struct s_node
 	int		y;
 	int		lenght;
 }				t_node;
+typedef struct s_path
+{
+	int	NO;
+	int	SO;
+	int	WE;
+	int	EA;
+	int	index;
+}				t_path;
+
+typedef	struct s_color
+{
+	int	RedFloor;
+	int	GreenFloor;
+	int	BlueFloor;
+	int	RedCeilling;
+	int	GreenCeilling;
+	int	BlueCeilling;
+	int	index;
+} t_color;
 typedef struct s_ray
 {
 	int		redline;
@@ -78,6 +100,7 @@ typedef struct s_data
 	double	rayangle;
 	int mapx;
 	int mapy;
+	int		minimap;
 	int		turndirection; // -1 if left +1 if right
 	int		walkdirection; // -1 if back +1 if front
 	int		walkdirection2;
@@ -97,8 +120,10 @@ typedef struct s_data
 	double		mini_scall;
 	int		img_h;
 	int		img_w;
+	int		g_w;
 	unsigned int	*color_buff;
-	
+	t_path	path;
+	t_color	color;
 	// int		c;
 	int		fd;
 	t_node	var;

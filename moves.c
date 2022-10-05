@@ -106,6 +106,8 @@ int	key_hook(int keycode, t_data *img)
 		moves2 (keycode, img);
 	else if(keycode == 123 || keycode == 124)
 		moves3(keycode, img);
+	else if(keycode == 48)
+		img->minimap = 1;
 	return (0);
 }
 
@@ -122,6 +124,8 @@ int	key_hook2(int keycode, t_data *img)
 		img->mini_scall = 1;
 	else if(keycode == 11)
 		img->mini_scall = 0;
+	else if(keycode == 48)
+		img->minimap = 0;
 	return (0);
 }
 
@@ -131,7 +135,7 @@ int	loop_game(t_data	*img)
 	if(img->img)
 		mlx_destroy_image (img->mlx, img->img);
 	mlx_clear_window (img->mlx, img->mlx_win);
-	img->img = mlx_new_image(img->mlx,  img->mapx* 80, img->mapy * 80);
+	img->img = mlx_new_image(img->mlx,  W_WITHE, W_HIGHTE);
 	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 	draw(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
@@ -140,3 +144,59 @@ int	loop_game(t_data	*img)
 	img->ray.redline = 0;
 	return (0);
 }
+
+// void	draw(t_data *img)
+// {
+// 	img->var.y = 0;
+// 	while (img->map[img->var.y])
+// 	{
+// 		img->var.x = 0;
+// 		while (img->map[img->var.y][img->var.x])
+// 		{
+// 			if (img->map[img->var.y][img->var.x] == '1')
+// 				put_wall(img);
+// 			else if (img->map[img->var.y][img->var.x] == '0')
+// 				put_ground(img);
+// 			img->var.x++;
+// 		}
+// 		img->var.y++;
+// 		while(img->var.x < img->g_w)
+// 		{
+// 			put_wall(img);
+// 			img->var.x++;
+// 		}
+// 		img->var.y++;
+// 	}
+// 	put_myplayer(img);
+// 	castallrays(img);
+// 	if (img->mini_scall != 1)
+// 		rander_3dprojectedwall(img);
+// }
+
+// void	castallrays(t_data	*img)
+// {
+// 	int i = 0;
+// 	int j;
+// 	int x;
+// 	int y;
+
+// 	init_rays(img);
+// 	while(i < img->num_rays)
+// 	{
+// 		j = 1;
+// 		normalizeangle(img);
+// 		cast(img, i);
+		
+// 		while(img->rays[i].distance > j)
+// 		{
+// 			x = img->px + 5 + cos(img->rayangle) * j;
+// 			y = img->py + 5 + sin(img->rayangle) * j;
+// 			if (img->mini_scall == 1)
+// 				my_mlx_pixel_put(img, x * img->mini_scall, y * img->mini_scall,	0x800080);
+// 			j++;
+// 		}
+// 		img->rayangle += FOV_ANGLE / img->num_rays;
+// 		img->rays[i].rayangle_pro = img->rayangle;
+// 		i++;
+// 	}
+// }

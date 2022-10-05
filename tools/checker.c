@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 22:38:37 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/03 14:57:55 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/09/27 04:36:51 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void	init_player(t_data	*img, int	y, int	x)
 	img->walkdirection = 0;
 	img->turndirection = 0;
 	if(img->map[y][x] == 'N') // -PI/2
-		img->rotationangle = -PI / 2;	
-	else if(img->map[y][x] == 'W')	
+		img->rotationangle = -PI / 2;
+	else if(img->map[y][x] == 'W')
 		img->rotationangle = PI;
 	else if(img->map[y][x] == 'S')
 		img->rotationangle = PI / 2;
@@ -130,6 +130,24 @@ int	middle(char **map, t_data *img)
 	return (0);
 }
 
+int	get_w(char	**map)
+{
+	int		i;
+	int		x;
+	int		g_w;
+
+	i = 0;
+	g_w = 0;
+	while(map[i])
+	{
+		x =  ft_strlen(map[i]);
+		if(g_w < x)
+			g_w = x;
+		i++;
+	}
+	return (g_w);
+}
+
 int	check_map(char	**map, t_data	*img)
 {
 	if ((height(map, img)) == -1)
@@ -152,6 +170,7 @@ int	check_map(char	**map, t_data	*img)
 		printf("middle error\n");
 		return (0);
 	}
+	img->g_w = get_w(img->map);
 	return (1);
 }
 

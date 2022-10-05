@@ -1,20 +1,230 @@
 #include "cub3d.h"
 
+int	NO_PATH(t_data *img, char	*identifier, char	*path)
+{
+	if(!strcmp(identifier, "NO"))
+	{	
+		printf("NO\n");
+		img->path.NO = open(path, O_RDONLY);
+		img->path.index += 1;
+		return (img->path.NO);
+	}
+	return (-1);
+}
+int	SO_PATH(t_data *img, char	*identifier, char	*path)
+{
+	if(!strcmp(identifier, "SO"))
+	{	
+		printf("SO\n");
+		img->path.SO = open(path, O_RDONLY);
+		img->path.index += 1;
+		return (img->path.SO);
+	}
+	return (-1);
+}
+int	WE_PATH(t_data *img, char	*identifier, char	*path)
+{
+	if(!strcmp(identifier, "WE"))
+	{	
+		printf("WE\n");
+		img->path.WE = open(path, O_RDONLY);
+		img->path.index += 1;
+		return (img->path.WE);
+	}
+	return (-1);
+}
+int	EA_PATH(t_data *img, char	*identifier, char	*path)
+{
+	if(!strcmp(identifier, "EA"))
+	{	
+		printf("EA\n");
+		img->path.EA = open(path, O_RDONLY);
+		img->path.index += 1;
+		return (img->path.EA);
+	}
+	return (-1);
+}
+
+void	free_tab(char	**str)
+{
+	int	i;
+
+	i = -1;
+	while(str[++i])
+		free(str[i]);
+}
+
+int	path_texture(t_data *img, char	*path)
+{
+	char	**str;
+	int		ret;
+	
+	ret = 0;
+	printf("PATH::: %s", path);
+	str = ft_split(path, ' ');
+	if(str[0] && str[1] && !str[2])
+	{
+		str[1][ft_strlen(str[1]) - 1] = '\0';
+		if(img->path.index == 0)
+			ret = NO_PATH(img, str[0], str[1]);
+		else if(img->path.index == 1)
+			ret = SO_PATH(img, str[0], str[1]);
+		else if(img->path.index == 2)
+			ret = WE_PATH(img, str[0], str[1]);
+		else if(img->path.index == 3)
+			ret = EA_PATH(img, str[0], str[1]);
+		free_tab(str);
+		if (ret != -1)
+			return (1);
+	}
+	printf("Path Error\n");
+	printf("--------ERROR--------\n");
+	return (0);
+		
+}
+
+int	is_num(char	*str)
+{
+	int i;
+
+	i = -1;
+	while(str[++i])
+		if(str[i] < '0' && str[i] > '9')
+			return (0);
+	return (1);
+}
+
+int	FLOOR_COLOR(t_data *img, char	*value)
+{
+	int		i;
+	int		color;
+	char	**color_tab;
+
+	i = 0;
+	color_tab = ft_split(value, ',');
+	printf("FLOOR\n");
+	if(color_tab[2] && !color_tab[3])
+	{	
+		while(color_tab[i])
+		{
+			if(is_num(color_tab[i]))
+			{
+				color = atoi(color_tab[i]);
+				if (color >= 0 && color <= 255)
+				{
+					if(i == 0)
+						img->color.RedFloor = color;
+					else if(i == 1)
+						img->color.GreenFloor = color;
+					else if(i == 2)
+						img->color.BlueFloor = color;
+				}
+				else
+					break;
+				i++;
+			}
+			else
+				break;
+		}
+		if(i == 3)
+			img->color.index += 1;
+	}
+	free_tab(color_tab);
+	return (i);
+}
+int	CEILLING_COLOR(t_data *img, char	*value)
+{
+	int		i;
+	int		color;
+	char	**color_tab;
+
+	i = 0;
+	color_tab = ft_split(value, ',');
+	printf("CEILLING\n");
+	if(color_tab[2] && !color_tab[3])
+	{	
+		while(color_tab[i])
+		{
+			if(is_num(color_tab[i]))
+			{
+				color = atoi(color_tab[i]);
+				if (color >= 0 && color <= 255)
+				{
+					if(i == 0)
+						img->color.RedCeilling = color;
+					else if(i == 1)
+						img->color.GreenCeilling = color;
+					else if(i == 2)
+						img->color.BlueCeilling = color;
+				}
+				else
+					break;
+				i++;
+			}
+			else
+				break;
+		}
+		if(i == 3)
+			img->color.index += 1;
+	}
+	free_tab(color_tab);
+	return (i);
+}
+
+int	set_color(t_data *img, char	*path)
+{
+	char	**str;
+
+	int		ret;
+	
+	ret = -1;
+	printf("COLOR::: %s", path);
+	str = ft_split(path, ' ');
+	if(str[0] && str[1] && !str[2])
+	{
+		str[1][ft_strlen(str[1]) - 1] = '\0';
+		if(img->color.index == 0 && !strcmp(str[0], "F"))
+			ret = FLOOR_COLOR(img, str[1]);
+		else if(img->color.index == 1 && !strcmp(str[0], "C"))
+			ret = CEILLING_COLOR(img, str[1]);
+		free_tab(str);
+		if(ret == 3)
+			return (1);
+	}
+	printf("Color Error\n");
+	printf("--------ERROR--------\n");
+	return (0);
+		
+}
+
 void	read_map(t_data *img)
 {
 	char	*instruction;
 	char	*tab;
 
 	instruction = get_next_line(img->fd);
+	tab = NULL;
 	if (!instruction)
 	{
 		write(1, "Error\n", 6);
 		exit (0);
 	}
-	tab = NULL;
 	while (instruction)
 	{
-		tab = ft_strjoin(tab, instruction);
+		if(img->path.index < 4)
+		{	
+			if(strcmp(instruction,"\n"))
+				if(!path_texture(img, instruction))
+					exit (0);
+		}
+		else if(img->color.index < 2)
+		{
+			if(strcmp(instruction,"\n"))
+				if(!set_color(img,	instruction))
+					exit(0);
+		}
+		else
+			tab = ft_strjoin(tab, instruction);
 		free(instruction);
 		instruction = get_next_line(img->fd);
 	}
@@ -29,7 +239,6 @@ void	read_map(t_data *img)
 	return ;
 }
 
-
 void	init_data(t_data	*img, char	*fd)
 {
 	img->rays = NULL;
@@ -39,6 +248,8 @@ void	init_data(t_data	*img, char	*fd)
 	img->walkdirection2 = 0;
 	img->walkdirection = 0;
 	img->mini_scall = 0;
+	img->path.index = 0;
+	img->color.index = 0;
 	img->fd = open(fd, O_RDONLY);
 	if (!(img->fd) || !img)
 	{
