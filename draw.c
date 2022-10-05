@@ -6,11 +6,23 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/05 21:49:19 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/10/05 23:44:52 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+// unsigned int	get_color(t_textur *img, int x, int y)
+// {
+// 	char	*dst;
+
+// 	if (x < TILE_SIZE &&  y < TILE_SIZE && (x > 0 &&  y > 0))
+// 	{
+// 		dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+// 		return ((unsigned int)dst);
+// 	}
+// 	return (0);
+// }
 
 void	my_mlx_pixel_put(t_data *img, int x, int y, int color)
 {
@@ -306,16 +318,20 @@ void ft_react(t_data *data, int x, int hight)
 		distancefromtop = j + (hight / 2) - (W_HIGHTE / 2);
 		textureoffsety = distancefromtop * TEXTUR_HIGHT / hight;
 		if (data->rays[x].dir =='S')
-			data->addr[j * data->line_length + x * data->bits_per_pixel / 8] = data->s_textur_buffer.addr[textureoffsety * data->s_textur_buffer.line_length + textureoffsetx * data->s_textur_buffer.bits_per_pixel / 8];
+			*(unsigned int *)(data->addr + (j * data->line_length + x * (data->bits_per_pixel / 8))) = data->s_textur_buffer.addr[(textureoffsety * TILE_SIZE) + textureoffsetx];
 		else if (data->rays[x].dir == 'N')
-			data->addr[j * data->line_length + x * data->bits_per_pixel / 8] = data->n_textur_buffer.addr[textureoffsety * data->n_textur_buffer.line_length + textureoffsetx * data->n_textur_buffer.bits_per_pixel / 8];
+			*(unsigned int *)(data->addr + (j * data->line_length + x * (data->bits_per_pixel / 8))) = data->n_textur_buffer.addr[(textureoffsety * TILE_SIZE) + textureoffsetx];
 		else if (data->rays[x].dir == 'W')
-			data->addr[j * data->line_length + x * data->bits_per_pixel / 8] = data->w_textur_buffer.addr[textureoffsety * data->w_textur_buffer.line_length + textureoffsetx * data->w_textur_buffer.bits_per_pixel / 8];
+			*(unsigned int *)(data->addr + (j * data->line_length + x * (data->bits_per_pixel / 8))) = data->w_textur_buffer.addr[(textureoffsety * TILE_SIZE) + textureoffsetx];
 		else if (data->rays[x].dir == 'E')
-			data->addr[(j * data->line_length )+ x * data->bits_per_pixel / 8] = data->e_textur_buffer.addr[textureoffsety * data->e_textur_buffer.line_length + textureoffsetx * data->e_textur_buffer.bits_per_pixel / 8];		
+			*(unsigned int *)(data->addr + (j * data->line_length + x * (data->bits_per_pixel / 8))) = data->e_textur_buffer.addr[(textureoffsety * TILE_SIZE) + textureoffsetx];
 		j++;
 	}
 }
+
+
+
+
 void	ray_diriction(t_data	*data, int i)
 {
 	if (data->rays[i].is_hor)

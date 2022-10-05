@@ -76,7 +76,7 @@ typedef	struct s_textur
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-	char 	*addr;
+	unsigned int 	*addr;
 }	t_textur;
 
 

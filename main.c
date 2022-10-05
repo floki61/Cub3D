@@ -258,19 +258,14 @@ void	read_images(t_data	*data)
 	int hight;
 	int with;
 
-	printf("%s\n", data->e_path);
-	printf("%s\n", data->n_path);
-	printf("%s\n", data->s_path);
-	printf("%s\n", data->w_path);
-	// exit(0);
 	data->n_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->n_path, &with, &hight);
 	data->s_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->s_path, &with, &hight);
 	data->e_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->e_path, &with, &hight);
 	data->w_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->w_path, &with, &hight);
-	data->n_textur_buffer.addr = mlx_get_data_addr(data->n_textur_buffer.img, &data->n_textur_buffer.bits_per_pixel, &data->n_textur_buffer.line_length, &data->n_textur_buffer.endian);
-	data->s_textur_buffer.addr = mlx_get_data_addr(data->s_textur_buffer.img, &data->s_textur_buffer.bits_per_pixel, &data->s_textur_buffer.line_length, &data->s_textur_buffer.endian);
-	data->e_textur_buffer.addr = mlx_get_data_addr(data->e_textur_buffer.img, &data->e_textur_buffer.bits_per_pixel, &data->e_textur_buffer.line_length, &data->e_textur_buffer.endian);
-	data->w_textur_buffer.addr = mlx_get_data_addr(data->w_textur_buffer.img, &data->w_textur_buffer.bits_per_pixel, &data->w_textur_buffer.line_length, &data->w_textur_buffer.endian);
+	data->n_textur_buffer.addr = (unsigned int*)mlx_get_data_addr(data->n_textur_buffer.img, &data->n_textur_buffer.bits_per_pixel, &data->n_textur_buffer.line_length, &data->n_textur_buffer.endian);
+	data->s_textur_buffer.addr = (unsigned int*)mlx_get_data_addr(data->s_textur_buffer.img, &data->s_textur_buffer.bits_per_pixel, &data->s_textur_buffer.line_length, &data->s_textur_buffer.endian);
+	data->e_textur_buffer.addr = (unsigned int*)mlx_get_data_addr(data->e_textur_buffer.img, &data->e_textur_buffer.bits_per_pixel, &data->e_textur_buffer.line_length, &data->e_textur_buffer.endian);
+	data->w_textur_buffer.addr = (unsigned int*)mlx_get_data_addr(data->w_textur_buffer.img, &data->w_textur_buffer.bits_per_pixel, &data->w_textur_buffer.line_length, &data->w_textur_buffer.endian);
 	// printf("%p \")
 }
 
