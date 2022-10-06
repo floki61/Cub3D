@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/05 23:44:52 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/10/06 03:47:21 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,21 +53,19 @@ void	put_wall(t_data	*img)
 	int	y = W_HIGHTE - (img->mapy * 20) - 10;
 	x += (img->var.x * 20);
 	y += (img->var.y * 20);
-	// exit(0);
-	// int	x = ((img->mapx * TILE_SIZE) - (img->g_w * 20) - 10) + (img->var.x * 20);
-	// int y = ((img->mapy * TILE_SIZE) - (img->mapy * 20) - 10) + (img->var.y * 20);
 	while(h < 20)
 	{
 		w = 0;
 		while (w < 20)
 		{
-			my_mlx_pixel_put(img, x + w, y + h, create_trgb(50, 220,120,120));
+			my_mlx_pixel_put(img, x + w, y + h, create_trgb(50, 60,60,60));
 			i++;
 			w++;
 		}
 		h++;
 	}
 }
+
 
 void	put_ground(t_data	*img)
 {
@@ -79,17 +77,15 @@ void	put_ground(t_data	*img)
 	int	y = W_HIGHTE - (img->mapy * 20) - 10;
 	x += (img->var.x * 20);
 	y += (img->var.y * 20);
-	// int x = ((img->mapx * TILE_SIZE) - (img->g_w * 20) - 10) + (img->var.x * 20);
-	// int y = ((img->mapy * TILE_SIZE) - (img->mapy * 20) - 10) + (img->var.y * 20);
 	while(h < 20)
 	{
 		w = 0;
 		while (w < 20)
 		{
 			if(h == 19 || w == 19 )
-				my_mlx_pixel_put(img, x + w, y + h , create_trgb(50, 120,120,120));
+				my_mlx_pixel_put(img, x + w, y + h , create_trgb(50, 60,60,60));
 			else
-				my_mlx_pixel_put(img, x + w, y + h, create_trgb(50, 255,255,255));
+				my_mlx_pixel_put(img, x + w, y + h, create_trgb(50, 120,120,120));
 			w++;
 		}
 		h++;
@@ -102,16 +98,17 @@ void	put_myplayer(t_data *img)
 	int w;
 
 	h = 0;
-	int px = W_WITHE - (img->g_w * 20) - 10 + (img->px / 4);
-	int py = W_HIGHTE - (img->mapy * 20) - 10 + (img->py / 4);
-	// int	px = ((img->mapx * TILE_SIZE) - (img->g_w * 20) - 10) + (img->px / 4);;
-	// int py = ((img->mapy * TILE_SIZE) - (img->mapy * 20) - 10) + (img->py / 4);
-	while(h < 6)
+	int px = W_WITHE - (img->g_w * 20) - 10;
+	int py = W_HIGHTE - (img->mapy * 20) - 10;
+	float x = (TILE_SIZE / 20.f);
+	px += (img->px / x);
+	py += (img->py / x);
+	while(h < 4)
 	{
 		w = 0;
-		while (w < 6)
+		while (w < 4)
 		{
-			my_mlx_pixel_put(img, (px + w), (py + h), 0xFF0000);
+			my_mlx_pixel_put(img, (px + w), (py + h), 0xffffff);
 			w++;
 		}
 		h++;
@@ -120,7 +117,9 @@ void	put_myplayer(t_data *img)
 
 int		haswallat(t_data	*img,int	x, int y)
 {	
-	if (y / TILE_SIZE >= img->mapy)
+	if (y / TILE_SIZE > img->mapy)
+		return (1);
+	else if ( x / TILE_SIZE > ft_strlen(img->map[y / TILE_SIZE]))
 		return (1);
 	if(img->map[y / TILE_SIZE][x / TILE_SIZE] == '1')
 		return(1);
@@ -407,14 +406,14 @@ void	draw_map(t_data *img)
 				put_ground(img);
 			img->var.x++;
 		}
-		// while(img->var.x < img->g_w)
-		// {
-		// 	put_wall(img);
-		// 	img->var.x++;
-		// }
+		while(img->var.x < img->g_w)
+		{
+			put_wall(img);
+			img->var.x++;
+		}
 		img->var.y++;
 	}
-	// put_myplayer(img);
+	put_myplayer(img);
 	// drawrays(img);   
 }
 

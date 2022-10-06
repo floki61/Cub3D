@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 22:38:37 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/05 20:44:05 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/10/06 03:34:36 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int	width(char **map, int i) //-> firt line must be 11111111111111
 
 void	init_player(t_data	*img, int	y, int	x)
 {
-	img->py = (TILE_SIZE * y) + 35;
-	img->px = (TILE_SIZE * x) + 35;
+	img->py = (TILE_SIZE * y) + (TILE_SIZE / 2) - 5;
+	img->px = (TILE_SIZE * x) + (TILE_SIZE / 2) - 5;
 	img->ray.redline = 0;
 	img->walkdirection = 0;
 	img->turndirection = 0;
