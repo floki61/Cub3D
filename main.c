@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/06 22:25:53 by mait-aad          #+#    #+#             */
+/*   Updated: 2022/10/06 22:25:54 by mait-aad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-int	NO_PATH(t_data *img, char	*identifier, char	*path)
+int	no_path(t_data *img, char	*identifier, char	*path)
 {
-	if(!strcmp(identifier, "NO"))
+	if (!strcmp(identifier, "NO"))
 	{	
 		img->n_path = path;
 		img->path.no = open(path, O_RDONLY);
@@ -11,9 +23,10 @@ int	NO_PATH(t_data *img, char	*identifier, char	*path)
 	}
 	return (-1);
 }
-int	SO_PATH(t_data *img, char	*identifier, char	*path)
+
+int	so_path(t_data *img, char	*identifier, char	*path)
 {
-	if(!strcmp(identifier, "SO"))
+	if (!strcmp(identifier, "SO"))
 	{	
 		img->s_path = path;
 		img->path.so = open(path, O_RDONLY);
@@ -22,9 +35,10 @@ int	SO_PATH(t_data *img, char	*identifier, char	*path)
 	}
 	return (-1);
 }
-int	WE_PATH(t_data *img, char	*identifier, char	*path)
+
+int	we_path(t_data *img, char	*identifier, char	*path)
 {
-	if(!strcmp(identifier, "WE"))
+	if (!strcmp(identifier, "WE"))
 	{	
 		img->w_path = path;
 		img->path.we = open(path, O_RDONLY);
@@ -33,9 +47,10 @@ int	WE_PATH(t_data *img, char	*identifier, char	*path)
 	}
 	return (-1);
 }
-int	EA_PATH(t_data *img, char	*identifier, char	*path)
+
+int	ea_path(t_data *img, char	*identifier, char	*path)
 {
-	if(!strcmp(identifier, "EA"))
+	if (!strcmp(identifier, "EA"))
 	{	
 		img->e_path = path;
 		img->path.ea = open(path, O_RDONLY);
@@ -50,7 +65,7 @@ void	free_tab(char	**str)
 	int	i;
 
 	i = -1;
-	while(str[++i])
+	while (str[++i])
 		free(str[i]);
 }
 
@@ -58,36 +73,35 @@ int	path_texture(t_data *img, char	*path)
 {
 	char	**str;
 	int		ret;
-	
+
 	ret = 0;
 	str = ft_split(path, ' ');
-	if(str[0] && str[1] && !str[2])
+	if (str[0] && str[1] && !str[2])
 	{
 		str[1][ft_strlen(str[1]) - 1] = '\0';
-		if(img->path.index == 0)
-			ret = NO_PATH(img, str[0], str[1]);
-		else if(img->path.index == 1)
-			ret = SO_PATH(img, str[0], str[1]);
-		else if(img->path.index == 2)
-			ret = WE_PATH(img, str[0], str[1]);
-		else if(img->path.index == 3)
-			ret = EA_PATH(img, str[0], str[1]);
+		if (img->path.index == 0)
+			ret = no_path(img, str[0], str[1]);
+		else if (img->path.index == 1)
+			ret = so_path(img, str[0], str[1]);
+		else if (img->path.index == 2)
+			ret = we_path(img, str[0], str[1]);
+		else if (img->path.index == 3)
+			ret = ea_path(img, str[0], str[1]);
 		// free_tab(str);
 		if (ret != -1)
 			return (1);
 	}
 	printf("--------ERROR--------\n");
 	return (0);
-		
 }
 
 int	is_num(char	*str)
 {
-	int i;
+	int	i;
 
 	i = -1;
-	while(str[++i])
-		if(str[i] < '0' && str[i] > '9')
+	while (str[++i])
+		if (str[i] < '0' && str[i] > '9')
 			return (0);
 	return (1);
 }
@@ -100,35 +114,36 @@ int	FLOOR_COLOR(t_data *img, char	*value)
 
 	i = 0;
 	color_tab = ft_split(value, ',');
-	if(color_tab[2] && !color_tab[3])
+	if (color_tab[2] && !color_tab[3])
 	{	
-		while(color_tab[i])
+		while (color_tab[i])
 		{
-			if(is_num(color_tab[i]))
+			if (is_num(color_tab[i]))
 			{
 				color = atoi(color_tab[i]);
 				if (color >= 0 && color <= 255)
 				{
-					if(i == 0)
+					if (i == 0)
 						img->color.redfloor = color;
-					else if(i == 1)
+					else if (i == 1)
 						img->color.greenfloor = color;
-					else if(i == 2)
+					else if (i == 2)
 						img->color.bluefloor = color;
 				}
 				else
-					break;
+					break ;
 				i++;
 			}
 			else
-				break;
+				break ;
 		}
-		if(i == 3)
+		if (i == 3)
 			img->color.index += 1;
 	}
 	free_tab(color_tab);
 	return (i);
 }
+
 int	CEILLING_COLOR(t_data *img, char	*value)
 {
 	int		i;
@@ -137,30 +152,30 @@ int	CEILLING_COLOR(t_data *img, char	*value)
 
 	i = 0;
 	color_tab = ft_split(value, ',');
-	if(color_tab[2] && !color_tab[3])
+	if (color_tab[2] && !color_tab[3])
 	{	
-		while(color_tab[i])
+		while (color_tab[i])
 		{
-			if(is_num(color_tab[i]))
+			if (is_num(color_tab[i]))
 			{
 				color = atoi(color_tab[i]);
 				if (color >= 0 && color <= 255)
 				{
-					if(i == 0)
+					if (i == 0)
 						img->color.redceilling = color;
-					else if(i == 1)
+					else if (i == 1)
 						img->color.greenceilling = color;
-					else if(i == 2)
+					else if (i == 2)
 						img->color.blueceilling = color;
 				}
 				else
-					break;
+					break ;
 				i++;
 			}
 			else
-				break;
+				break ;
 		}
-		if(i == 3)
+		if (i == 3)
 			img->color.index += 1;
 	}
 	free_tab(color_tab);
@@ -170,25 +185,23 @@ int	CEILLING_COLOR(t_data *img, char	*value)
 int	set_color(t_data *img, char	*path)
 {
 	char	**str;
-
 	int		ret;
-	
+
 	ret = -1;
 	str = ft_split(path, ' ');
-	if(str[0] && str[1] && !str[2])
+	if (str[0] && str[1] && !str[2])
 	{
 		str[1][ft_strlen(str[1]) - 1] = '\0';
-		if(img->color.index == 0 && !strcmp(str[0], "F"))
+		if (img->color.index == 0 && !strcmp(str[0], "F"))
 			ret = FLOOR_COLOR(img, str[1]);
-		else if(img->color.index == 1 && !strcmp(str[0], "C"))
+		else if (img->color.index == 1 && !strcmp(str[0], "C"))
 			ret = CEILLING_COLOR(img, str[1]);
 		free_tab(str);
-		if(ret == 3)
+		if (ret == 3)
 			return (1);
 	}
 	printf("--------ERROR--------\n");
 	return (0);
-		
 }
 
 void	read_map(t_data *img)
@@ -205,16 +218,16 @@ void	read_map(t_data *img)
 	}
 	while (instruction)
 	{
-		if(img->path.index < 4)
+		if (img->path.index < 4)
 		{	
-			if(strcmp(instruction,"\n"))
-				if(!path_texture(img, instruction))
+			if (strcmp(instruction, "\n"))
+				if (!path_texture(img, instruction))
 					exit (0);
 		}
-		else if(img->color.index < 2)
+		else if (img->color.index < 2)
 		{
-			if(strcmp(instruction,"\n"))
-				if(!set_color(img,	instruction))
+			if (strcmp(instruction, "\n"))
+				if (!set_color(img, instruction))
 					exit(0);
 		}
 		else
@@ -241,7 +254,7 @@ void	init_data(t_data	*img, char	*fd)
 	img->color_buff = NULL;
 	img->walkdirection2 = 0;
 	img->walkdirection = 0;
-	img->fov_angle =(60 * (PI / 180));
+	img->fov_angle = (60 * (PI / 180));
 	img->mini_scall = 0;
 	img->color.index = 0;
 	img->fd = open(fd, O_RDONLY);
