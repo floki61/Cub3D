@@ -6,7 +6,7 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/06 22:12:33 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/10/06 22:20:14 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ void	horizontal_raygrid(t_data	*img, int i)
 				++yintercept;
 			img->rays[i].h_wallhitx = xintercept;
 			img->rays[i].h_wallhity = yintercept;
-			img->rays[i].horzhitdistance = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
+			img->rays[i].horzhitdistance = distancebetweenpoints(img->px + 5, img->py + 5, xintercept, yintercept);
 			break;
 		}
 		else
@@ -215,7 +215,7 @@ void	vertical_raygrid(t_data	*img, int i)
 				++xintercept;
 			img->rays[i].v_wallhitx = xintercept;
 			img->rays[i].v_wallhity = yintercept;
-			img->rays[i].verthitdistance = distanceBetweenPoints(img->px + 5, img->py + 5, xintercept, yintercept);
+			img->rays[i].verthitdistance = distancebetweenpoints(img->px + 5, img->py + 5, xintercept, yintercept);
 			break;
 		}
 		else
