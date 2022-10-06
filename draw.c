@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/06 03:47:21 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/06 15:07:29 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-// unsigned int	get_color(t_textur *img, int x, int y)
-// {
-// 	char	*dst;
-
-// 	if (x < TILE_SIZE &&  y < TILE_SIZE && (x > 0 &&  y > 0))
-// 	{
-// 		dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-// 		return ((unsigned int)dst);
-// 	}
-// 	return (0);
-// }
 
 void	my_mlx_pixel_put(t_data *img, int x, int y, int color)
 {
@@ -258,7 +246,7 @@ void	cast(t_data	*img, int i)
 void	init_rays(t_data	*img)
 {
 	img->num_rays = (W_WITHE/ WALL_STRIP_WIDTH); 
-	img->rayangle = img->rotationangle - (FOV_ANGLE / 2);
+	img->rayangle = img->rotationangle - (img->fov_angle / 2);
 	if(!img->rays)
 		img->rays = malloc(sizeof(t_cast) * img->num_rays);
 }
@@ -273,63 +261,33 @@ void	castallrays(t_data	*img)
 	{
 		normalizeangle(img);
 		cast(img, i);
-		// img->rays[i].raylenght = img->rays.distance;
 		img->rays[i].rayangle_pro = img->rayangle;
-		img->rayangle += FOV_ANGLE / img->num_rays;
+		img->rayangle += img->fov_angle / img->num_rays;
 		i++;
 	}
-}
-
-void	pint_sc_gr(t_data *data, int top, int y, int x)
-{
-	int	i;
-
-	i = -1;
-	while(++i < top)
-		*(unsigned int *)(data->addr + (i * data->line_length + x * (data->bits_per_pixel / 8))) = create_trgb(100, data->color.RedCeilling, data->color.GreenCeilling,data->color.BlueCeilling);
-	i = y -1;
-	while(W_HIGHTE > ++i)
-		*(unsigned int *)(data->addr + (i * data->line_length + x * (data->bits_per_pixel / 8))) = create_trgb(100, data->color.RedFloor, data->color.GreenFloor,data->color.BlueFloor);
 }
 
 void ft_react(t_data *data, int x, int hight)
 {
 	int	j;
 	int	top_pixl;
-	int	textureoffsetx;
 	int bottem_pixl;
 	int distancefromtop;
-	int textureoffsety;
 
-	top_pixl = (W_HIGHTE/2) - (hight/2);
-	top_pixl = top_pixl < 0 ? 0 : top_pixl;
-	bottem_pixl = (W_HIGHTE/2) + (hight/2);
-	bottem_pixl = bottem_pixl >  W_HIGHTE ? W_HIGHTE : bottem_pixl;
+	top_pixl = get_top(hight);
+	
+	bottem_pixl = 	get_bottem(hight);
 	pint_sc_gr(data, top_pixl, bottem_pixl, x);
-	if (data->rays[x].verthitdistance)
-		textureoffsetx = (int)data->rays[x].wallhity % TEXTUR_HIGHT;
-	else
-		textureoffsetx = (int)data->rays[x].wallhitx % TEXTUR_WIDTH;
+	data->textureoffsetx = x_ofset(data, x);
 	j = top_pixl;
 	while (j < bottem_pixl)
 	{
-
 		distancefromtop = j + (hight / 2) - (W_HIGHTE / 2);
-		textureoffsety = distancefromtop * TEXTUR_HIGHT / hight;
-		if (data->rays[x].dir =='S')
-			*(unsigned int *)(data->addr + (j * data->line_length + x * (data->bits_per_pixel / 8))) = data->s_textur_buffer.addr[(textureoffsety * TILE_SIZE) + textureoffsetx];
-		else if (data->rays[x].dir == 'N')
-			*(unsigned int *)(data->addr + (j * data->line_length + x * (data->bits_per_pixel / 8))) = data->n_textur_buffer.addr[(textureoffsety * TILE_SIZE) + textureoffsetx];
-		else if (data->rays[x].dir == 'W')
-			*(unsigned int *)(data->addr + (j * data->line_length + x * (data->bits_per_pixel / 8))) = data->w_textur_buffer.addr[(textureoffsety * TILE_SIZE) + textureoffsetx];
-		else if (data->rays[x].dir == 'E')
-			*(unsigned int *)(data->addr + (j * data->line_length + x * (data->bits_per_pixel / 8))) = data->e_textur_buffer.addr[(textureoffsety * TILE_SIZE) + textureoffsetx];
+		data->textureoffsety = distancefromtop * TEXTUR_HIGHT / hight;
+		draw_the_3d(data, (j * data->line_length + x * (data->bits_per_pixel / 8)), (data->textureoffsety * TILE_SIZE) + data->textureoffsetx, x);
 		j++;
 	}
 }
-
-
-
 
 void	ray_diriction(t_data	*data, int i)
 {
@@ -337,7 +295,7 @@ void	ray_diriction(t_data	*data, int i)
 	{
 		if (data->rays[i].rayfacing.right)
 			data->rays[i].dir = 'E';
-		else if(data->rays[i].rayfacing.left)
+		else if (data->rays[i].rayfacing.left)
 			data->rays[i].dir = 'W';	
 	}
 	else
@@ -356,7 +314,7 @@ void rander_3dprojectedwall(t_data *data)
 	int wall_hight;
 	int correct_dest;
 
-	distance_projection_plan = (W_WITHE / 2) / tan(FOV_ANGLE / 2);
+	distance_projection_plan = (W_WITHE / 2) / tan(data->fov_angle / 2);
 	i = 0;
 	while(i < data->num_rays)
 	{

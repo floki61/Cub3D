@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 22:38:37 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/06 03:34:36 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/06 14:40:40 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	init_player(t_data	*img, int	y, int	x)
 {
 	img->py = (TILE_SIZE * y) + (TILE_SIZE / 2) - 5;
 	img->px = (TILE_SIZE * x) + (TILE_SIZE / 2) - 5;
-	img->ray.redline = 0;
 	img->walkdirection = 0;
 	img->turndirection = 0;
 	if(img->map[y][x] == 'N') // -PI/2

@@ -5,9 +5,9 @@ int	NO_PATH(t_data *img, char	*identifier, char	*path)
 	if(!strcmp(identifier, "NO"))
 	{	
 		img->n_path = path;
-		img->path.NO = open(path, O_RDONLY);
+		img->path.no = open(path, O_RDONLY);
 		img->path.index += 1;
-		return (img->path.NO);
+		return (img->path.no);
 	}
 	return (-1);
 }
@@ -16,9 +16,9 @@ int	SO_PATH(t_data *img, char	*identifier, char	*path)
 	if(!strcmp(identifier, "SO"))
 	{	
 		img->s_path = path;
-		img->path.SO = open(path, O_RDONLY);
+		img->path.so = open(path, O_RDONLY);
 		img->path.index += 1;
-		return (img->path.SO);
+		return (img->path.so);
 	}
 	return (-1);
 }
@@ -27,9 +27,9 @@ int	WE_PATH(t_data *img, char	*identifier, char	*path)
 	if(!strcmp(identifier, "WE"))
 	{	
 		img->w_path = path;
-		img->path.WE = open(path, O_RDONLY);
+		img->path.we = open(path, O_RDONLY);
 		img->path.index += 1;
-		return (img->path.WE);
+		return (img->path.we);
 	}
 	return (-1);
 }
@@ -38,9 +38,9 @@ int	EA_PATH(t_data *img, char	*identifier, char	*path)
 	if(!strcmp(identifier, "EA"))
 	{	
 		img->e_path = path;
-		img->path.EA = open(path, O_RDONLY);
+		img->path.ea = open(path, O_RDONLY);
 		img->path.index += 1;
-		return (img->path.EA);
+		return (img->path.ea);
 	}
 	return (-1);
 }
@@ -110,11 +110,11 @@ int	FLOOR_COLOR(t_data *img, char	*value)
 				if (color >= 0 && color <= 255)
 				{
 					if(i == 0)
-						img->color.RedFloor = color;
+						img->color.redfloor = color;
 					else if(i == 1)
-						img->color.GreenFloor = color;
+						img->color.greenfloor = color;
 					else if(i == 2)
-						img->color.BlueFloor = color;
+						img->color.bluefloor = color;
 				}
 				else
 					break;
@@ -147,11 +147,11 @@ int	CEILLING_COLOR(t_data *img, char	*value)
 				if (color >= 0 && color <= 255)
 				{
 					if(i == 0)
-						img->color.RedCeilling = color;
+						img->color.redceilling = color;
 					else if(i == 1)
-						img->color.GreenCeilling = color;
+						img->color.greenceilling = color;
 					else if(i == 2)
-						img->color.BlueCeilling = color;
+						img->color.blueceilling = color;
 				}
 				else
 					break;
@@ -241,8 +241,8 @@ void	init_data(t_data	*img, char	*fd)
 	img->color_buff = NULL;
 	img->walkdirection2 = 0;
 	img->walkdirection = 0;
+	img->fov_angle =(60 * (PI / 180));
 	img->mini_scall = 0;
-	img->path.index = 0;
 	img->color.index = 0;
 	img->fd = open(fd, O_RDONLY);
 	if (!(img->fd) || !img)
@@ -266,7 +266,6 @@ void	read_images(t_data	*data)
 	data->s_textur_buffer.addr = (unsigned int*)mlx_get_data_addr(data->s_textur_buffer.img, &data->s_textur_buffer.bits_per_pixel, &data->s_textur_buffer.line_length, &data->s_textur_buffer.endian);
 	data->e_textur_buffer.addr = (unsigned int*)mlx_get_data_addr(data->e_textur_buffer.img, &data->e_textur_buffer.bits_per_pixel, &data->e_textur_buffer.line_length, &data->e_textur_buffer.endian);
 	data->w_textur_buffer.addr = (unsigned int*)mlx_get_data_addr(data->w_textur_buffer.img, &data->w_textur_buffer.bits_per_pixel, &data->w_textur_buffer.line_length, &data->w_textur_buffer.endian);
-	// printf("%p \")
 }
 
 int	main(int argc, char **argv)

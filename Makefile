@@ -1,6 +1,6 @@
 NAME = cub3d
 # BNAME = so_long_bonus
-FLAGS =  -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit  -fsanitize=address
+FLAGS =  -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit  #-fsanitize=address
  
 SRCS =	main.c 					\
 		tools/checker.c			\
@@ -10,6 +10,7 @@ SRCS =	main.c 					\
 		tools/get_next_line.c	\
 		tools/ft_itoi.c 		\
 		tools/tools.c 			\
+		utilites.c
 
 all: $(NAME)
 

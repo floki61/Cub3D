@@ -50,7 +50,7 @@ void	update_direction1(t_data	*img)
 	double	rotationangle;		
 
 
-	rotationangle = img->rotationangle + (FOV_ANGLE * 1.5 * img->walkdirection2);
+	rotationangle = img->rotationangle + (img->fov_angle * 1.5 * img->walkdirection2);
 	img->movestep = img->movespeed;
 	while(img->movestep >= 0)
 	{
@@ -144,7 +144,6 @@ int	loop_game(t_data	*img)
 	// mlx_destroy_image(img->mlx, img->w_textur_buffer.img);
 	mlx_hook(img->mlx_win, 2, 1L, key_hook, img);
 	mlx_hook(img->mlx_win, 3, 2L, key_hook2, img);
-	img->ray.redline = 0;
 	return (0);
 }
 
@@ -198,7 +197,7 @@ int	loop_game(t_data	*img)
 // 				my_mlx_pixel_put(img, x * img->mini_scall, y * img->mini_scall,	0x800080);
 // 			j++;
 // 		}
-// 		img->rayangle += FOV_ANGLE / img->num_rays;
+// 		img->rayangle += img->fov_angle / img->num_rays;
 // 		img->rays[i].rayangle_pro = img->rayangle;
 // 		i++;
 // 	}
