@@ -10,7 +10,8 @@ SRCS =	main.c 					\
 		tools/get_next_line.c	\
 		tools/ft_itoi.c 		\
 		tools/tools.c 			\
-		utilites.c
+		utilites.c				\
+		utilites_2.c
 
 all: $(NAME)
 

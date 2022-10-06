@@ -253,28 +253,12 @@ void	init_data(t_data	*img, char	*fd)
 	return ;
 }
 
-void	read_images(t_data	*data)
-{
-	int hight;
-	int with;
-
-	data->n_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->n_path, &with, &hight);
-	data->s_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->s_path, &with, &hight);
-	data->e_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->e_path, &with, &hight);
-	data->w_textur_buffer.img = mlx_xpm_file_to_image(data->mlx, data->w_path, &with, &hight);
-	data->n_textur_buffer.addr = (unsigned int*)mlx_get_data_addr(data->n_textur_buffer.img, &data->n_textur_buffer.bits_per_pixel, &data->n_textur_buffer.line_length, &data->n_textur_buffer.endian);
-	data->s_textur_buffer.addr = (unsigned int*)mlx_get_data_addr(data->s_textur_buffer.img, &data->s_textur_buffer.bits_per_pixel, &data->s_textur_buffer.line_length, &data->s_textur_buffer.endian);
-	data->e_textur_buffer.addr = (unsigned int*)mlx_get_data_addr(data->e_textur_buffer.img, &data->e_textur_buffer.bits_per_pixel, &data->e_textur_buffer.line_length, &data->e_textur_buffer.endian);
-	data->w_textur_buffer.addr = (unsigned int*)mlx_get_data_addr(data->w_textur_buffer.img, &data->w_textur_buffer.bits_per_pixel, &data->w_textur_buffer.line_length, &data->w_textur_buffer.endian);
-}
-
 int	main(int argc, char **argv)
 {
 	t_data	img;
 
-	check_name(argc ,argv[1]);
+	check_name(argc, argv[1]);
 	init_data(&img, argv[1]);
 	read_map(&img);
 	open_window(&img);
 }
-

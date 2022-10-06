@@ -6,7 +6,7 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 14:45:32 by mait-aad          #+#    #+#             */
-/*   Updated: 2022/10/06 15:08:03 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/10/06 21:10:18 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ typedef struct s_cast
 typedef struct s_data
 {
 	void			*mlx;
+	int				t_w;
+	int				t_h;
 	void			*mlx_win;
 	char			**map;
 	int				px;
@@ -183,6 +185,7 @@ void	pint_sc_gr(t_data *data, int top, int y, int x);
 int		x_ofset(t_data *data, int x);
 void	draw_the_3d(t_data	*data, int addr_index, int texture_index, int x);
 int		get_top(int hight);
-int		get_bottem(int	hight);
+int		get_bottem(int hight);
+void	read_images(t_data	*d);
 
 #endif

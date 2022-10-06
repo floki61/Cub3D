@@ -6,7 +6,7 @@
 /*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/06 15:07:29 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/10/06 21:15:41 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,14 +227,16 @@ void	cast(t_data	*img, int i)
 	raysfacing(img, i);
 	horizontal_raygrid(img, i);
 	vertical_raygrid(img, i);
-	if(!img->rays[i].verthitdistance || (img->rays[i].verthitdistance > img->rays[i].horzhitdistance && img->rays[i].horzhitdistance))
+	if (!img->rays[i].verthitdistance || (img->rays[i].verthitdistance
+			> img->rays[i].horzhitdistance && img->rays[i].horzhitdistance))
 	{
 		img->rays[i].is_hor = 0;
 		img->rays[i].wallhitx = img->rays[i].h_wallhitx;
 		img->rays[i].wallhity = img->rays[i].h_wallhitx;
 		img->rays[i].distance = img->rays[i].horzhitdistance;
 	}
-	else if(!img->rays[i].horzhitdistance || img->rays[i].verthitdistance < img->rays[i].horzhitdistance)
+	else if (!img->rays[i].horzhitdistance || img->rays[i].verthitdistance
+		< img->rays[i].horzhitdistance)
 	{
 		img->rays[i].is_hor = 1;
 		img->rays[i].wallhitx = img->rays[i].v_wallhity;
@@ -245,19 +247,19 @@ void	cast(t_data	*img, int i)
 
 void	init_rays(t_data	*img)
 {
-	img->num_rays = (W_WITHE/ WALL_STRIP_WIDTH); 
+	img->num_rays = (W_WITHE / WALL_STRIP_WIDTH);
 	img->rayangle = img->rotationangle - (img->fov_angle / 2);
-	if(!img->rays)
+	if (!img->rays)
 		img->rays = malloc(sizeof(t_cast) * img->num_rays);
 }
 
-
 void	castallrays(t_data	*img)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	init_rays(img);
-	while(i < img->num_rays)
+	while (i < img->num_rays)
 	{
 		normalizeangle(img);
 		cast(img, i);
@@ -271,12 +273,11 @@ void ft_react(t_data *data, int x, int hight)
 {
 	int	j;
 	int	top_pixl;
-	int bottem_pixl;
-	int distancefromtop;
+	int	bottem_pixl;
+	int	distancefromtop;
 
 	top_pixl = get_top(hight);
-	
-	bottem_pixl = 	get_bottem(hight);
+	bottem_pixl = get_bottem(hight);
 	pint_sc_gr(data, top_pixl, bottem_pixl, x);
 	data->textureoffsetx = x_ofset(data, x);
 	j = top_pixl;
@@ -284,7 +285,9 @@ void ft_react(t_data *data, int x, int hight)
 	{
 		distancefromtop = j + (hight / 2) - (W_HIGHTE / 2);
 		data->textureoffsety = distancefromtop * TEXTUR_HIGHT / hight;
-		draw_the_3d(data, (j * data->line_length + x * (data->bits_per_pixel / 8)), (data->textureoffsety * TILE_SIZE) + data->textureoffsetx, x);
+		draw_the_3d(data, (j * data->line_length + x
+				*(data->bits_per_pixel / 8)),
+			(data->textureoffsety * TILE_SIZE) + data->textureoffsetx, x);
 		j++;
 	}
 }
@@ -309,18 +312,20 @@ void	ray_diriction(t_data	*data, int i)
 
 void rander_3dprojectedwall(t_data *data)
 {
-	int i;
-	int distance_projection_plan;
-	int wall_hight;
-	int correct_dest;
+	int	i;
+	int	distance_projection_plan;
+	int	wall_hight;
+	int	correct_dest;
 
 	distance_projection_plan = (W_WITHE / 2) / tan(data->fov_angle / 2);
 	i = 0;
-	while(i < data->num_rays)
+	while (i < data->num_rays)
 	{
 		ray_diriction(data, i);
-		correct_dest = data->rays[i].distance * cos(data->rays[i].rayangle_pro - data->rotationangle);
-		wall_hight = (int)((TILE_SIZE / ((double)correct_dest)) * ((double)distance_projection_plan));
+		correct_dest = data->rays[i].distance
+			* cos(data->rays[i].rayangle_pro - data->rotationangle);
+		wall_hight = (int)((TILE_SIZE / ((double)correct_dest))
+				* ((double)distance_projection_plan));
 		ft_react(data, i, wall_hight);
 		i++;
 	}
@@ -328,20 +333,21 @@ void rander_3dprojectedwall(t_data *data)
 
 void	drawrays(t_data	*img)
 {
-	int i = 0;
-	int j;
-	int x;
-	int y;
-	
-	while(i < img->num_rays)
+	int	i;
+	int	j;
+	int	x;
+	int	y;
+
+	i = 0;
+	while (i < img->num_rays)
 	{
 		j = 1;
-		while(img->rays[i].distance > j)
+		while (img->rays[i].distance > j)
 		{
 			exit(0);
 			x = img->px + 5 + cos(img->rays[i].rayangle_pro) * j;
 			y = img->py + 5 + sin(img->rays[i].rayangle_pro) * j;
-			my_mlx_pixel_put(img, x * 0.2, y * 0.2,	0x800080);
+			my_mlx_pixel_put(img, x * 0.2, y * 0.2, 0x800080);
 			j++;
 		}
 		i++;
@@ -356,15 +362,16 @@ void	draw_map(t_data *img)
 		img->var.x = 0;
 		while (img->map[img->var.y][img->var.x])
 		{
-			if(img->map[img->var.y][img->var.x] == '1')
+			if (img->map[img->var.y][img->var.x] == '1')
 				put_wall(img);
-			else if (img->map[img->var.y][img->var.x] == ' ' || img->map[img->var.y][img->var.x] == '\t')
+			else if (img->map[img->var.y][img->var.x] == ' '
+				|| img->map[img->var.y][img->var.x] == '\t')
 				put_wall(img);
 			else if (img->map[img->var.y][img->var.x] == '0')
 				put_ground(img);
 			img->var.x++;
 		}
-		while(img->var.x < img->g_w)
+		while (img->var.x < img->g_w)
 		{
 			put_wall(img);
 			img->var.x++;
@@ -372,14 +379,13 @@ void	draw_map(t_data *img)
 		img->var.y++;
 	}
 	put_myplayer(img);
-	// drawrays(img);   
 }
 
 void	draw(t_data *img)
 {
 	castallrays(img);
 	rander_3dprojectedwall(img);
-	if(img->minimap)
+	if (img->minimap)
 		draw_map(img);
 }
 
@@ -395,11 +401,11 @@ int	open_window(t_data *img)
 	img->mapx = ft_strlen(img->map[0]);
 	img->mlx = mlx_init();
 	img->mlx_win = mlx_new_window(img->mlx, W_WITHE, W_HIGHTE, "game");
-	img->img_w =  img->mapx * TILE_SIZE;
-	img->img_h =  img->mapy * TILE_SIZE;
+	img->img_w = img->mapx * TILE_SIZE;
+	img->img_h = img->mapy * TILE_SIZE;
 	read_images(img);
 	mlx_loop_hook(img->mlx, loop_game, img);
 	mlx_hook(img->mlx_win, 17, 0, destroy, img);
 	mlx_loop(img->mlx);
 	return (0);
-}	
+}
