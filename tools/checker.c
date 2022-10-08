@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 22:38:37 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/27 04:36:51 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/08 01:03:47 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,8 @@ int	width(char **map, int i) //-> firt line must be 11111111111111
 
 void	init_player(t_data	*img, int	y, int	x)
 {
-	img->py = (80 * y) + 35;
-	img->px = (80 * x) + 35;
-	img->ray.redline = 0;
+	img->py = (TILE_SIZE * y) + (TILE_SIZE / 2) - 5;
+	img->px = (TILE_SIZE * x) + (TILE_SIZE / 2) - 5;
 	img->walkdirection = 0;
 	img->turndirection = 0;
 	if(img->map[y][x] == 'N') // -PI/2
@@ -77,7 +76,6 @@ void	init_player(t_data	*img, int	y, int	x)
 	else if(img->map[y][x] == 'E')
 		img->rotationangle = 0;
 	img->map[y][x] = '0';
-	printf("angle: %f\n", img->rotationangle);
 	img->rotationspeed = 2 * (PI / 180);
 	img->movespeed = 10;
 }
@@ -153,22 +151,22 @@ int	check_map(char	**map, t_data	*img)
 	if ((height(map, img)) == -1)
 	{
 		printf("height error\n");
-		return (0);
+		exit (0);
 	}
 	if ((width(map, 0)) == -1)
 	{
-		printf("width0 error\n");
-		return (0);
+		printf("width error\n");
+		exit (0);
 	}
 	if ((width(map, img->mapy - 1)) == -1)
 	{
-		printf("width1 error\n");
-		return (0);
+		printf("width error\n");
+		exit (0);
 	}
 	if ((middle(map, img)) == -1)
 	{
 		printf("middle error\n");
-		return (0);
+		exit (0);
 	}
 	img->g_w = get_w(img->map);
 	return (1);
