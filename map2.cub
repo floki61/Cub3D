@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 NO textures/Stoneflag.xpm
 SO textures/avatars-UidYWfW20bjki8Ub-GJKpBQ-t500x500-_1_.xpm
 WE textures/StoneHitler.xpm
@@ -6,6 +7,15 @@ EA textures/wall.xpm
 
 F 180,180,200
 C 180,180,200,
+=======
+NO Stoneflag.xpm
+SO avatars-UidYWfW20bjki8Ub-GJKpBQ-t500x500-_1_.xpm
+WE StoneHitler.xpm
+EA wall.xpm
+
+F 250,250,250
+C 170,10,200
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 
         111111111111111111111111111111
         111111111111111111111110000001

@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/10/07 16:40:19 by oel-berh         ###   ########.fr       */
+=======
+/*   Updated: 2022/10/06 22:20:14 by mait-aad         ###   ########.fr       */
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +22,9 @@ void	my_mlx_pixel_put(t_data *img, int x, int y, int color)
 
 	if (x < img->img_w && img->img_h > y)
 	{
-		dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-		*(unsigned int*)dst = color;
+		dst = img->addr + (y
+				* img->line_length + x * (img->bits_per_pixel / 8));
+		*(unsigned int *)dst = color;
 	}
 }
 
@@ -28,25 +33,34 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-
 void	put_wall(t_data	*img)
 {
-	int i;
+	int	i;
 	int	h;
-	int w;
-	
+	int	w;
+	int	x;
+	int	y;
+
 	i = 0;
 	h = 0;
-	int	x = W_WITHE - (img->g_w * 20) - 10;
-	int	y = W_HIGHTE - (img->mapy * 20) - 10;
+	x = W_WITHE - (img->g_w * 20) - 10;
+	y = W_HIGHTE - (img->mapy * 20) - 10;
 	x += (img->var.x * 20);
 	y += (img->var.y * 20);
+<<<<<<< HEAD
 	while(h < 20)
+=======
+	while (h < 20)
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 	{
 		w = 0;
 		while (w < 20)
 		{
+<<<<<<< HEAD
 			my_mlx_pixel_put(img, x + w, y + h, create_trgb(50, 60,60,60));
+=======
+			my_mlx_pixel_put(img, x + w, y + h, create_trgb(50, 60, 60, 60));
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 			i++;
 			w++;
 		}
@@ -58,22 +72,37 @@ void	put_wall(t_data	*img)
 void	put_ground(t_data	*img)
 {
 	int	h;
-	int w;
-	
+	int	w;
+	int	x;
+	int	y;
+
 	h = 0;
-	int	x = W_WITHE - (img->g_w * 20) - 10;
-	int	y = W_HIGHTE - (img->mapy * 20) - 10;
+	x = W_WITHE - (img->g_w * 20) - 10;
+	y = W_HIGHTE - (img->mapy * 20) - 10;
 	x += (img->var.x * 20);
 	y += (img->var.y * 20);
+<<<<<<< HEAD
 	while(h < 20)
+=======
+	while (h < 20)
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 	{
 		w = 0;
 		while (w < 20)
 		{
+<<<<<<< HEAD
 			if(h == 19 || w == 19 )
 				my_mlx_pixel_put(img, x + w, y + h , create_trgb(50, 60,60,60));
 			else
 				my_mlx_pixel_put(img, x + w, y + h, create_trgb(50, 120,120,120));
+=======
+			if (h == 19 || w == 19)
+				my_mlx_pixel_put(img, x + w,
+					y + h, create_trgb(50, 60, 60, 60));
+			else
+				my_mlx_pixel_put(img, x + w,
+					y + h, create_trgb(50, 120, 120, 120));
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 			w++;
 		}
 		h++;
@@ -83,15 +112,25 @@ void	put_ground(t_data	*img)
 void	put_myplayer(t_data *img)
 {
 	int	h;
-	int w;
+	int	w;
+	int	px;
+	int	py;
 
 	h = 0;
+<<<<<<< HEAD
 	int px = W_WITHE - (img->g_w * 20) - 10;
 	int py = W_HIGHTE - (img->mapy * 20) - 10;
 	float x = (TILE_SIZE / 20.f);
 	px += (img->px / x);
 	py += (img->py / x);
 	while(h < 4)
+=======
+	px = W_WITHE - (img->g_w * 20) - 10;
+	py = W_HIGHTE - (img->mapy * 20) - 10;
+	px += (img->px / (TILE_SIZE / 20.f));
+	py += (img->py / (TILE_SIZE / 20.f));
+	while (h < 4)
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 	{
 		w = 0;
 		while (w < 4)
@@ -103,7 +142,178 @@ void	put_myplayer(t_data *img)
 	}
 }
 
+<<<<<<< HEAD
 void ft_react(t_data *data, int x, int hight)
+=======
+int	haswallat(t_data	*img, int x, int y)
+{	
+	if (y / TILE_SIZE > img->mapy)
+		return (1);
+	else if (x / TILE_SIZE > ft_strlen(img->map[y / TILE_SIZE]))
+		return (1);
+	if (img->map[y / TILE_SIZE][x / TILE_SIZE] == '1')
+		return (1);
+	return (0);
+}
+
+void	normalizeangle(t_data	*img)
+{
+	img->rayangle = remainder(img->rayangle, (2 * PI));
+	if (img->rayangle < 0)
+		img->rayangle = (2 * PI) + img->rayangle;
+}
+
+float	distancebetweenpoints(float x1, float y1, float x2, float y2)
+{
+	return (sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
+}
+
+void	raysfacing(t_data	*img, int i)
+{
+	img->rays[i].rayfacing.down = ((img->rayangle > 0) && (img->rayangle < PI));
+	img->rays[i].rayfacing.up = (!img->rays[i].rayfacing.down);
+	img->rays[i].rayfacing.right
+		= ((img->rayangle < (0.5 * PI)) || (img->rayangle > (1.5 * PI)));
+	img->rays[i].rayfacing.left = !img->rays[i].rayfacing.right;
+}
+
+void	horizontal_raygrid(t_data	*img, int i)
+{
+	float	xintercept;
+	float	yintercept;
+	float	xstep;
+	float	ystep;
+
+	img->rays[i].horzhitdistance = 0;
+	yintercept = floor((img->py + 5) / TILE_SIZE) * TILE_SIZE;
+	if(img->rays[i].rayfacing.down)
+		yintercept += TILE_SIZE;
+	xintercept = img->px + 5 + (yintercept - img->py - 5) / tan(img->rayangle);
+	ystep = TILE_SIZE;
+	if(img->rays[i].rayfacing.up)
+		ystep *= -1;
+	xstep = TILE_SIZE	/ tan(img->rayangle);
+	if(img->rays[i].rayfacing.left && xstep > 0)
+		xstep *=  -1;
+	else if(img->rays[i].rayfacing.right && xstep < 0)
+		xstep *= -1;
+	while(xintercept >= 0 && xintercept <= TILE_SIZE * img->mapx && yintercept >= 0 && yintercept <= TILE_SIZE * img->mapy)
+	{
+		if(img->rays[i].rayfacing.up)
+			yintercept -= 1;
+		if(haswallat(img,xintercept, yintercept))
+		{
+			if(img->rays[i].rayfacing.up)
+				++yintercept;
+			img->rays[i].h_wallhitx = xintercept;
+			img->rays[i].h_wallhity = yintercept;
+			img->rays[i].horzhitdistance = distancebetweenpoints(img->px + 5, img->py + 5, xintercept, yintercept);
+			break;
+		}
+		else
+		{
+			if(img->rays[i].rayfacing.up)
+				yintercept += 1;
+			img->rays[i].horzhitdistance = 0;
+			xintercept += xstep;
+			yintercept += ystep;
+		}
+	}
+}
+
+void	vertical_raygrid(t_data	*img, int i)
+{
+	float		xintercept;
+	float		yintercept;
+	float		xstep;
+	float		ystep;
+
+	img->rays[i].verthitdistance = 0;
+	xintercept = floor((img->px + 5) / TILE_SIZE) * TILE_SIZE;
+	if(img->rays[i].rayfacing.right)
+		xintercept += TILE_SIZE;
+	yintercept = img->py + 5 + (xintercept - img->px - 5) * tan(img->rayangle);
+	xstep = TILE_SIZE;
+	if(img->rays[i].rayfacing.left)
+		xstep *= -1;
+	ystep = TILE_SIZE * tan(img->rayangle);
+	if(img->rays[i].rayfacing.up && ystep > 0)
+		ystep *=  -1;
+	else if(img->rays[i].rayfacing.down && ystep < 0)
+		ystep *= -1; 
+	while(xintercept >= 0 && xintercept <= TILE_SIZE * img->mapx && yintercept >= 0 && yintercept <= TILE_SIZE * img->mapy)
+	{
+		if(img->rays[i].rayfacing.left)
+			xintercept--;
+		if(haswallat(img,xintercept, yintercept))
+		{
+			if(img->rays[i].rayfacing.left)
+				++xintercept;
+			img->rays[i].v_wallhitx = xintercept;
+			img->rays[i].v_wallhity = yintercept;
+			img->rays[i].verthitdistance = distancebetweenpoints(img->px + 5, img->py + 5, xintercept, yintercept);
+			break;
+		}
+		else
+		{
+			if(img->rays[i].rayfacing.left)
+				++xintercept;
+			img->rays[i].verthitdistance = 0;
+			xintercept += xstep;
+			yintercept += ystep;
+		}
+	}
+}
+
+void	cast(t_data	*img, int i)
+{
+	raysfacing(img, i);
+	horizontal_raygrid(img, i);
+	vertical_raygrid(img, i);
+	if (!img->rays[i].verthitdistance || (img->rays[i].verthitdistance
+			> img->rays[i].horzhitdistance && img->rays[i].horzhitdistance))
+	{
+		img->rays[i].is_hor = 0;
+		img->rays[i].wallhitx = img->rays[i].h_wallhitx;
+		img->rays[i].wallhity = img->rays[i].h_wallhitx;
+		img->rays[i].distance = img->rays[i].horzhitdistance;
+	}
+	else if (!img->rays[i].horzhitdistance || img->rays[i].verthitdistance
+		< img->rays[i].horzhitdistance)
+	{
+		img->rays[i].is_hor = 1;
+		img->rays[i].wallhitx = img->rays[i].v_wallhity;
+		img->rays[i].wallhity = img->rays[i].v_wallhity;
+		img->rays[i].distance = img->rays[i].verthitdistance;
+	}
+}
+
+void	init_rays(t_data	*img)
+{
+	img->num_rays = (W_WITHE / WALL_STRIP_WIDTH);
+	img->rayangle = img->rotationangle - (img->fov_angle / 2);
+	if (!img->rays)
+		img->rays = malloc(sizeof(t_cast) * img->num_rays);
+}
+
+void	castallrays(t_data	*img)
+{
+	int	i;
+
+	i = 0;
+	init_rays(img);
+	while (i < img->num_rays)
+	{
+		normalizeangle(img);
+		cast(img, i);
+		img->rays[i].rayangle_pro = img->rayangle;
+		img->rayangle += img->fov_angle / img->num_rays;
+		i++;
+	}
+}
+
+void	ft_react(t_data	*data, int x, int hight)
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 {
 	int	j;
 	int	top_pixl;
@@ -133,7 +343,11 @@ void	ray_diriction(t_data	*data, int i)
 		if (data->rays[i].rayfacing.right)
 			data->rays[i].dir = 'E';
 		else if (data->rays[i].rayfacing.left)
+<<<<<<< HEAD
 			data->rays[i].dir = 'W';	
+=======
+			data->rays[i].dir = 'W';
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 	}
 	else
 	{
@@ -144,7 +358,7 @@ void	ray_diriction(t_data	*data, int i)
 	}
 }
 
-void rander_3dprojectedwall(t_data *data)
+void	rander_3dprojectedwall(t_data	*data)
 {
 	int	i;
 	int	distance_projection_plan;
@@ -160,9 +374,12 @@ void rander_3dprojectedwall(t_data *data)
 			* cos(data->rays[i].rayangle_pro - data->rotationangle);
 		wall_hight = (int)((TILE_SIZE / ((double)correct_dest))
 				* ((double)distance_projection_plan));
+<<<<<<< HEAD
 		// if (correct_dest == 0)
 		// 	wall_hight = 0;
 		// printf("indx [%d]num [%d] corr >> %d\n",i , data->num_rays, wall_hight);
+=======
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 		ft_react(data, i, wall_hight);
 		i++;
 	}
@@ -245,4 +462,8 @@ int	open_window(t_data *img)
 	mlx_hook(img->mlx_win, 17, 0, destroy, img);
 	mlx_loop(img->mlx);
 	return (0);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8

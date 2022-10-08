@@ -3,10 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 14:45:32 by mait-aad          #+#    #+#             */
 /*   Updated: 2022/10/08 01:10:01 by oel-berh         ###   ########.fr       */
+=======
+/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/06 14:45:32 by mait-aad          #+#    #+#             */
+/*   Updated: 2022/10/06 21:10:18 by mait-aad         ###   ########.fr       */
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +21,21 @@
 # define CUB3D_H
 
 # define PI 3.14159265
+<<<<<<< HEAD
 # define W_WITHE  2000
 # define W_HIGHTE  800
 # define WALL_STRIP_WIDTH 1
 # define TILE_SIZE	64
 # define TEXTUR_WIDTH	64
 # define TEXTUR_HIGHT	64
+=======
+# define TILE_SIZE  64
+# define W_WITHE  2000
+# define W_HIGHTE  800
+# define WALL_STRIP_WIDTH 1
+# define TEXTUR_WIDTH 64
+# define TEXTUR_HIGHT 64
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 
 # include <stdio.h>
 # include <unistd.h>
@@ -87,10 +103,13 @@ typedef struct s_textur
 typedef struct s_cast
 {
 	double	rayangle_pro;
+<<<<<<< HEAD
 	float	xintercept;
 	float	yintercept;
 	float	xstep;
 	float	ystep;
+=======
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 	int		is_hor;
 	float	wallhitx;
 	float	wallhity;
@@ -131,10 +150,13 @@ typedef struct s_data
 	double			rotationspeed;
 	int				movespeed;
 	float			fov_angle;
+<<<<<<< HEAD
 	float			h_yintercept;
 	float			h_xintercept;
 	float			v_yintercept;
 	float			v_xintercept;
+=======
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 	int				movestep;
 	int				bits_per_pixel;
 	int				line_length;
@@ -195,6 +217,7 @@ void	draw_the_3d(t_data	*data, int addr_index, int texture_index, int x);
 int		get_top(int hight);
 int		get_bottem(int hight);
 void	read_images(t_data	*d);
+<<<<<<< HEAD
 void	castallrays(t_data	*img);
 void	init_rays(t_data	*img);
 void	normalizeangle(t_data	*img);
@@ -202,4 +225,7 @@ void	raysfacing(t_data	*img, int i);
 int		haswallat(t_data	*img,int	x, int y);
 float   distancebetweenpoints(float x1, float y1, float x2, float y2);
 void	read_map(t_data *img);
+=======
+
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 #endif

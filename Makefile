@@ -11,10 +11,14 @@ SRCS =	main.c 					\
 		tools/ft_itoi.c 		\
 		tools/tools.c 			\
 		utilites.c				\
+<<<<<<< HEAD
 		utilites_2.c			\
 		raycasting.c 			\
 		raycasting_tools.c 		\
 		map.c 					\
+=======
+		utilites_2.c
+>>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 
 all: $(NAME)
 
