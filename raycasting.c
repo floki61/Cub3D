@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 23:10:15 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/08 05:48:23 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/08 16:04:43 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,27 +113,6 @@ void	vertical_raygrid(t_data	*img, int i)
 		ystep *= -1;
 	norm_ver_g(img, xstep, ystep, i);
 }
-
-void	comp_raygrid(t_data	*img, int i)
-{
-	if (!img->rays[i].verthitdistance || (img->rays[i].verthitdistance
-			> img->rays[i].horzhitdistance && img->rays[i].horzhitdistance))
-	{
-		img->rays[i].is_hor = 0;
-		img->rays[i].wallhitx = img->rays[i].h_wallhitx;
-		img->rays[i].wallhity = img->rays[i].h_wallhitx;
-		img->rays[i].distance = img->rays[i].horzhitdistance;
-	}
-	else if (!img->rays[i].horzhitdistance || img->rays[i].verthitdistance
-		< img->rays[i].horzhitdistance)
-	{
-		img->rays[i].is_hor = 1;
-		img->rays[i].wallhitx = img->rays[i].v_wallhity;
-		img->rays[i].wallhity = img->rays[i].v_wallhity;
-		img->rays[i].distance = img->rays[i].verthitdistance;
-	}
-}
-
 
 void	castallrays(t_data	*img)
 {

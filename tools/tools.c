@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 00:32:45 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/09/25 15:15:37 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/10/08 16:07:56 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	char	*ret;
 	int		i;
 	int		str1;
-	int		str2 = 0;
+	int		str2;
 	int		strr1;
 
 	i = -1;
@@ -116,27 +116,3 @@ void	ft_putstr(char *s)
 		write (1, &s[i++], 1);
 	write(1, "\n", 1);
 }
-
-void	search_map(t_data *img, char n)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (img->map[i])
-	{
-		j = 0;
-		while (img->map[i][j])
-		{
-			if (img->map[i][j] == n)
-			{
-				img->px = j;
-				img->py = i;
-				return ;
-			}
-			j++;
-		}
-		i++;
-	}
-}
-

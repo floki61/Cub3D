@@ -1,6 +1,5 @@
 NAME = cub3d
-# BNAME = so_long_bonus
-FLAGS =  -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit  -fsanitize=address
+FLAGS =  -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit  #-g3 -fsanitize=address
  
 SRCS =	main.c 					\
 		tools/checker.c			\
@@ -11,14 +10,13 @@ SRCS =	main.c 					\
 		tools/ft_itoi.c 		\
 		tools/tools.c 			\
 		utilites.c				\
-<<<<<<< HEAD
 		utilites_2.c			\
 		raycasting.c 			\
 		raycasting_tools.c 		\
 		map.c 					\
-=======
-		utilites_2.c
->>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
+		minimap.c 				\
+		tools.c 				\
+		project_wall.c 			\
 
 all: $(NAME)
 

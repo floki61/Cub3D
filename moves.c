@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -7,55 +6,11 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 23:28:19 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/08 05:52:06 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/08 15:58:47 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-=======
-#include "cub3d.h"
-
-void	moves3(int keycode, t_data *img)
-{
-	int	px;
-	int	py;
-
-	px = img->px;
-	py = img->py;
-	if (keycode == 123)
-		img->turndirection = -1;
-	else if (keycode == 124)
-		img->turndirection = 1;
-}
-
-void	moves2(int keycode, t_data *img)
-{
-	int	px;
-	int	py;
-
-	px = img->px;
-	py = img->py;
-	if (keycode == 2)
-		img->walkdirection2 = 1;
-	else if (keycode == 0)
-		img->walkdirection2 = -1;
-}
-
-void	moves1(int keycode, t_data *img)
-{
-	int	px;
-	int	py;
-
-	px = img->px;
-	py = img->py;
-	if (keycode == 53)
-		exit(0);
-	else if (keycode == 1)
-		img->walkdirection = -1;
-	else if (keycode == 13)
-		img->walkdirection = 1;
-}
->>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 
 void	update_direction1(t_data	*img)
 {
@@ -63,13 +18,8 @@ void	update_direction1(t_data	*img)
 	int		py;
 	double	rotationangle;		
 
-<<<<<<< HEAD
 	rotationangle = img->rotationangle + (img->fov_angle * 1.5
 			* img->walkdirection2);
-=======
-	rotationangle = img->rotationangle
-		+ (img->fov_angle * 1.5 * img->walkdirection2);
->>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 	img->movestep = img->movespeed;
 	while (img->movestep >= 0)
 	{
@@ -124,7 +74,6 @@ void	update(t_data	*img)
 
 int	key_hook(int keycode, t_data *img)
 {
-<<<<<<< HEAD
 	if (keycode == 53)
 		exit (0);
 	else if (keycode == 1)
@@ -139,14 +88,6 @@ int	key_hook(int keycode, t_data *img)
 		img->walkdirection2 = 1;
 	else if (keycode == 0)
 		img->walkdirection2 = -1;
-=======
-	if (keycode == 53 || keycode == 1 || keycode == 13)
-		moves1(keycode, img);
-	else if (keycode == 0 || keycode == 2)
-		moves2 (keycode, img);
-	else if (keycode == 123 || keycode == 124)
-		moves3(keycode, img);
->>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 	else if (keycode == 48)
 		img->minimap = 1;
 	return (0);
@@ -160,95 +101,7 @@ int	key_hook2(int keycode, t_data *img)
 		img->turndirection = 0;
 	else if (keycode == 0 || keycode == 2)
 		img->walkdirection2 = 0;
-<<<<<<< HEAD
-=======
-	else if (keycode == 46)
-		img->mini_scall = 1;
-	else if (keycode == 11)
-		img->mini_scall = 0;
->>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
 	else if (keycode == 48)
 		img->minimap = 0;
 	return (0);
 }
-
-int	loop_game(t_data	*img)
-{
-	update(img);
-	if (img->img)
-		mlx_destroy_image (img->mlx, img->img);
-	mlx_clear_window (img->mlx, img->mlx_win);
-<<<<<<< HEAD
-	img->img = mlx_new_image(img->mlx, W_WITHE, W_HIGHTE);
-	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel,
-			&img->line_length, &img->endian);
-=======
-	img->img = mlx_new_image(img->mlx,  W_WITHE, W_HIGHTE);
-	img->addr = mlx_get_data_addr(img->img,
-			&img->bits_per_pixel, &img->line_length, &img->endian);
->>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
-	draw(img);
-	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
-	mlx_hook(img->mlx_win, 2, 1L, key_hook, img);
-	mlx_hook(img->mlx_win, 3, 2L, key_hook2, img);
-	return (0);
-}
-<<<<<<< HEAD
-=======
-
-// void	draw(t_data *img)
-// {
-// 	img->var.y = 0;
-// 	while (img->map[img->var.y])
-// 	{
-// 		img->var.x = 0;
-// 		while (img->map[img->var.y][img->var.x])
-// 		{
-// 			if (img->map[img->var.y][img->var.x] == '1')
-// 				put_wall(img);
-// 			else if (img->map[img->var.y][img->var.x] == '0')
-// 				put_ground(img);
-// 			img->var.x++;
-// 		}
-// 		img->var.y++;
-// 		while(img->var.x < img->g_w)
-// 		{
-// 			put_wall(img);
-// 			img->var.x++;
-// 		}
-// 		img->var.y++;
-// 	}
-// 	put_myplayer(img);
-// 	castallrays(img);
-// 	if (img->mini_scall != 1)
-// 		rander_3dprojectedwall(img);
-// }
-
-// void	castallrays(t_data	*img)
-// {
-// 	int i = 0;
-// 	int j;
-// 	int x;
-// 	int y;
-
-// 	init_rays(img);
-// 	while(i < img->num_rays)
-// 	{
-// 		j = 1;
-// 		normalizeangle(img);
-// 		cast(img, i);
-// 		while(img->rays[i].distance > j)
-// 		{
-// 			x = img->px + 5 + cos(img->rayangle) * j;
-// 			y = img->py + 5 + sin(img->rayangle) * j;
-// 			if (img->mini_scall == 1)
-// 				my_mlx_pixel_put(img, x * 
-// 					img->mini_scall, y * img->mini_scall,	0x800080);
-// 			j++;
-// 		}
-// 		img->rayangle += img->fov_angle / img->num_rays;
-// 		img->rays[i].rayangle_pro = img->rayangle;
-// 		i++;
-// 	}
-// }
->>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8

@@ -3,20 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 22:38:37 by oel-berh          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/10/08 01:03:47 by oel-berh         ###   ########.fr       */
-=======
-/*   Updated: 2022/10/06 14:40:40 by mait-aad         ###   ########.fr       */
->>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
+/*   Updated: 2022/10/09 17:13:19 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-int skip_lastspaces(char    *line)
+int	skip_lastspaces(char	*line)
 {
 	int	n;
 
@@ -26,12 +22,12 @@ int skip_lastspaces(char    *line)
 	return (n);
 }
 
-int skip_spaces(char    *line)
+int	skip_spaces(char	*line)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(line[i] == ' ' || line[i] == '\t')
+	while (line[i] == ' ' || line[i] == '\t')
 		i++;
 	return (i);
 }
@@ -43,7 +39,8 @@ int	height(char **map, t_data *img)
 	i = 0;
 	while (map[i])
 	{
-		if (map[i][skip_spaces(map[i])] != '1' || map[i][skip_lastspaces(map[i])] != '1')
+		if (map[i][skip_spaces(map[i])] != '1'
+				|| map[i][skip_lastspaces(map[i])] != '1')
 			return (-1);
 		i++;
 	}
@@ -51,7 +48,7 @@ int	height(char **map, t_data *img)
 	return (i);
 }
 
-int	width(char **map, int i) //-> firt line must be 11111111111111
+int	width(char **map, int i)
 {
 	int	n;
 
@@ -65,19 +62,19 @@ int	width(char **map, int i) //-> firt line must be 11111111111111
 	return (n);
 }
 
-void	init_player(t_data	*img, int	y, int	x)
+void	init_player(t_data	*img, int y, int x)
 {
 	img->py = (TILE_SIZE * y) + (TILE_SIZE / 2) - 5;
 	img->px = (TILE_SIZE * x) + (TILE_SIZE / 2) - 5;
 	img->walkdirection = 0;
 	img->turndirection = 0;
-	if(img->map[y][x] == 'N') // -PI/2
+	if (img->map[y][x] == 'N')
 		img->rotationangle = -PI / 2;
-	else if(img->map[y][x] == 'W')
+	else if (img->map[y][x] == 'W')
 		img->rotationangle = PI;
-	else if(img->map[y][x] == 'S')
+	else if (img->map[y][x] == 'S')
 		img->rotationangle = PI / 2;
-	else if(img->map[y][x] == 'E')
+	else if (img->map[y][x] == 'E')
 		img->rotationangle = 0;
 	img->map[y][x] = '0';
 	img->rotationspeed = 2 * (PI / 180);
@@ -86,7 +83,7 @@ void	init_player(t_data	*img, int	y, int	x)
 
 int	middle(char **map, t_data *img)
 {
-	int nop;
+	int	nop;
 	int	i;
 	int	n;
 
@@ -105,23 +102,14 @@ int	middle(char **map, t_data *img)
 			else if(map[i][n] == '0')
 			{
 				if(map[i - 1][n] == ' ' || map[i + 1][n] == ' ' || map[i][n + 1] == ' ' || map[i][n - 1] == ' ')
-				{
-					printf("Y: %d, X: %d\n",i, n);
 					return (-1);
-				}
 				else if(map[i - 1][n] == '\0' || map[i + 1][n] == '\0' || map[i][n + 1] == '\0' || map[i][n - 1] == '\0')
-				{
-					printf("Y: %d, X: %d\n",i, n);
 					return (-1);
-				}
 				else if(map[i - 1][n] == '\t' || map[i + 1][n] == '\t' || map[i][n + 1] == '\t' || map[i][n - 1] == '\t')
 					return(-1);
 			}
 			else if (map [i][n] != '1' && map[i][n] != ' ' && map[i][n] != '\t')
-			{
-				printf("Y: %d, X: %d\n",i, n);
 				return (-1);
-			}
 			if(nop > 1)
 				return (-1);
 			n++;
@@ -196,7 +184,7 @@ int	check_name(int argc, char *str)
 	}
 	if(str[i] - s[j] != 0)
 	{
-		ft_putstr("Error Invalid File");
+		ft_putstr("Error Invalid File\n");
 		exit(0);
 	}
 	return (0);

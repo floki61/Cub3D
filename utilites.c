@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utilites.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 14:15:29 by mait-aad          #+#    #+#             */
-/*   Updated: 2022/10/07 16:27:29 by oel-berh         ###   ########.fr       */
-=======
-/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/06 14:15:29 by mait-aad          #+#    #+#             */
-/*   Updated: 2022/10/06 21:09:30 by mait-aad         ###   ########.fr       */
->>>>>>> 2693f92367358d5c20048a3d86296e22bd8117b8
+/*   Updated: 2022/10/08 07:44:49 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +20,13 @@ void	pint_sc_gr(t_data *data, int top, int y, int x)
 	while (++i < top)
 		*(unsigned int *)(data->addr
 				+ (i * data->line_length + x * (data->bits_per_pixel / 8)))
-			= create_trgb(100, data->color.redceilling,
+			= trgb(100, data->color.redceilling,
 				data->color.greenceilling, data->color.blueceilling);
 	i = y -1;
 	while (W_HIGHTE > ++i)
 		*(unsigned int *)(data->addr
 				+ (i * data->line_length + x * (data->bits_per_pixel / 8)))
-			= create_trgb(100, data->color.redfloor,
+			= trgb(100, data->color.redfloor,
 				data->color.greenfloor, data->color.bluefloor);
 }
 
