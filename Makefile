@@ -9,6 +9,7 @@ SRCS =	main.c 					\
 		tools/get_next_line.c	\
 		tools/ft_itoi.c 		\
 		tools/tools.c 			\
+		tools/tools2.c 			\
 		utilites.c				\
 		utilites_2.c			\
 		raycasting.c 			\
@@ -17,6 +18,7 @@ SRCS =	main.c 					\
 		minimap.c 				\
 		tools.c 				\
 		project_wall.c 			\
+
 
 all: $(NAME)
 

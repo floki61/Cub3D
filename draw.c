@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/08 15:58:16 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/11 03:21:11 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	draw(t_data *img)
 int	destroy(t_data *data)
 {
 	mlx_destroy_window(data->mlx, data->mlx_win);
-	exit(0);
+	exit (0);
 	return (0);
 }
 

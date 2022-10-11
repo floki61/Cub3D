@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 00:34:24 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/08 15:32:34 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/11 03:53:32 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	init_data(t_data	*img, char	*fd)
 	img->color.cindex = 0;
 	img->color.index = 0;
 	img->path.index = 0;
+	img->pr = 0;
 	img->fd = open(fd, O_RDONLY);
 	if (!(img->fd) || !img)
 	{

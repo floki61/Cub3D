@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 00:42:57 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/09 17:14:03 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/11 03:45:27 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,22 @@ int	element_map(t_data *img, char	*path)
 	return (1);
 }
 
+void	nline(char *map)
+{
+	int	i;
+
+	i = 0;
+	while (map[i] == '\n')
+		i++;
+	while (map[i])
+	{
+		if (map[i] == '\n' && map[i + 1] == '\n')
+			exit (0);
+		i++;
+	}
+	return ;
+}
+
 void	read_map(t_data *img)
 {
 	char	*instruction;
@@ -112,6 +128,7 @@ void	read_map(t_data *img)
 		instruction = get_next_line(img->fd);
 	}
 	free(instruction);
+	nline(tab);
 	img->map = ft_split(tab, '\n');
 	free(tab);
 	return ;

@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 14:45:32 by mait-aad          #+#    #+#             */
-/*   Updated: 2022/10/08 16:51:30 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/11 04:01:27 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define CUB3D_H
 
 # define PI 3.14159265
-# define W_WITHE  2000
+# define W_WITHE 2000
 # define W_HIGHTE  800
 # define WALL_STRIP_WIDTH 1
 # define TILE_SIZE	64
@@ -158,6 +158,7 @@ typedef struct s_data
 	t_textur		w_textur_buffer;
 	t_textur		e_textur_buffer;
 	t_color			color;
+	int				pr;
 	int				fd;
 	t_node			var;
 	t_player		player;
@@ -211,5 +212,10 @@ void	init_color(t_data *img, char **color, int c);
 void	rander_3dprojectedwall(t_data *data);
 void	update(t_data	*img);
 void	comp_raygrid(t_data	*img, int i);
+int		get_w(char	**map);
+int		safe(char	**map, int i, int n);
+void	init_player(t_data	*img, int y, int x);
+int		skip_spaces(char	*line);
+int		skip_lastspaces(char	*line);
 
 #endif
