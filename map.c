@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 00:42:57 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/11 03:45:27 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/15 18:15:48 by mait-aad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ int	set_color(t_data *img, char	*value, int c)
 		exit (0);
 	}
 	img->color.index += 1;
+	free(value);
 	free_tab(color_tab);
+	free (color_tab);
 	return (1);
 }
 
@@ -87,6 +89,7 @@ int	element_map(t_data *img, char	*path)
 		}
 	}
 	free (str[0]);
+	free (str);
 	return (1);
 }
 
