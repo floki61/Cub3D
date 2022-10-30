@@ -6,28 +6,32 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 14:15:29 by mait-aad          #+#    #+#             */
-/*   Updated: 2022/10/08 07:44:49 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/23 20:43:48 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include    "cub3d.h"
 
-void	pint_sc_gr(t_data *data, int top, int y, int x)
+void	pint_sc_gr(t_data	*data, int top, int y, int x)
 {
 	int	i;
 
 	i = -1;
 	while (++i < top)
-		*(unsigned int *)(data->addr
+	{
+			*(unsigned int *)(data->addr
 				+ (i * data->line_length + x * (data->bits_per_pixel / 8)))
 			= trgb(100, data->color.redceilling,
 				data->color.greenceilling, data->color.blueceilling);
+	}
 	i = y -1;
 	while (W_HIGHTE > ++i)
-		*(unsigned int *)(data->addr
+	{	
+			*(unsigned int *)(data->addr
 				+ (i * data->line_length + x * (data->bits_per_pixel / 8)))
 			= trgb(100, data->color.redfloor,
 				data->color.greenfloor, data->color.bluefloor);
+	}
 }
 
 int	x_ofset(t_data *data, int x)

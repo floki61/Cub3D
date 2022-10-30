@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 14:45:32 by mait-aad          #+#    #+#             */
-/*   Updated: 2022/10/11 04:01:27 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/23 20:36:35 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # define PI 3.14159265
 # define W_WITHE 2000
-# define W_HIGHTE  800
+# define W_HIGHTE 1000
 # define WALL_STRIP_WIDTH 1
 # define TILE_SIZE	64
 # define TEXTUR_WIDTH	64
@@ -217,5 +217,7 @@ int		safe(char	**map, int i, int n);
 void	init_player(t_data	*img, int y, int x);
 int		skip_spaces(char	*line);
 int		skip_lastspaces(char	*line);
+void	make_b_image(t_data *data);
+void	norm_1(char **str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 15:56:33 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/08 16:02:08 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/23 20:42:01 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,12 @@ void	rander_3dprojectedwall(t_data *data)
 	while (i < data->num_rays)
 	{
 		ray_diriction(data, i);
-		correct_dest = data->rays[i].distance
+		correct_dest = (int)data->rays[i].distance
 			* cos(data->rays[i].rayangle_pro - data->rotationangle);
 		wall_hight = (int)((TILE_SIZE / ((double)correct_dest))
 				* ((double)distance_projection_plan));
+		if (correct_dest == 0)
+			wall_hight = W_HIGHTE;
 		ft_react(data, i, wall_hight);
 		i++;
 	}

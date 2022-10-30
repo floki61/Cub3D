@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 00:59:04 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/11 03:21:11 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/23 20:40:12 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,13 @@ int	destroy(t_data *data)
 int	loop_game(t_data	*img)
 {
 	update(img);
-	if (img->img)
-		mlx_destroy_image (img->mlx, img->img);
-	mlx_clear_window (img->mlx, img->mlx_win);
-	img->img = mlx_new_image(img->mlx, W_WITHE, W_HIGHTE);
-	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel,
-			&img->line_length, &img->endian);
+	if (!img->img)
+	{
+		img->img = mlx_new_image(img->mlx, W_WITHE, W_HIGHTE);
+			img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel,
+				&img->line_length, &img->endian);
+		make_b_image (img);
+	}
 	draw(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	mlx_hook(img->mlx_win, 2, 1L, key_hook, img);

@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 23:10:15 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/08 16:04:43 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/23 19:18:12 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	norm_hor_grid(t_data	*img, float xstep, float ystep, int i)
 {
 	while (img->h_xintercept >= 0
-		&& img->h_xintercept <= TILE_SIZE * img->mapx
+		&& img->h_xintercept <= TILE_SIZE * img->g_w
 		&& img->h_yintercept >= 0
 		&& img->h_yintercept <= TILE_SIZE * img->mapy)
 	{
@@ -66,7 +66,7 @@ void	horizontal_raygrid(t_data	*img, int i)
 void	norm_ver_g(t_data	*img, float xstep, float ystep, int i)
 {
 	while (img->v_xintercept >= 0
-		&& img->v_xintercept <= TILE_SIZE * img->mapx
+		&& img->v_xintercept <= TILE_SIZE * img->g_w
 		&& img->v_yintercept >= 0
 		&& img->v_yintercept <= TILE_SIZE * img->mapy)
 	{

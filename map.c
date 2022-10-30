@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mait-aad <mait-aad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 00:42:57 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/15 18:15:48 by mait-aad         ###   ########.fr       */
+/*   Updated: 2022/10/23 20:37:02 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,10 @@ int	element_map(t_data *img, char	*path)
 		else if (!strcmp(str[0], "C") && img->color.cindex == 0)
 			set_color(img, str[1], 'c');
 		else
-		{
-			free_tab(str);
-			printf("-------- IN COLOR--------\n");
-			exit (0);
-		}
+			norm_1(str);
 	}
+	else
+		norm_1(str);
 	free (str[0]);
 	free (str);
 	return (1);
@@ -98,6 +96,11 @@ void	nline(char *map)
 	int	i;
 
 	i = 0;
+	if (!map)
+	{
+		printf("Error: empty map\n");
+		exit (0);
+	}
 	while (map[i] == '\n')
 		i++;
 	while (map[i])

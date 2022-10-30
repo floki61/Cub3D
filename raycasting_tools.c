@@ -6,7 +6,7 @@
 /*   By: oel-berh <oel-berh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 23:09:51 by oel-berh          #+#    #+#             */
-/*   Updated: 2022/10/08 16:05:30 by oel-berh         ###   ########.fr       */
+/*   Updated: 2022/10/23 20:42:11 by oel-berh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	haswallat(t_data	*img, int x, int y)
 		return (1);
 	else if (x / TILE_SIZE > ft_strlen(img->map[y / TILE_SIZE]))
 		return (1);
-	if (img->map[y / TILE_SIZE][x / TILE_SIZE] == '1')
+	if (img->map[y / TILE_SIZE][x / TILE_SIZE] != '0')
 		return (1);
 	return (0);
 }
@@ -64,6 +64,13 @@ void	comp_raygrid(t_data	*img, int i)
 	}
 	else if (!img->rays[i].horzhitdistance || img->rays[i].verthitdistance
 		< img->rays[i].horzhitdistance)
+	{
+		img->rays[i].is_hor = 1;
+		img->rays[i].wallhitx = img->rays[i].v_wallhity;
+		img->rays[i].wallhity = img->rays[i].v_wallhity;
+		img->rays[i].distance = img->rays[i].verthitdistance;
+	}
+	else
 	{
 		img->rays[i].is_hor = 1;
 		img->rays[i].wallhitx = img->rays[i].v_wallhity;

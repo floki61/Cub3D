@@ -1,5 +1,5 @@
 NAME = cub3d
-FLAGS =  -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit  #-g3 -fsanitize=address
+FLAGS =  -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit #-g3 -fsanitize=address
  
 SRCS =	main.c 					\
 		tools/checker.c			\

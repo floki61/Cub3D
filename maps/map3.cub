@@ -1,13 +1,13 @@
 SO textures/avatars-UidYWfW20bjki8Ub-GJKpBQ-t500x500-_1_.xpm
-NO textures/2.xpm
-F 10,10,200
-WE textures/1.xpm
-
-
-
+NO textures/Stoneflag.xpm
 EA textures/wall.xpm
 
+
+F 10,10,200
+WE textures/StoneHitler.xpm
+
 C 140,140,240
+
 
 1111111111111111111111
 101010010000000000011
